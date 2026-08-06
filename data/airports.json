@@ -1,0 +1,144 @@
+{
+  "airports": [
+    {
+      "id": "PEK",
+      "name_zh": "北京大兴国际机场",
+      "name_en": "Beijing Daxing International",
+      "icao": "ZBAD",
+      "city": "北京",
+      "country": "中国",
+      "latitude": 39.5098,
+      "longitude": 116.4108,
+      "elevation_m": 30,
+      "runways": ["01L/19R", "11L/29R", "17L/35R", "17R/35L"],
+      "terminals": ["T1 航站楼", "T2 航站楼"],
+      "annual_passengers_M": 75,
+      "scenario_tags": ["夏季白天晴", "冬季夜间雾"],
+      "assets": [
+        {"id": "AST-001", "name": "T1 航站楼", "type": "Terminal", "criticality": "P0"},
+        {"id": "AST-002", "name": "南跑道 01L/19R", "type": "Runway", "criticality": "P0"},
+        {"id": "AST-006", "name": "塔台", "type": "Control", "criticality": "P0"},
+        {"id": "AST-007", "name": "南灯光站", "type": "NavAid", "criticality": "P1"}
+      ],
+      "equipment_deployed": [
+        {"id": "EQP-RDR-01", "type": "AESA 主雷达", "pos": [39.514, 116.408]},
+        {"id": "EQP-RDR-02", "type": "被动相关定位 (PCL)", "pos": [39.506, 116.415]},
+        {"id": "EQP-EW-01",  "type": "分布式电磁干扰", "pos": [39.512, 116.413]},
+        {"id": "EQP-HPM-01", "type": "HPM 定向能", "pos": [39.510, 116.405]}
+      ],
+      "ooda_baseline_s": 4.2,
+      "pk_baseline": 0.962,
+      "far_baseline": 0.014,
+      "color_primary": "#1F4E79",
+      "threat_palette": "low-mid"
+    },
+    {
+      "id": "BRU",
+      "name_zh": "布鲁塞尔国际机场",
+      "name_en": "Brussels Airport (BRU/EBBR)",
+      "icao": "EBBR",
+      "city": "布鲁塞尔",
+      "country": "比利时",
+      "latitude": 50.9014,
+      "longitude": 4.4844,
+      "elevation_m": 56,
+      "runways": ["07L/25R", "07R/25L"],
+      "terminals": ["T 航站楼 (Departures/Arrivals)"],
+      "annual_passengers_M": 25,
+      "scenario_tags": ["中雨强风", "国际出港 VIP"],
+      "assets": [
+        {"id": "AST-003", "name": "国际出港 VIP", "type": "VIP", "criticality": "P0"},
+        {"id": "AST-008", "name": "客运航站楼", "type": "Terminal", "criticality": "P0"},
+        {"id": "AST-009", "name": "货运区", "type": "Cargo", "criticality": "P1"}
+      ],
+      "equipment_deployed": [
+        {"id": "EQP-RDR-03", "type": "AESA 主雷达 L-band", "pos": [50.905, 4.480]},
+        {"id": "EQP-RDR-04", "type": "毫米波雷达", "pos": [50.898, 4.490]},
+        {"id": "EQP-EW-02", "type": "宽带阻塞干扰", "pos": [50.903, 4.486]},
+        {"id": "EQP-NET-01", "type": "拦截网弹", "pos": [50.900, 4.482]}
+      ],
+      "ooda_baseline_s": 4.6,
+      "pk_baseline": 0.948,
+      "far_baseline": 0.022,
+      "color_primary": "#C62828",
+      "threat_palette": "mid"
+    },
+    {
+      "id": "MUC",
+      "name_zh": "慕尼黑弗朗茨·约瑟夫·施特劳斯机场",
+      "name_en": "Munich Airport (MUC/EDDM)",
+      "icao": "EDDM",
+      "city": "慕尼黑",
+      "country": "德国",
+      "latitude": 48.3537,
+      "longitude": 11.7861,
+      "elevation_m": 453,
+      "runways": ["08L/26R", "08R/26L"],
+      "terminals": ["T1", "T2 (卫星)"],
+      "annual_passengers_M": 47,
+      "scenario_tags": ["黄昏雷暴", "货运区"],
+      "assets": [
+        {"id": "AST-004", "name": "货运中心", "type": "Cargo", "criticality": "P1"},
+        {"id": "AST-005", "name": "燃油储存区", "type": "Fuel", "criticality": "P0"},
+        {"id": "AST-010", "name": "T2 卫星", "type": "Terminal", "criticality": "P0"}
+      ],
+      "equipment_deployed": [
+        {"id": "EQP-RDR-05", "type": "AESA 主雷达 S-band", "pos": [48.358, 11.783]},
+        {"id": "EQP-RDR-06", "type": "光电跟踪", "pos": [48.350, 11.789]},
+        {"id": "EQP-EW-03", "type": "灵巧欺骗干扰", "pos": [48.355, 11.787]},
+        {"id": "EQP-LSR-01", "type": "激光武器 HEL", "pos": [48.353, 11.790]}
+      ],
+      "ooda_baseline_s": 4.8,
+      "pk_baseline": 0.94,
+      "far_baseline": 0.018,
+      "color_primary": "#00695C",
+      "threat_palette": "mid-high"
+    }
+  ],
+  "effectors": [
+    {"id": "EW",  "name": "电磁干扰 (EW)",     "type": "soft",     "range_km": 5,  "pk_against_swarm": 0.45, "cost": 0.2},
+    {"id": "HPM", "name": "高功率微波 (HPM)",   "type": "directional","range_km": 3,  "pk_against_swarm": 0.78, "cost": 0.8},
+    {"id": "HEL", "name": "高能激光 (HEL)",     "type": "directional","range_km": 8,  "pk_against_swarm": 0.92, "cost": 0.6},
+    {"id": "Kinetic", "name": "动能拦截",        "type": "hard",     "range_km": 4,  "pk_against_swarm": 0.85, "cost": 0.7},
+    {"id": "Net", "name": "拦截网",              "type": "soft",     "range_km": 1.5,"pk_against_swarm": 0.60, "cost": 0.4}
+  ],
+  "ooda_phases": [
+    {"phase": "Observe",   "name_zh": "观察", "baseline_s": 0.8, "color": "#1565C0"},
+    {"phase": "Orient",    "name_zh": "判断", "baseline_s": 0.9, "color": "#2E7D32"},
+    {"phase": "Decide",    "name_zh": "决策", "baseline_s": 1.2, "color": "#E65100"},
+    {"phase": "Act",       "name_zh": "行动", "baseline_s": 1.3, "color": "#C62828"},
+    {"phase": "Feedback",  "name_zh": "评估", "baseline_s": 0.4, "color": "#6A1B9A"}
+  ],
+  "demo_scenarios": [
+    {
+      "name": "PEK 5 架神风 FPV 突防",
+      "airport": "PEK",
+      "uav_count": 5,
+      "uav_type": "自制 FPV 神风",
+      "speed_mps": 45,
+      "altitude_m": 60,
+      "pk_estimate": 0.985,
+      "ooda_estimate_s": 3.8
+    },
+    {
+      "name": "BRU 20 架民用改装集群",
+      "airport": "BRU",
+      "uav_count": 20,
+      "uav_type": "Autel EVO II 集群",
+      "speed_mps": 20,
+      "altitude_m": 120,
+      "pk_estimate": 0.92,
+      "ooda_estimate_s": 4.6
+    },
+    {
+      "name": "MUC 50 架高强度蜂群（压测）",
+      "airport": "MUC",
+      "uav_count": 50,
+      "uav_type": "高密度复合蜂群",
+      "speed_mps": 30,
+      "altitude_m": 80,
+      "pk_estimate": 0.78,
+      "ooda_estimate_s": 4.95
+    }
+  ]
+}
