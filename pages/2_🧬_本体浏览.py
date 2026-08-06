@@ -199,7 +199,7 @@ def show() -> None:
         st.markdown("### 🗒️ Link Type 列表")
         lt_df = pd.DataFrame([
             {
-                "ID": f"L{lt['id']:02d}",
+                "ID": lt["id"],  # already "L01" .. "L10"
                 "名称": lt["name"],
                 "中文": lt["name_zh"],
                 "From": lt["from"],
