@@ -1,0 +1,31 @@
+{
+  "provider": "OpenStreetMap.Mapnik",
+  "attribution": "© OpenStreetMap contributors",
+  "generated_on": "2026-08-09",
+  "airports": {
+    "PKX": {
+      "file": "PKX.png",
+      "west": 116.1708,
+      "south": 39.3898,
+      "east": 116.65079999999999,
+      "north": 39.629799999999996,
+      "zoom": 12
+    },
+    "BRU": {
+      "file": "BRU.png",
+      "west": 4.2444,
+      "south": 50.781400000000005,
+      "east": 4.7244,
+      "north": 51.0214,
+      "zoom": 12
+    },
+    "MUC": {
+      "file": "MUC.png",
+      "west": 11.5461,
+      "south": 48.233700000000006,
+      "east": 12.0261,
+      "north": 48.4737,
+      "zoom": 12
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "schema_version": 2,
+  "scope": "synthetic_capacity_constrained_engagement_assumptions",
+  "mission_success_fraction": 0.80,
+  "mission_success_definition": "在完整闭环截止时间内至少使 ceil(0.80*N) 架威胁失效",
+  "resource_scaling_study": {
+    "package_definition": "一个资源包等于当前全部启用效应器的一套独立并行容量；复制资源包不提高单次作用Pk，也不缩短基础OODA分量，但协调感知主口径会增加跨包同步与去冲突时延",
+    "package_counts": [1, 2, 3, 4, 5, 6],
+    "threat_counts": [20, 25, 30, 40, 50, 60, 75, 100],
+    "success_threshold": 0.75,
+    "high_reliability_threshold": 0.95,
+    "primary_timing_mode": "coordination_aware",
+    "upper_bound_timing_mode": "ideal_parallel",
+    "coordination_assumption": "各资源包共享融合航迹与单批人工授权；主口径显式加入随资源包数量及N/20对数增长的跨包同步、去冲突和指令编组时延，理想并行口径仅作为容量上界",
+    "cost_reporting": "同时报告资源包数量与平均行动成本（合成单位）；不折算采购价或全寿命周期成本"
+  },
+  "default_effector_order": ["EW", "HPM", "HEL", "Kinetic", "Net"],
+  "environment": {
+    "common_effectiveness_low": 0.78,
+    "common_effectiveness_mode": 0.94,
+    "common_effectiveness_high": 1.04,
+    "target_resilience_low": 0.82,
+    "target_resilience_mode": 0.98,
+    "target_resilience_high": 1.08
+  },
+  "degradation_profiles": {
+    "nominal": {
+      "name_zh": "标称资源",
+      "pk_factor": 1.0,
+      "capacity_factor": 1.0,
+      "precision_track_probability": 0.97,
+      "disabled_effectors": []
+    },
+    "sensor_degraded": {
+      "name_zh": "传感器退化",
+      "pk_factor": 0.92,
+      "capacity_factor": 0.85,
+      "precision_track_probability": 0.78,
+      "disabled_effectors": []
+    },
+    "contested": {
+      "name_zh": "通信/电磁对抗",
+      "pk_factor": 0.84,
+      "capacity_factor": 0.75,
+      "precision_track_probability": 0.88,
+      "disabled_effectors": []
+    },
+    "hpm_offline": {
+      "name_zh": "HPM 离线",
+      "pk_factor": 1.0,
+      "capacity_factor": 1.0,
+      "precision_track_probability": 0.97,
+      "disabled_effectors": ["HPM"]
+    }
+  },
+  "effectors": {
+    "EW": {
+      "name_zh": "定向电磁干扰",
+      "engagement_type": "area",
+      "base_single_target_pk": 0.25,
+      "channels": 1,
+      "targets_per_action": 20,
+      "cycle_time_s": 1.20,
+      "allocated_window_s": 1.20,
+      "max_actions": 1,
+      "inventory": 1,
+      "cost_per_action": 0.20,
+      "requires_precision_track": false,
+      "notes": "单次扇区压制覆盖当前全部存活目标，存在目标抗干扰差异"
+    },
+    "HPM": {
+      "name_zh": "高功率微波",
+      "engagement_type": "group",
+      "base_single_target_pk": 0.62,
+      "channels": 1,
+      "targets_per_action": 6,
+      "cycle_time_s": 0.75,
+      "allocated_window_s": 1.60,
+      "max_actions": 2,
+      "inventory": 4,
+      "cost_per_action": 0.80,
+      "requires_precision_track": false,
+      "notes": "两次群目标脉冲，每次最多覆盖 6 个当前存活目标"
+    },
+    "HEL": {
+      "name_zh": "高能激光",
+      "engagement_type": "precision",
+      "base_single_target_pk": 0.88,
+      "channels": 1,
+      "targets_per_action": 1,
+      "cycle_time_s": 1.05,
+      "allocated_window_s": 3.30,
+      "max_actions": 3,
+      "inventory": 8,
+      "cost_per_action": 0.60,
+      "requires_precision_track": true,
+      "notes": "单通道精确补射，受跟踪可用性约束"
+    },
+    "Kinetic": {
+      "name_zh": "动能拦截",
+      "engagement_type": "precision",
+      "base_single_target_pk": 0.84,
+      "channels": 2,
+      "targets_per_action": 1,
+      "cycle_time_s": 1.45,
+      "allocated_window_s": 4.50,
+      "max_actions": 6,
+      "inventory": 6,
+      "cost_per_action": 0.70,
+      "requires_precision_track": true,
+      "notes": "双通道、总弹药 6 发，用于穿透软杀伤层的剩余目标"
+    },
+    "Net": {
+      "name_zh": "拦截网",
+      "engagement_type": "precision",
+      "base_single_target_pk": 0.58,
+      "channels": 2,
+      "targets_per_action": 1,
+      "cycle_time_s": 1.90,
+      "allocated_window_s": 3.80,
+      "max_actions": 4,
+      "inventory": 4,
+      "cost_per_action": 0.40,
+      "requires_precision_track": true,
+      "notes": "低速近程补充手段，默认主场景不启用"
+    }
+  }
+}

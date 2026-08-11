@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-08-11T10:46:29+08:00",
+  "python": "3.11.15 | packaged by conda-forge | (main, Jun 11 2026, 03:27:10) [MSC v.1944 64 bit (AMD64)]",
+  "python_executable": "D:\\Downloads\\反无人机体系\\.venv-cuas\\python.exe",
+  "platform": "Windows-10-10.0.26220-SP0",
+  "kernel": "cuas-zx2026",
+  "working_directory": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\05_Notebook与数据",
+  "packages": {
+    "streamlit": "1.61.1",
+    "plotly": "6.9.0",
+    "rdflib": "7.6.0",
+    "pyshacl": "0.40.1",
+    "owlready2": "0.51",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.9.0",
+    "statsmodels": "0.14.6",
+    "matplotlib": "3.11.1",
+    "nbclient": "0.11.0"
+  },
+  "notebooks": [
+    {
+      "source": "notebook_01_ontology_validation.ipynb",
+      "source_sha256": "97D00804BF7A888EDFD75FBE952B432098728BA03E8B6F43CE131AD9AC38A792",
+      "executed_notebook": "notebook_01_ontology_validation_executed.ipynb",
+      "executed_sha256": "28F5FC0D8DF94E43266D1DFF0F75DE43D399D88EB5B8A7C498045BA3D1569B86",
+      "html": "notebook_01_ontology_validation_executed.html",
+      "text_output": "文本输出\\notebook_01_ontology_validation.txt",
+      "started_at": "2026-08-11T10:46:29+08:00",
+      "duration_seconds": 9.53,
+      "code_cells": 8,
+      "executed_code_cells": 8,
+      "errors": 0,
+      "status": "passed"
+    },
+    {
+      "source": "notebook_02_ooda_simulation.ipynb",
+      "source_sha256": "9D3823048AE72334FD702EE3F74241A7DD182D296F3FF6A4FD134073C82745E4",
+      "executed_notebook": "notebook_02_ooda_simulation_executed.ipynb",
+      "executed_sha256": "4E55438600768C30E4E734C5A17C797EB35E20DC42DBAB4701737EE5EC2AEBDC",
+      "html": "notebook_02_ooda_simulation_executed.html",
+      "text_output": "文本输出\\notebook_02_ooda_simulation.txt",
+      "started_at": "2026-08-11T10:46:39+08:00",
+      "duration_seconds": 468.317,
+      "code_cells": 15,
+      "executed_code_cells": 15,
+      "errors": 0,
+      "status": "passed"
+    },
+    {
+      "source": "notebook_03_bayesian_adaptive.ipynb",
+      "source_sha256": "F2B64449456D171716960458D72DA845D47E040E34D8D2F542BD4B5EBA2C6043",
+      "executed_notebook": "notebook_03_bayesian_adaptive_executed.ipynb",
+      "executed_sha256": "33AD02316D7B017306EA2585E0C5671CCBEAC1799A07C546909CDBBD4A41A488",
+      "html": "notebook_03_bayesian_adaptive_executed.html",
+      "text_output": "文本输出\\notebook_03_bayesian_adaptive.txt",
+      "started_at": "2026-08-11T10:54:28+08:00",
+      "duration_seconds": 7.029,
+      "code_cells": 11,
+      "executed_code_cells": 11,
+      "errors": 0,
+      "status": "passed"
+    },
+    {
+      "source": "notebook_04_demo_end_to_end.ipynb",
+      "source_sha256": "FAB2F27EA09782B306DEA7EAF9AD66F37C490DF8249FD6ED9489D7442BD50E10",
+      "executed_notebook": "notebook_04_demo_end_to_end_executed.ipynb",
+      "executed_sha256": "FCF0C2EC2B3B3955977A9137B71F780C53D7FCFD092BCBD0CD81CD3AE97CFC65",
+      "html": "notebook_04_demo_end_to_end_executed.html",
+      "text_output": "文本输出\\notebook_04_demo_end_to_end.txt",
+      "started_at": "2026-08-11T10:54:35+08:00",
+      "duration_seconds": 3.802,
+      "code_cells": 7,
+      "executed_code_cells": 7,
+      "errors": 0,
+      "status": "passed"
+    }
+  ],
+  "status": "passed"
+}

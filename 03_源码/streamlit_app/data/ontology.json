@@ -1,0 +1,191 @@
+{
+  "ontology_meta": {
+    "name": "C-UAS Counter-UAS Ontology",
+    "version": "1.1.0",
+    "namespace": "http://cuas-ontology.org/cuas#",
+    "methodology": "Palantir-style 8 Object Types + 10 Link Types",
+    "source_tbox": "03_源码/本体模型/cuas-ontology.ttl",
+    "source_abox": "03_源码/本体模型/cuas-data-valid.ttl",
+    "competition": "OSREDM 2026 Track 7: New Concept Counter-UAS",
+    "evidence_scope": "coherent_engineering_fixture_not_field_test"
+  },
+  "object_types": [
+    {
+      "id": "Mission",
+      "name_zh": "使命",
+      "name_en": "Mission",
+      "icon": "🛡️",
+      "color": "#1F4E79",
+      "description": "定义保护对象、责任区域、交战规则、场景、能力分配和成功指标的活对象。",
+      "properties": ["missionId", "missionType", "priority", "protectedAsset", "geoFence", "timeWindow", "rulesOfEngagement", "successCriteria"],
+      "sample_instances": [
+        {"id": "Mission_G20Summit", "name": "G20 峰会要地防护使命", "missionId": "MSN-2026-G20-001", "missionType": "Defense", "priority": 5}
+      ]
+    },
+    {
+      "id": "Scenario",
+      "name_zh": "场景",
+      "name_en": "Scenario",
+      "icon": "📍",
+      "color": "#2E7D32",
+      "description": "按探测、跟踪识别、威胁评估、决策分配、处置验证组织完整时序流程。",
+      "properties": ["scenarioId", "scenarioStage", "triggerCondition", "expectedOutcome", "scenarioLatencyBudget"],
+      "sample_instances": [
+        {"id": "Scenario_Detect_MSN001", "name": "探测发现", "stage": "Detection", "budget_s": 0.8},
+        {"id": "Scenario_Track_MSN001", "name": "跟踪识别", "stage": "TrackingIdentification", "budget_s": 1.0},
+        {"id": "Scenario_Assess_MSN001", "name": "威胁评估", "stage": "ThreatAssessment", "budget_s": 0.5},
+        {"id": "Scenario_Decide_MSN001", "name": "决策分配", "stage": "DecisionAllocation", "budget_s": 1.2},
+        {"id": "Scenario_Engage_MSN001", "name": "处置验证", "stage": "EngagementVerification", "budget_s": 1.5}
+      ]
+    },
+    {
+      "id": "TechnicalCapability",
+      "name_zh": "技术能力",
+      "name_en": "TechnicalCapability",
+      "icon": "⚙️",
+      "color": "#E65100",
+      "description": "与具体装备解耦的探测、融合识别、指控、软/硬杀伤和集成使能能力。",
+      "properties": ["capabilityId", "capabilityClass", "capabilityMetric", "capabilityVersion"],
+      "sample_instances": [
+        {"id": "Cap_Radar_GaN_AESA", "name": "GaN AESA 雷达探测", "class": "Detection", "version": "v3.2"},
+        {"id": "Cap_Fusion_MultiSensor", "name": "多传感器融合识别", "class": "FusionID", "version": "v2.1"},
+        {"id": "Cap_C2_Semantic", "name": "语义指挥控制", "class": "C2", "version": "v1.1"},
+        {"id": "Cap_EW_Directional", "name": "定向电磁软杀伤", "class": "SoftKill", "version": "v2.0"},
+        {"id": "Cap_HPM_Group", "name": "HPM 群目标硬杀伤", "class": "HardKill", "version": "v1.3"},
+        {"id": "Cap_Data_Integration", "name": "统一航迹与告警去重", "class": "IntegrationEnablement", "version": "v1.4"}
+      ]
+    },
+    {
+      "id": "Equipment",
+      "name_zh": "装备",
+      "name_en": "Equipment",
+      "icon": "🔧",
+      "color": "#6A1B9A",
+      "description": "实现技术能力并覆盖一个或多个工作场景的物理或软件装备。",
+      "properties": ["equipmentSN", "stanagProfile", "operationalStatus", "geoPosition"],
+      "sample_instances": [
+        {"id": "Eq_RadarUnit_007", "name": "AESA 雷达单元 007", "sn": "RDR-AESA-007", "status": "Available"},
+        {"id": "Eq_FusionNode_001", "name": "多源融合节点 001", "sn": "FUS-NODE-001", "status": "Available"},
+        {"id": "Eq_CommandPost_001", "name": "语义指挥所 001", "sn": "CMD-POST-001", "status": "Available"},
+        {"id": "Eq_EW_HPM_001", "name": "EW/HPM 复合阵列 001", "sn": "HPM-ARRAY-001", "status": "Available"}
+      ]
+    },
+    {
+      "id": "EffectMetric",
+      "name_zh": "效果指标",
+      "name_en": "EffectMetric",
+      "icon": "📊",
+      "color": "#C62828",
+      "description": "用于度量使命成功并通过 validates 关系反馈到使命的 KPP/MOE/MOP。",
+      "properties": ["metricId", "metricName", "metricValue", "metricThreshold", "metricLayer"],
+      "sample_instances": [
+        {"id": "EM_DetectionCoverage", "name": "DetectionCoverage", "value": 0.96, "threshold": 0.95, "layer": "KPP", "scope": "ontology_fixture_not_field_test"},
+        {"id": "EM_IdentificationAccuracy", "name": "IdentificationAccuracy", "value": 0.93, "threshold": 0.92, "layer": "KPP", "scope": "ontology_fixture_not_field_test"},
+        {"id": "EM_OODAClosureTime", "name": "OODAClosureTime", "value": 4.3, "threshold": 5.0, "layer": "MOE", "scope": "ontology_fixture_not_field_test"},
+        {"id": "EM_InterceptionSuccess", "name": "InterceptionSuccessRate", "value": 0.87, "threshold": 0.85, "layer": "MOE", "scope": "ontology_fixture_not_field_test"},
+        {"id": "EM_FalseAlarmRate", "name": "FalseAlarmRate", "value": 0.018, "threshold": 0.02, "layer": "MOP", "scope": "ontology_fixture_not_field_test"}
+      ]
+    },
+    {
+      "id": "Threat",
+      "name_zh": "威胁",
+      "name_en": "Threat",
+      "icon": "⚠️",
+      "color": "#B71C1C",
+      "description": "对被保护资产构成风险的无人机或无人机蜂群。",
+      "properties": ["threatClass", "threatLevel", "threatTrajectory", "isSwarmMember"],
+      "sample_instances": [
+        {"id": "Threat_Swarm_20", "name": "20 机 Class-I 蜂群", "class": "ClassI", "level": 5, "swarm_size": 20}
+      ]
+    },
+    {
+      "id": "Asset",
+      "name_zh": "资产",
+      "name_en": "Asset",
+      "icon": "🏢",
+      "color": "#00695C",
+      "description": "使命需要保护的场所、设施或人员等高价值对象。",
+      "properties": ["assetType", "criticalityScore", "hasGeoLocation"],
+      "sample_instances": [
+        {"id": "Asset_HangzhouConventionCenter", "name": "杭州会展中心", "type": "MassEvent", "criticality": 10}
+      ]
+    },
+    {
+      "id": "Operator",
+      "name_zh": "操作员",
+      "name_en": "Operator",
+      "icon": "👤",
+      "color": "#4E342E",
+      "description": "具有明确角色和授权等级、能够操作装备的人类决策或执行节点。",
+      "properties": ["operatorRole", "clearanceLevel", "operates"],
+      "sample_instances": [
+        {"id": "Operator_Commander_01", "name": "指挥员 01", "role": "Commander", "clearance": "TOP_SECRET"}
+      ]
+    }
+  ],
+  "link_types": [
+    {"id": "L01", "name": "governs", "name_zh": "使命管辖场景", "from": "Mission", "to": "Scenario", "cardinality": "one-to-many", "description": "Mission→Scenario"},
+    {"id": "L02", "name": "allocates", "name_zh": "使命分配能力", "from": "Mission", "to": "TechnicalCapability", "cardinality": "many-to-many", "description": "Mission→TechnicalCapability"},
+    {"id": "L03", "name": "measuredBy", "name_zh": "使命由效果度量", "from": "Mission", "to": "EffectMetric", "cardinality": "many-to-many", "description": "Mission→EffectMetric"},
+    {"id": "L04", "name": "implements", "name_zh": "装备实现能力", "from": "Equipment", "to": "TechnicalCapability", "cardinality": "many-to-many", "description": "Equipment→TechnicalCapability"},
+    {"id": "L05", "name": "covers", "name_zh": "装备覆盖场景", "from": "Equipment", "to": "Scenario", "cardinality": "many-to-many", "description": "Equipment→Scenario"},
+    {"id": "L06", "name": "produces", "name_zh": "能力产生效果", "from": "TechnicalCapability", "to": "EffectMetric", "cardinality": "many-to-many", "description": "TechnicalCapability→EffectMetric"},
+    {"id": "L07", "name": "protects", "name_zh": "使命保护资产", "from": "Mission", "to": "Asset", "cardinality": "many-to-many", "description": "Mission→Asset"},
+    {"id": "L08", "name": "confronts", "name_zh": "使命对抗威胁", "from": "Mission", "to": "Threat", "cardinality": "many-to-many", "description": "Mission→Threat"},
+    {"id": "L09", "name": "validates", "name_zh": "效果验证使命", "from": "EffectMetric", "to": "Mission", "cardinality": "many-to-many", "description": "EffectMetric→Mission"},
+    {"id": "L10", "name": "operates", "name_zh": "操作员操作装备", "from": "Operator", "to": "Equipment", "cardinality": "many-to-many", "description": "Operator→Equipment"}
+  ],
+  "edge_instances": [
+    {"link": "L01", "from": "Mission_G20Summit", "to": "Scenario_Detect_MSN001"},
+    {"link": "L01", "from": "Mission_G20Summit", "to": "Scenario_Track_MSN001"},
+    {"link": "L01", "from": "Mission_G20Summit", "to": "Scenario_Assess_MSN001"},
+    {"link": "L01", "from": "Mission_G20Summit", "to": "Scenario_Decide_MSN001"},
+    {"link": "L01", "from": "Mission_G20Summit", "to": "Scenario_Engage_MSN001"},
+    {"link": "L02", "from": "Mission_G20Summit", "to": "Cap_Radar_GaN_AESA"},
+    {"link": "L02", "from": "Mission_G20Summit", "to": "Cap_Fusion_MultiSensor"},
+    {"link": "L02", "from": "Mission_G20Summit", "to": "Cap_C2_Semantic"},
+    {"link": "L02", "from": "Mission_G20Summit", "to": "Cap_EW_Directional"},
+    {"link": "L02", "from": "Mission_G20Summit", "to": "Cap_HPM_Group"},
+    {"link": "L02", "from": "Mission_G20Summit", "to": "Cap_Data_Integration"},
+    {"link": "L03", "from": "Mission_G20Summit", "to": "EM_DetectionCoverage"},
+    {"link": "L03", "from": "Mission_G20Summit", "to": "EM_IdentificationAccuracy"},
+    {"link": "L03", "from": "Mission_G20Summit", "to": "EM_OODAClosureTime"},
+    {"link": "L03", "from": "Mission_G20Summit", "to": "EM_InterceptionSuccess"},
+    {"link": "L03", "from": "Mission_G20Summit", "to": "EM_FalseAlarmRate"},
+    {"link": "L04", "from": "Eq_RadarUnit_007", "to": "Cap_Radar_GaN_AESA"},
+    {"link": "L04", "from": "Eq_FusionNode_001", "to": "Cap_Fusion_MultiSensor"},
+    {"link": "L04", "from": "Eq_FusionNode_001", "to": "Cap_Data_Integration"},
+    {"link": "L04", "from": "Eq_CommandPost_001", "to": "Cap_C2_Semantic"},
+    {"link": "L04", "from": "Eq_EW_HPM_001", "to": "Cap_EW_Directional"},
+    {"link": "L04", "from": "Eq_EW_HPM_001", "to": "Cap_HPM_Group"},
+    {"link": "L05", "from": "Eq_RadarUnit_007", "to": "Scenario_Detect_MSN001"},
+    {"link": "L05", "from": "Eq_FusionNode_001", "to": "Scenario_Track_MSN001"},
+    {"link": "L05", "from": "Eq_FusionNode_001", "to": "Scenario_Assess_MSN001"},
+    {"link": "L05", "from": "Eq_CommandPost_001", "to": "Scenario_Decide_MSN001"},
+    {"link": "L05", "from": "Eq_EW_HPM_001", "to": "Scenario_Engage_MSN001"},
+    {"link": "L06", "from": "Cap_Radar_GaN_AESA", "to": "EM_DetectionCoverage"},
+    {"link": "L06", "from": "Cap_Fusion_MultiSensor", "to": "EM_IdentificationAccuracy"},
+    {"link": "L06", "from": "Cap_C2_Semantic", "to": "EM_OODAClosureTime"},
+    {"link": "L06", "from": "Cap_EW_Directional", "to": "EM_InterceptionSuccess"},
+    {"link": "L06", "from": "Cap_HPM_Group", "to": "EM_InterceptionSuccess"},
+    {"link": "L06", "from": "Cap_Data_Integration", "to": "EM_FalseAlarmRate"},
+    {"link": "L07", "from": "Mission_G20Summit", "to": "Asset_HangzhouConventionCenter"},
+    {"link": "L08", "from": "Mission_G20Summit", "to": "Threat_Swarm_20"},
+    {"link": "L09", "from": "EM_DetectionCoverage", "to": "Mission_G20Summit"},
+    {"link": "L09", "from": "EM_IdentificationAccuracy", "to": "Mission_G20Summit"},
+    {"link": "L09", "from": "EM_OODAClosureTime", "to": "Mission_G20Summit"},
+    {"link": "L09", "from": "EM_InterceptionSuccess", "to": "Mission_G20Summit"},
+    {"link": "L09", "from": "EM_FalseAlarmRate", "to": "Mission_G20Summit"},
+    {"link": "L10", "from": "Operator_Commander_01", "to": "Eq_CommandPost_001"},
+    {"link": "L10", "from": "Operator_Commander_01", "to": "Eq_EW_HPM_001"}
+  ],
+  "summary_stats": {
+    "total_object_types": 8,
+    "total_link_types": 10,
+    "total_object_instances": 24,
+    "total_edge_instances": 42,
+    "total_property_types": 37,
+    "scenarios_covered": 5,
+    "missions_covered": 1
+  }
+}

@@ -1,160 +1,123 @@
-# 🛡️ C-UAS Ontology — 反蜂群机场防护杀伤网
+# 智信—2026 · 选题 7「新概念反无」参赛工作区
 
-> **OSREDM 2026 · 7 号赛道 · 新概念反无**
-> 基于 Palantir Ontology 方法论构建的反无人机体系本体论实时交互演示。
+## 当前结论
 
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.61-FF4B4B?logo=streamlit)](https://streamlit.io)
-[![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python)](https://python.org)
-[![License](https://img.shields.io/badge/License-OSREDM%202026-blue)](#)
-[![Status](https://img.shields.io/badge/Status-Demo%20Ready-brightgreen)](#)
+本仓库分支是完整项目包派生出的**公开安全技术基线**：整体逻辑沿用“智信2026_新概念反无_完整项目包”，二维/三维机场态势采用 `C-UAS-Final-Package` 的改进思路并已融合。远端原有四次提交作为历史保留，不再作为当前事实源。公开范围及排除项见 `PUBLIC_REPOSITORY.md`。
 
-🌐 **在线演示**: <https://cuas-demo.streamlit.app>（部署后替换为真实 URL）
+项目定位是“杀伤网驱动的重点场所反无人平台决策与数字化试验方法”：用本体把使命、场景、能力、装备、威胁、资产、人员与效果指标连成可查询的语义网络；用概率更新和参数化仿真展示从识别、预警到处置评估的闭环。当前成果是**软件原型与合成仿真**，不是实装、机场现场试验或武器效能鉴定。
 
----
+最后核验：2026-08-10。
 
-## 🎯 项目简介
+## 已验证状态
 
-本项目提出一个 **基于 Palantir Ontology 思想的反无人机体系本体论**，把反蜂群机场防护的
-"使命 / 场景 / 能力 / 装备 / 威胁 / 资产 / 操作员 / 效果指标" 这 **8 个 Object Type**
-与 **10 条 Link Type** 形式化，并配套一个 **贝叶斯自适应识别引擎**，使得 OODA 闭环
-时延压缩到 **5 秒以内**，威胁识别 AUC 从 0.567 提升到 **0.9958**（+0.428）。
+| 项目 | 当前结果 | 证据位置 |
+|---|---:|---|
+| Notebook 执行 | 41/41 个代码单元成功，4/4 Notebook 通过，0 错误 | `05_Notebook与数据/验证输出/最新执行/execution_manifest.json` |
+| Streamlit 验收 | 7/7 个入口与页面通过；5 个 SPARQL 模板均返回非空结果 | `05_Notebook与数据/验证输出/streamlit_acceptance.json` |
+| 本体一致性 | 8 OT / 10 LT；HermiT 与 SHACL 正、负向对照全部通过 | `05_Notebook与数据/验证输出/ontology_consistency_report.md` |
+| 机场代码 | 北京大兴 PKX/ZBAD；无旧 PEK 标识 | 同上 |
+| 离线地图、轨迹与防御包络 | PKX、BRU、MUC 均随包提供；每机场 3 层非圆二维/三维包络；20 机×60 帧最大逐帧位移 0.298532 km、最大向外跳变 0，二维/三维状态一致 | `streamlit_acceptance.json` |
+| 指标裁决 | 21 项通过、0 项未通过、2 项仅报告 | `05_Notebook与数据/验证输出/指标裁决.md` |
+| 本体 Action 写回 | 压力夹具触发 8 条规则：5 条自动写回、3 条人工授权；独立 RDF 图 127 triples，正式本体不变 | `action_feedback_demo.json` 与 `action_feedback_writeback.ttl` |
+| 技术主线总验收 | 14/14 项通过；包含真实本地启动、轨迹连续性、Action、Notebook 源哈希、指标引用、网页快照、形式模型与部署镜像 | `05_Notebook与数据/验证输出/technical_acceptance_summary.md` |
+| 当前技术快照 | 一键验收后自动生成源文件树 SHA-256、权威/派生/冻结文件清单 | `07_文档/当前技术版本清单.md` |
 
-整个系统通过一个 5 页 Streamlit Web App 实时演示，评审专家可在线浏览本体架构、跑
-SPARQL 推理、调节贝叶斯参数、仿真 PEK/BRU/MUC 三大机场反蜂群场景。
+### 当前可引用的合成指标
 
----
+| 指标 | 结果 | 边界 |
+|---|---:|---|
+| 本体形式一致性 | PASS | 当前 TBox + 正向 ABox 经 HermiT 判为一致；互斥类型负向对照被判为不一致；SHACL 正向通过并准确检出 2 项受控错误 |
+| 五通道终态合成后验 | 0.94594，95% CI [0.93024, 0.95940] | Notebook 03，Beta-Binomial 固定种子合成反馈 |
+| 持续达标收敛周期 | 均值 23.805，P95 50 | 1000 次 × 200 周期；连续 10 周期高于 0.90 |
+| 贝叶斯 / 固定规则 AUC | 0.96789 / 0.86881 | 同案例、同五通道、同观测预算；ΔAUC=0.09909，配对 95% CI [0.09490, 0.10347] |
+| 20 机 HPM 完整闭环时延 | 均值 3.164 s，P90 3.670 s，P(小于5s)=0.9896 | 包含传感、通信、融合识别、人工授权、分配、瞄准、效应到达与 BDA |
+| 20 机动态反馈闭环使命 Pk | 0.7655，Wilson 95% CI [0.7596, 0.7713] | 至少失效 16/20 且完整闭环小于 5 s；参数化仿真 |
+| 同资源静态覆盖表 Pk | 0.3007 | 交战前协调覆盖后冻结目标表，无效果反馈；与动态策略同资源、同优先级和同随机条件 |
+| 固定资源规模前沿 | N=20 | 扫描 N=1/5/10/15/20/25/30/40/50/60/75/100；25 机 Pk=0.2903，30 机 Pk=0.0337，40–100 机为 0 |
+| 协调感知资源增配边界（点估计 Pk≥0.75） | N=20/25/30/40/50/60/75/100 分别需 1/2/2/2/3/3/4/5 包 | 48 格、每格 3000 次共同随机数；对应动态 Pk=0.7593/0.9803/0.9767/0.8013/0.9627/0.8113/0.9153/0.8470 |
+| 协调感知高可靠前沿（点估计 Pk≥0.95） | 上述规模分别需 2/2/2/3/3/4/5/6 包 | 100 机 6 包：动态 Pk=0.9523，Wilson 95% CI [0.9441, 0.9594]；固定规则同资源 Pk=0.0210 |
 
-## 🏆 三大关键指标
+必须同时披露当前边界：OODA 分量、资源容量与单次作用 Pk 是可查询的工程假设，尚未由第三方或机场现场标定；当前固定资源在 25 机及以上不达标；1–6 包主口径加入跨包同步、任务去冲突和指令编组时延，但这些时延仍未由真实竞争链路或跨阵地台架标定，理想并行结果只作为上界；资源包数和合成行动成本不是采购报价；逐目标人工授权、传感退化和 HPM 离线等压力工况显著降低成功率；SWRL 规则执行、真实专家标注一致性和机场现场试验不在本轮证据范围内。
 
-| 指标 | 数值 | 对比 | 含义 |
-|------|------|------|------|
-| **贝叶斯 AUC** | **0.9958** | vs 固定规则 0.567 (+0.428) | 威胁识别精度 |
-| **OODA 闭环** | **< 5 s** | vs 传统 10-15 s | 观察-判断-决策-行动 |
-| **本体规模** | **8 OT + 10 LT + 4 ST** | Palantir 风格 | 形式化覆盖度 |
+## 本地运行
 
----
+要求：Windows PowerShell。所有 Python 操作使用工作区根目录下的隔离环境 `.venv-cuas`。
 
-## 🗂 五大功能页面
-
-| # | 页面 | 主要功能 | 关键技术 |
-|---|------|---------|---------|
-| 🏠 | **主页** | Logo / 3 大指标 / 视频嵌入 / 团队介绍 | `st.metric`, `st.video` |
-| 🧬 | **本体浏览** | 8 OT 卡片 + 10 LT 网络图 + 实例计数 | Plotly Network Graph |
-| 🔍 | **SPARQL 查询** | 5 模板查询 + 自定义 + 实时可视化 | rdflib + Plotly |
-| 📊 | **贝叶斯实验** | 参数滑块 / 实时 ROC / AUC 对比 | Beta-Binomial 共轭 |
-| 🗺 | **机场反无** | 3 场景 / 5-50 架 / OODA 瀑布 | Plotly Animation |
-
----
-
-## 🧬 本体论核心（Palantir 风格）
-
-### 8 个 Object Type
-`Mission` · `Scenario` · `TechnicalCapability` · `Equipment` · `EffectMetric` ·
-`Threat` · `Asset` · `Operator`
-
-### 10 个 Link Type
-1. `mission_requires_capability`
-2. `scenario_involves_threat`
-3. `threat_targets_asset`
-4. `capability_implemented_by_equipment`
-5. `equipment_operated_by_operator`
-6. `mission_protects_asset`
-7. `scenario_validates_mission`
-8. `capability_achieves_metric`
-9. `equipment_counters_threat`
-10. `operator_assigned_to_mission`
-
-### 4 个 Status Type
-`Mission.status` · `Equipment.status` · `Scenario.status` · `Threat.status`
-
----
-
-## 🛠 技术栈
-
-- **Streamlit 1.61** — 多页面框架
-- **Plotly 5.18** — 交互图（网络图 / 瀑布 / ROC）
-- **rdflib 7.0** — SPARQL 查询
-- **Pandas + NumPy** — 数据处理
-- **Matplotlib + Seaborn** — 静态图
-- **scikit-learn** — AUC 计算
-
----
-
-## 🚀 快速启动
-
-### 本地运行
-```bash
-git clone https://github.com/YOUR_USERNAME/cuas-ontology-demo.git
-cd cuas-ontology-demo
-pip install -r requirements.txt
-streamlit run app.py
-```
-浏览器自动打开 <http://localhost:8501>。
-
-### 一键演示模式
-```bash
-streamlit run demo_mode.py
-```
-进入 **30 分钟精华版自动演示** 模式，按剧本逐步跳转。
-
-### Streamlit Cloud 一键部署
-详见 [`deploy_guide.md`](./deploy_guide.md)，5 分钟即可拿到公开 URL。
-
----
-
-## 📂 目录结构
-
-```
-streamlit_cloud_deploy/
-├── app.py                          # 主入口（多页导航）
-├── demo_mode.py                    # 自动演示模式
-├── pages/                          # 多页应用（自动路由）
-│   ├── 1_🏠_主页.py
-│   ├── 2_🧬_本体浏览.py
-│   ├── 3_🔍_SPARQL查询.py
-│   ├── 4_📊_贝叶斯实验.py
-│   └── 5_🗺_机场反无.py
-├── utils/
-│   ├── ontology_loader.py
-│   ├── sparql_runner.py
-│   └── bayes_engine.py
-├── data/
-│   ├── ontology.json
-│   ├── airports.json
-│   └── bayes_params.json
-├── assets/                         # 静态资源
-├── .streamlit/
-│   ├── config.toml                 # 主题 + 服务配置
-│   └── secrets.toml.example        # 密钥模板
-├── requirements.txt                # Python 依赖
-├── packages.txt                    # 系统依赖
-├── runtime.txt                     # Python 版本
-├── deploy_guide.md                 # ★ 5 分钟部署教程
-└── .github/workflows/test.yml      # CI 自动化
+```powershell
+cd D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated
+.\06_部署脚本\安装本地环境.ps1
+.\06_部署脚本\启动本地项目.ps1
 ```
 
----
+启动后访问 `http://127.0.0.1:8501`。如需 Jupyter：
 
-## 👥 团队介绍
+```powershell
+.\06_部署脚本\启动Jupyter.ps1
+```
 
-**C-UAS Ontology Group** · OSREDM 2026 · 新概念反无赛道
+重新执行全部 Notebook 并更新输出：
 
-| 角色 | 姓名 | 职责 |
-|------|------|------|
-| 项目负责人 | 张三 | 体系架构、本体设计 |
-| 算法工程师 | 李四 | 贝叶斯引擎、AUC 优化 |
-| 数据工程师 | 王五 | SPARQL 推理、数据建模 |
-| 前端工程师 | 赵六 | Streamlit 可视化 |
-| 文档 & 演示 | 钱七 | 文档、PPT、视频 |
+```powershell
+.\06_部署脚本\执行全部Notebook.ps1
+```
 
----
+推荐在演示或交付前执行技术主线一键验收。它会依次重跑 4 个 Notebook、两轮页面验收、指标快照导出、部署镜像同步、隔离端口真实启动、跨文件终审，并生成带 SHA-256 的当前版本清单：
 
-## 📞 联系方式
+```powershell
+.\06_部署脚本\执行技术验收.ps1
+```
 
-- 比赛：**OSREDM 2026 · 7 号赛道 · 新概念反无**
-- 报名链接：<https://osredm.example.org>
-- 团队邮箱：<cuas-team@example.org>
+如只需单独执行应用级回归验收：
 
----
+```powershell
+& ..\.venv-cuas\python.exe .\06_部署脚本\verify_streamlit_app.py
+& ..\.venv-cuas\python.exe .\06_部署脚本\export_current_metrics.py
+.\06_部署脚本\sync_streamlit_deploy.ps1
+```
 
-> © 2025 OSREDM C-UAS Ontology Group · Streamlit 1.61 · Plotly 5.18 · rdflib 7.0
+## 目录职责
+
+| 目录 | 职责 | 是否为当前主线 |
+|---|---|---|
+| `01_参赛交付物` | 仅保留范围说明和暂停使用警告；实际交付物不进入公开分支 | 边界说明 |
+| `03_源码/streamlit_app` | 本地演示唯一代码主线 | 是 |
+| `03_源码/streamlit_cloud_deploy` | 由同步脚本生成的部署镜像 | 是，但不得手改 |
+| `03_源码/threejs_app` | 浏览器三维辅助演示 | 是，次于 Streamlit 主线 |
+| `05_Notebook与数据` | 四个规范 Notebook、验证输出和指标裁决 | 是 |
+| `06_部署脚本` | 环境、运行、验收与同步脚本 | 是 |
+| `07_文档` | 版本治理、事实口径与辅助说明 | 是 |
+
+版本冲突裁决见 `07_文档/版本治理与融合决策.md`；远端提交历史、旧 README 风险和推荐发布路径见 `07_文档/GitHub远端历史审计与发布策略.md`；逐项完成度见 `07_文档/项目完成度与证据审计.md`。
+
+## 比赛材料边界
+
+本公开技术分支不包含报名材料或第 7、8 步的方案书、PPT、视频和提交压缩包；这些内容继续留在本地完整项目包中并保持暂停状态。
+
+官网当前公开流程为：创意类报名 2026-07-15 至 2026-08-15；初赛提交方案与视频；决赛进行项目演示与现场答辩。报名材料和项目方案是两个分开的压缩包：
+
+- 项目方案包：`赛队名称_参赛类别_参赛科目_联系人姓名.zip`
+- 报名材料包：`报名材料_赛队名称_参赛类别_参赛科目_联系人姓名.zip`
+
+报名表暂不填写，因为赛队名称、队长、联系人、成员、证件材料和联系方式尚未由参赛者确认。联系人须与队长不同；官网允许最多 10 名成员，而下载表格当前仅有 5 行，超过 5 人时先向赛道联系人确认，不擅自改官方模板。
+
+## 事实源优先级
+
+1. 官网现行页面与下载原件；
+2. `05_Notebook与数据/验证输出/指标裁决.json`；
+3. 本地 `03_源码/streamlit_app`；
+4. `C-UAS-Final-Package` 的二维/三维实现思路；
+5. GitHub `wxyrc5/cuas-ontology-demo` 早期快照；
+6. 旧 PDF、PPT、视频、SRT、论文和宣传文案。
+
+凡与前一级冲突，后一级不得作为提交口径。禁止把合成结果表述为实测、现场、专家标注或正式装备性能。
+
+## 仍需参赛者提供
+
+- 正式赛队名称；
+- 队长姓名、手机、身份证明；
+- 联系人姓名、手机、身份证明（须与队长不同）；
+- 其余成员与联合单位信息；
+- 是否授权在提交材料中保留公开 GitHub 链接；
+- 演示视频最终采用真人旁白、AI 配音还是仅录屏字幕。
+
+在这些信息齐备前，可以完成匿名版方案书、PPT、视频分镜与技术附件，但不能生成真实可提交的报名压缩包。

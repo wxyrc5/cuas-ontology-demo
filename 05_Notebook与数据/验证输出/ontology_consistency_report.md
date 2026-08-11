@@ -1,0 +1,40 @@
+# C-UAS 本体一致性验证报告
+
+- 总结论：**通过**
+- 执行时间：2026-08-11T10:46:35+08:00
+- Python：3.11.15
+- Java：java version "20.0.1" 2023-04-18
+- Owlready2 / HermiT：0.51 / bundled
+
+## 四层验证结果
+
+| 检查 | 结果 | 实际证据 | 用时（秒） |
+|---|---:|---|---:|
+| RDF/Turtle 语法解析 | 通过 | cuas-ontology.ttl=288, cuas-data-valid.ttl=175, cuas-data-test.ttl=2, cuas-shapes.ttl=419 | 0.032 |
+| 8 OT / 10 LT 结构审计 | 通过 | core_classes=8/8; core_links=10/10; unsupported_datatype_ranges=0 | 0.000 |
+| SHACL 正向实例验证 | 通过 | Conforms=True | 0.176 |
+| SHACL 负向对照 | 通过 | Conforms=False; violations=2; expected_paths=priority,operationalStatus | 0.119 |
+| HermiT 正向一致性 | 通过 | HermiT consistent=True; expected=True; input_triples=463 | 0.927 |
+| HermiT 类型互斥负向对照 | 通过 | HermiT consistent=False; expected=False; input_triples=465 | 0.757 |
+
+## SHACL 负向对照（期望且仅期望 2 项）
+
+| Focus node | Path | 约束 |
+|---|---|---|
+| `Eq_RadarUnit_007` | `operationalStatus` | operationalStatus 必须是 Available / Engaged / Maintenance / Failed 之一 |
+| `Mission_G20Summit` | `priority` | priority 必须在 [1,5] 范围内，5 为最高优先级 |
+
+## 结论边界
+
+- HermiT 证明的是当前 OWL 2 DL TBox 与正向 ABox 可满足；负向对照证明核心类型互斥公理能够实际检出冲突。
+- SHACL 证明的是实例字段、枚举、关系方向和基数满足项目约束；它不替代描述逻辑一致性推理。
+- SWRL 规则保存在独立文件，不混入 Turtle TBox；规则执行正确性应作为单独规则测试评价。
+
+## 输入文件摘要
+
+| 文件 | 三元组数 | SHA-256 |
+|---|---:|---|
+| `cuas-ontology.ttl` | 288 | `25c71137474a1da19aad3657717e8004c22c2b137dc5230559930733749fe839` |
+| `cuas-data-valid.ttl` | 175 | `1f1cffeb04e4ef9577d0aaebf92ae1eaaf5bc10802c464a575fa028108638f7f` |
+| `cuas-data-test.ttl` | 2 | `db3ddfd0fdd6186b184b5a78e7677f8b660a0a10a7d3e9f5d864c09ade17754d` |
+| `cuas-shapes.ttl` | 419 | `e6ed57dcbb41416c22f61e582c181d9692455e3f40c62bc496b8109dbf4c0a1c` |

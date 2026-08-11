@@ -1,0 +1,117 @@
+--- cell 1 / stream ---
+项目根目录: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated
+
+--- cell 3 / execute_result ---
+            来源                                                 范围 现场实测  \
+0  notebook_01     formal_owl2dl_consistency_and_shacl_validation    否   
+1  notebook_02  synthetic_full_chain_ooda_and_capacity_constra...    否   
+2  notebook_03      synthetic_five_channel_beta_binomial_flywheel    否   
+
+             SHA256  
+0  0e127ee167985697  
+1  7db0180bc02e330e  
+2  5c79b0e5e998f8b4
+
+--- cell 5 / execute_result ---
+                                   指标      value         unit           工程门槛  \
+0                       形式一致性分层验证全部通过   1.000000         bool            = 1   
+1                  核心 Object Type 声明数   8.000000           OT            = 8   
+2                    核心 Link Type 声明数  10.000000           LT           = 10   
+3                     SHACL 受控负向违规检出数   2.000000   violations            = 2   
+4                   HermiT 正向 ABox 一致   1.000000         bool            = 1   
+5                  HermiT 互斥类型负向对照被拒绝   1.000000         bool            = 1   
+6                   20 机 HPM 完整闭环 P90   3.670253            s            < 5   
+7                 20 机 HPM P(完整闭环<5s)   0.989600        ratio         ≥ 0.90   
+8                     20 机容量约束闭环使命 Pk   0.765500  probability         ≥ 0.75   
+9         20 机闭环使命 Pk 的 Wilson 95% 下界   0.759577  probability         ≥ 0.75   
+10             同资源静态覆盖表（无反馈）20 机闭环 Pk   0.300700  probability            仅报告   
+11              固定资源包在 Pk≥0.75 下的规模前沿  20.000000      targets           ≥ 20   
+12  20–100 机达到协调感知 Pk≥0.75 所需最大同构资源包数   5.000000     packages            ≤ 6   
+13          达标资源包下动态反馈相对静态规则的最小 Pk 优势   0.450000  probability            > 0   
+14                          五通道终态合成后验   0.945941  probability         ≥ 0.90   
+15                         持续达标收敛周期均值  23.805000       cycles           ≤ 50   
+16                        95% 可信区间覆盖率   0.937000        ratio      0.90–0.99   
+17                          终态后验 RMSE   0.008894                      ≤ 0.03   
+18                         贝叶斯同预算 AUC   0.967892                      ≥ 0.85   
+19                        固定规则同预算 AUC   0.868806                         仅报告   
+20                   贝叶斯相对固定规则 AUC 增量   0.099085               95% CI 下界 > 0   
+21                          贝叶斯阈值 FPR   0.096500        ratio         ≤ 0.10   
+22                          贝叶斯阈值 FNR   0.081750        ratio         ≤ 0.10   
+
+         status       source  
+0          PASS  notebook_01  
+1          PASS  notebook_01  
+2          PASS  notebook_01  
+3          PASS  notebook_01  
+4          PASS  notebook_01  
+5          PASS  notebook_01  
+6          PASS  notebook_02  
+7          PASS  notebook_02  
+8          PASS  notebook_02  
+9          PASS  notebook_02  
+10  REPORT_ONLY  notebook_02  
+11         PASS  notebook_02  
+12         PASS  notebook_02  
+13         PASS  notebook_02  
+14         PASS  notebook_03  
+15         PASS  notebook_03  
+16         PASS  notebook_03  
+17         PASS  notebook_03  
+18         PASS  notebook_03  
+19  REPORT_ONLY  notebook_03  
+20         PASS  notebook_03  
+21         PASS  notebook_03  
+22         PASS  notebook_03
+
+--- cell 7 / display_data ---
+<Figure size 1700x500 with 3 Axes>
+
+--- cell 8 / display_data ---
+<Figure size 1400x480 with 2 Axes>
+
+--- cell 8 / execute_result ---
+       scenario    N  adaptive_pk  static_pk  mean_neutralized
+0    A_LSS_Solo    1     0.996333   0.996333          0.997667
+1     B_Swarm_5    5     0.992667   0.871000          4.978333
+2      Swarm_10   10     0.989667   0.383667          9.920667
+3      Swarm_15   15     0.953000   0.306333         14.403667
+4    C_Swarm_20   20     0.768333   0.300667         17.356333
+5      Swarm_25   25     0.290333   0.010000         17.833667
+6      Swarm_30   30     0.033667   0.000000         17.877000
+7      Swarm_40   40     0.000000   0.000000         17.728333
+8    D_Swarm_50   50     0.000000   0.000000         17.798333
+9      Swarm_60   60     0.000000   0.000000         17.771667
+10     Swarm_75   75     0.000000   0.000000         17.821667
+11  E_Swarm_100  100     0.000000   0.000000         17.688333
+
+--- cell 10 / stream ---
+指标裁决 JSON: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\指标裁决.json
+指标裁决说明: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\指标裁决.md
+裁决汇总: {'pass': 21, 'fail': 0, 'report_only': 2}
+
+--- cell 12 / stream ---
+Action 决策: ACT-A7454DD33AEE
+RDF 三元组: 127
+JSON: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\action_feedback_demo.json
+TTL: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\action_feedback_writeback.ttl
+
+--- cell 12 / execute_result ---
+                            rule_id                       action_code  \
+0        R01_DETECTION_COVERAGE_LOW           ADJUST_SENSOR_SCAN_MODE   
+1   R02_IDENTIFICATION_ACCURACY_LOW               SWITCH_FUSION_MODEL   
+2           R03_THREAT_LEVEL_RISING            RAISE_MISSION_PRIORITY   
+3  R04_THREAT_RESOURCE_REALLOCATION   AUTHORIZE_RESOURCE_REALLOCATION   
+4             R05_EQUIPMENT_FAILURE          QUARANTINE_AND_RERUN_WTA   
+5          R06_OODA_DEADLINE_BREACH     AUTHORIZE_BATCH_DECISION_MODE   
+6      R07_INTERCEPTION_SUCCESS_LOW  AUTHORIZE_EFFECTOR_REINFORCEMENT   
+7              R08_FALSE_ALARM_HIGH         RAISE_FUSION_CONFIRMATION   
+
+              execution_status                 description  
+0                 AUTO_APPLIED     提高雷达刷新并保持备用传感与数据融合能力分配。  
+1                 AUTO_APPLIED       切换到高置信多传感融合并请求高分辨率复核。  
+2                 AUTO_APPLIED            将使命优先级提升到当前威胁等级。  
+3  PENDING_HUMAN_AUTHORIZATION  请求从低优先级任务调入一个同构资源包；等待人工授权。  
+4                 AUTO_APPLIED      将故障装备移出能力池并重新计算武器目标分配。  
+5  PENDING_HUMAN_AUTHORIZATION      请求批量授权与指控通道重编组；等待人工授权。  
+6  PENDING_HUMAN_AUTHORIZATION    请求软硬杀伤资源重分配与补充交战；等待人工授权。  
+7                 AUTO_APPLIED            将告警确认切换为双源一致性门限。

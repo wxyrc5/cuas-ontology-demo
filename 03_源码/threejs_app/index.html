@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="C-UAS Ontology 沉浸式 3D 体验 — 反无人机体系本体模型 AR/VR 应用" />
+  <title>🛡️ C-UAS Ontology · 沉浸式 3D 体验</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <style>
+    :root {
+      --c-bg-0: #02060c;
+      --c-bg-1: #0a1525;
+      --c-accent: #1abc9c;
+      --c-warn: #e74c3c;
+      --c-info: #3498db;
+      --c-text: #ecf0f1;
+      --c-text-dim: #bdc3c7;
+      --glass-bg: rgba(10, 21, 37, 0.55);
+      --glass-border: rgba(26, 188, 156, 0.35);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(ellipse at top, var(--c-bg-1) 0%, var(--c-bg-0) 70%);
+      color: var(--c-text);
+      font-family: 'Noto Sans CJK SC', 'Source Han Sans CN', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+    canvas { display: block; }
+
+    /* ============ 沉浸式 UI 面板 ============ */
+    .panel {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 10;
+      padding: 18px 22px;
+      min-width: 320px;
+      max-width: 360px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px) saturate(180%);
+      -webkit-backdrop-filter: blur(14px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      pointer-events: auto;
+    }
+    .panel h1 {
+      margin: 0 0 4px 0;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: var(--c-accent);
+    }
+    .panel .sub {
+      font-size: 12px;
+      color: var(--c-text-dim);
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+    .panel .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(26, 188, 156, 0.18);
+      border: 1px solid rgba(26, 188, 156, 0.45);
+      border-radius: 8px;
+      font-size: 10px;
+      color: var(--c-accent);
+      margin-right: 4px;
+    }
+    .scene-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--c-text);
+      background: linear-gradient(135deg, rgba(26, 188, 156, 0.18), rgba(52, 152, 219, 0.18));
+      border: 1px solid rgba(26, 188, 156, 0.4);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background: linear-gradient(135deg, rgba(26, 188, 156, 0.35), rgba(52, 152, 219, 0.35));
+      border-color: var(--c-accent);
+      transform: translateY(-1px);
+    }
+    .btn:active { transform: translateY(0); }
+    .btn.full { grid-column: 1 / -1; }
+    .btn .emoji { font-size: 16px; }
+    .btn.vr {
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.25), rgba(155, 89, 182, 0.25));
+      border-color: rgba(231, 76, 60, 0.55);
+      color: #ffd1cb;
+    }
+    .btn.vr:hover {
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.45), rgba(155, 89, 182, 0.45));
+    }
+
+    /* ============ 右下角信息卡 ============ */
+    .info {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 10;
+      padding: 14px 18px;
+      max-width: 320px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(52, 152, 219, 0.35);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--c-text-dim);
+    }
+    .info b { color: var(--c-text); }
+    .info .ctrl {
+      display: inline-block;
+      padding: 1px 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--c-text);
+    }
+
+    /* ============ 顶部状态条 ============ */
+    .statusbar {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 10;
+      padding: 8px 14px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      font-size: 11px;
+      color: var(--c-text-dim);
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+    }
+    .statusbar .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--c-accent);
+      margin-right: 6px;
+      box-shadow: 0 0 8px var(--c-accent);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    /* ============ 详情面板（点击节点） ============ */
+    .detail {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-12px);
+      z-index: 20;
+      min-width: 320px;
+      max-width: 480px;
+      padding: 16px 20px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--c-accent);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .detail.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+    .detail h3 {
+      margin: 0 0 4px 0;
+      font-size: 16px;
+      color: var(--c-accent);
+    }
+    .detail p {
+      margin: 4px 0;
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--c-text-dim);
+    }
+    .detail .close {
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      cursor: pointer;
+      color: var(--c-text-dim);
+      font-size: 18px;
+      line-height: 1;
+    }
+    .detail .close:hover { color: var(--c-warn); }
+
+    /* ============ 加载动画 ============ */
+    .loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--c-bg-0);
+      transition: opacity 0.6s;
+    }
+    .loader.gone { opacity: 0; pointer-events: none; }
+    .loader .ring {
+      width: 64px;
+      height: 64px;
+      border: 3px solid rgba(26, 188, 156, 0.2);
+      border-top-color: var(--c-accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader .txt {
+      margin-top: 18px;
+      color: var(--c-text-dim);
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    /* ============ 移动端响应式 ============ */
+    @media (max-width: 720px) {
+      .panel { left: 8px; right: 8px; top: 8px; max-width: none; min-width: 0; padding: 12px 14px; }
+      .panel h1 { font-size: 15px; }
+      .scene-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+      .btn { padding: 8px 6px; font-size: 11px; }
+      .info { left: 8px; right: 8px; bottom: 8px; max-width: none; }
+      .statusbar { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 加载动画 -->
+  <div class="loader" id="loader">
+    <div class="ring"></div>
+    <div class="txt">正在加载 Three.js 场景…</div>
+  </div>
+
+  <!-- 3D 画布 -->
+  <div id="scene"></div>
+
+  <!-- 主控制面板 -->
+  <div class="panel" id="mainPanel">
+    <h1>🛡️ C-UAS Ontology · 3D</h1>
+    <div class="sub">
+      <span class="badge">8 OT</span>
+      <span class="badge">10 LT</span>
+      <span class="badge">WebXR</span>
+      反无人机体系本体模型 · 沉浸式可视化
+    </div>
+    <div class="scene-grid">
+      <button class="btn" id="btnAirport">
+        <span class="emoji">🛫</span>机场反无
+      </button>
+      <button class="btn" id="btnOntology">
+        <span class="emoji">🕸️</span>本体浏览
+      </button>
+      <button class="btn full" id="btnFlywheel">
+        <span class="emoji">🔄</span>贝叶斯飞轮闭环
+      </button>
+      <a class="btn" href="scene_airport.html" target="_blank" rel="noopener">
+        <span class="emoji">🔗</span>机场 · 独立页
+      </a>
+      <a class="btn" href="scene_ontology.html" target="_blank" rel="noopener">
+        <span class="emoji">🔗</span>本体 · 独立页
+      </a>
+      <a class="btn full" href="scene_flywheel.html" target="_blank" rel="noopener">
+        <span class="emoji">🔗</span>飞轮 · 独立页
+      </a>
+      <button class="btn vr full" id="btnVR">
+        <span class="emoji">🎮</span>进入 VR / WebXR 模式
+      </button>
+      <button class="btn full" id="btnAutoRotate" style="background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(52, 152, 219, 0.2)); border-color: rgba(155, 89, 182, 0.4);">
+        <span class="emoji">⏯️</span>切换自动旋转
+      </button>
+    </div>
+  </div>
+
+  <!-- 节点详情面板 -->
+  <div class="detail" id="detail">
+    <span class="close" id="detailClose">×</span>
+    <h3 id="detailTitle">—</h3>
+    <p id="detailDesc">—</p>
+  </div>
+
+  <!-- 状态条 -->
+  <div class="statusbar">
+    <span class="dot"></span>
+    <span id="statusText">Ready · Three.js r160</span>
+  </div>
+
+  <!-- 操作提示 -->
+  <div class="info" id="infoCard">
+    <b>🖱️ 桌面交互</b>　左键拖拽旋转 · 滚轮缩放 · 右键平移<br/>
+    <b>📱 移动端</b>　单指旋转 · 双指缩放 · 系统陀螺仪(需授权)<br/>
+    <b>🎮 VR 头显</b>　点击上方"VR 模式"按钮启动 WebXR
+  </div>
+
+  <!-- Three.js importmap -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <!-- 业务数据：8 OT + 10 LT -->
+  <script>
+    // 全局可复用数据
+    window.CUAS_DATA = {
+      PKX: {
+        name_zh: '北京大兴国际机场',
+        name_en: 'Beijing Daxing Intl. (PKX)',
+        icao: 'ZBAD',
+        lon: 116.410, lat: 39.510
+      },
+      NET_CLEAR_KM: 55,
+      DEFENSE_LAYERS: [
+        { id: 1, name_zh: '远程预警雷达层', r_km: 75.0, color: 0xFF6B6B, alpha: 0.10 },
+        { id: 2, name_zh: '中程雷达+RF层',  r_km: 35.0, color: 0xFFA94D, alpha: 0.13 },
+        { id: 3, name_zh: '光电/红外层',    r_km: 12.0, color: 0xFFD43B, alpha: 0.16 },
+        { id: 4, name_zh: '干扰/激光/拦截', r_km: 3.0,  color: 0x69DB7C, alpha: 0.22 }
+      ],
+      EFFECTORS: [
+        { id: 'EW_Jammer', name_zh: 'EW射频干扰',  range_km: 15.0, color: 0x9B59B6 },
+        { id: 'HPM',       name_zh: 'HPM高功率微波', range_km: 8.0,  color: 0x8E44AD },
+        { id: 'HEL',       name_zh: 'HEL高能激光',  range_km: 5.0,  color: 0xE74C3C },
+        { id: 'Kinetic',   name_zh: '动能拦截弹',   range_km: 10.0, color: 0x34495E }
+      ],
+      ONTOLOGY_OTS: [
+        { name: 'Mission',             name_zh: '使命',     color: 0x1F4E79, desc: '作战意图 & 成功判据 · 24 实例' },
+        { name: 'Scenario',            name_zh: '场景',     color: 0x2E7D32, desc: '5 阶段 OODA 作战工作流 · 60 实例' },
+        { name: 'TechnicalCapability', name_zh: '能力',     color: 0xE65100, desc: '6 大类能力谱系 · 64 实例' },
+        { name: 'Equipment',           name_zh: '装备',     color: 0x6A1B9A, desc: '传感器/效应器/平台 · 78 实例' },
+        { name: 'EffectMetric',        name_zh: '效果度量', color: 0xC62828, desc: 'MOP/MOE/KPP · 45 实例' },
+        { name: 'Threat',              name_zh: '威胁',     color: 0xB71C1C, desc: '敌方目标 & 蜂群 · 32 实例' },
+        { name: 'Asset',               name_zh: '资产',     color: 0x00695C, desc: '被保护对象 · 18 实例' },
+        { name: 'Operator',            name_zh: '操作员',   color: 0x4E342E, desc: '决策 & 执行人员 · 22 实例' }
+      ],
+      ONTOLOGY_LTS: [
+        { name: 'governs',    name_zh: '支配', src: 'Mission',        tgt: 'Scenario',             color: 0x2C3E50 },
+        { name: 'allocates',  name_zh: '分配', src: 'Mission',        tgt: 'Equipment',            color: 0x16A085 },
+        { name: 'measuredBy', name_zh: '度量', src: 'Mission',        tgt: 'EffectMetric',         color: 0xC62828 },
+        { name: 'validates',  name_zh: '反哺', src: 'EffectMetric',   tgt: 'Mission',              color: 0xFF0000, highlight: true },
+        { name: 'confronts',  name_zh: '对抗', src: 'Mission',        tgt: 'Threat',               color: 0xB71C1C },
+        { name: 'protects',   name_zh: '保护', src: 'Mission',        tgt: 'Asset',                color: 0x00695C },
+        { name: 'covers',     name_zh: '涵盖', src: 'Scenario',       tgt: 'TechnicalCapability',  color: 0xFFA500 },
+        { name: 'produces',   name_zh: '产出', src: 'Scenario',       tgt: 'EffectMetric',         color: 0xE67E22 },
+        { name: 'implements', name_zh: '实现', src: 'Equipment',      tgt: 'TechnicalCapability',  color: 0xE65100 },
+        { name: 'operates',   name_zh: '操作', src: 'Operator',       tgt: 'Equipment',            color: 0x4E342E }
+      ],
+      FLYWHEEL_NODES: [
+        { id: 'Mission',  name_zh: '使命', color: 0x1F4E79, desc: 'M_k ~ Beta(α, β)\n作战意图 + 成功判据' },
+        { id: 'Scenario', name_zh: '场景', color: 0x2E7D32, desc: 's_t ∈ {obs, ori, dec, act}\nOODA 子序列' },
+        { id: 'Solution', name_zh: '方案', color: 0xE65100, desc: 'θ = argmax CER(t)\n武器配对 + CER' },
+        { id: 'Effect',   name_zh: '效果', color: 0xC62828, desc: 'P(e_t) ~ Beta(s+2, f+2)\n后验分布' }
+      ],
+      FLYWHEEL_EDGES: [
+        { src: 'Mission',  tgt: 'Scenario', label: 'governs' },
+        { src: 'Scenario', tgt: 'Solution', label: 'covers' },
+        { src: 'Solution', tgt: 'Effect',   label: 'produces' },
+        { src: 'Effect',   tgt: 'Mission',  label: 'validates', highlight: true }
+      ]
+    };
+  </script>
+
+  <!-- Three.js 主程序 -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { VRButton } from 'three/addons/webxr/VRButton.js';
+    import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+    function mulberry32(seed) {
+      return function () {
+        let value = seed += 0x6D2B79F5;
+        value = Math.imul(value ^ value >>> 15, value | 1);
+        value ^= value + Math.imul(value ^ value >>> 7, value | 61);
+        return ((value ^ value >>> 14) >>> 0) / 4294967296;
+      };
+    }
+    const auxiliaryRandom = mulberry32(2026001);
+
+    // ===========================================================
+    // 1. 初始化场景 / 相机 / 渲染器
+    // ===========================================================
+    const DATA = window.CUAS_DATA;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x02060c);
+    scene.fog = new THREE.FogExp2(0x02060c, 0.018);
+
+    const camera = new THREE.PerspectiveCamera(
+      60,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      500
+    );
+    camera.position.set(8, 6, 14);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    renderer.xr.enabled = true;
+    document.getElementById('scene').appendChild(renderer.domElement);
+
+    // CSS2D 渲染器（用于中文标签）
+    const labelRenderer = new CSS2DRenderer();
+    labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    labelRenderer.domElement.style.position = 'absolute';
+    labelRenderer.domElement.style.top = '0';
+    labelRenderer.domElement.style.pointerEvents = 'none';
+    document.getElementById('scene').appendChild(labelRenderer.domElement);
+
+    // VR 按钮
+    const vrButton = VRButton.createButton(renderer);
+    vrButton.style.position = 'fixed';
+    vrButton.style.bottom = '16px';
+    vrButton.style.left = '50%';
+    vrButton.style.transform = 'translateX(-50%)';
+    vrButton.style.zIndex = '15';
+    document.body.appendChild(vrButton);
+
+    // ===========================================================
+    // 2. 光照
+    // ===========================================================
+    scene.add(new THREE.AmbientLight(0x4a6080, 0.6));
+    const hemiLight = new THREE.HemisphereLight(0x88aaff, 0x223344, 0.5);
+    scene.add(hemiLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    dirLight.position.set(15, 20, 10);
+    scene.add(dirLight);
+    const rimLight = new THREE.PointLight(0x1abc9c, 1.2, 60);
+    rimLight.position.set(-12, 6, -8);
+    scene.add(rimLight);
+
+    // 星空粒子背景
+    (function addStarfield() {
+      const starGeo = new THREE.BufferGeometry();
+      const N = 1800;
+      const positions = new Float32Array(N * 3);
+      const colors = new Float32Array(N * 3);
+      for (let i = 0; i < N; i++) {
+        const r = 80 + auxiliaryRandom() * 60;
+        const theta = auxiliaryRandom() * Math.PI * 2;
+        const phi = Math.acos(2 * auxiliaryRandom() - 1);
+        positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = r * Math.cos(phi);
+        positions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+        const c = new THREE.Color().setHSL(0.55 + auxiliaryRandom() * 0.1, 0.4, 0.6 + auxiliaryRandom() * 0.4);
+        colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
+      }
+      starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      starGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      const starMat = new THREE.PointsMaterial({ size: 0.25, vertexColors: true, transparent: true, opacity: 0.8, depthWrite: false });
+      scene.add(new THREE.Points(starGeo, starMat));
+    })();
+
+    // ===========================================================
+    // 3. 控制器
+    // ===========================================================
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 2;
+    controls.maxDistance = 60;
+    controls.target.set(0, 1, 0);
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.5;
+
+    // 移动端陀螺仪
+    let gyroEnabled = false;
+    function tryEnableGyro() {
+      if (typeof DeviceOrientationEvent === 'undefined') return;
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        DeviceOrientationEvent.requestPermission()
+          .then(state => { if (state === 'granted') gyroEnabled = true; })
+          .catch(() => {});
+      } else {
+        gyroEnabled = true;
+      }
+    }
+    window.addEventListener('touchend', tryEnableGyro, { once: true });
+    window.addEventListener('click', tryEnableGyro, { once: true });
+    const gyroState = { alpha: 0, beta: 0, gamma: 0 };
+    window.addEventListener('deviceorientation', (e) => {
+      if (!gyroEnabled) return;
+      gyroState.alpha = e.alpha || 0;
+      gyroState.beta = e.beta || 0;
+      gyroState.gamma = e.gamma || 0;
+    });
+
+    // ===========================================================
+    // 4. 场景管理：清理 & 切换
+    // ===========================================================
+    const sceneGroup = new THREE.Group();
+    scene.add(sceneGroup);
+
+    const detailEl = document.getElementById('detail');
+    const detailTitle = document.getElementById('detailTitle');
+    const detailDesc = document.getElementById('detailDesc');
+    document.getElementById('detailClose').onclick = () => detailEl.classList.remove('show');
+    window.showDetail = (title, desc) => {
+      detailTitle.textContent = title;
+      detailDesc.textContent = desc;
+      detailEl.classList.add('show');
+    };
+
+    function clearScene() {
+      while (sceneGroup.children.length) {
+        const obj = sceneGroup.children[0];
+        sceneGroup.remove(obj);
+        obj.traverse((c) => {
+          if (c.geometry) c.geometry.dispose?.();
+          if (c.material) {
+            if (Array.isArray(c.material)) c.material.forEach(m => m.dispose?.());
+            else c.material.dispose?.();
+          }
+          if (c instanceof CSS2DObject && c.element?.parentNode) c.element.parentNode.removeChild(c.element);
+        });
+      }
+    }
+
+    // 创建文字标签（CSS2D 方式，中文支持好）
+    function makeLabel(text, color = '#ecf0f1', bg = 'rgba(10,21,37,0.75)', size = '11px') {
+      const div = document.createElement('div');
+      div.textContent = text;
+      div.style.cssText = `
+        padding: 3px 8px;
+        background: ${bg};
+        border: 1px solid ${color}55;
+        border-radius: 6px;
+        color: ${color};
+        font-size: ${size};
+        font-family: 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        white-space: nowrap;
+        pointer-events: none;
+        text-shadow: 0 0 4px rgba(0,0,0,0.8);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      `;
+      return new CSS2DObject(div);
+    }
+
+    // ===========================================================
+    // 5. 场景 1: 机场反无
+    // ===========================================================
+    function buildAirportScene() {
+      clearScene();
+      document.getElementById('statusText').textContent = '场景 1/3 · 机场反无 (PKX)';
+
+      // —— 5.1 跑道 ×4 ——
+      const runwayMat = new THREE.MeshStandardMaterial({ color: 0x1B2631, roughness: 0.9 });
+      for (const hdgDeg of [10, 100, 170, 190]) {
+        const hdg = hdgDeg * Math.PI / 180;
+        const L = 3.8;
+        const runway = new THREE.Mesh(
+          new THREE.BoxGeometry(0.18, 0.01, L * 2),
+          runwayMat
+        );
+        runway.position.y = 0.005;
+        runway.rotation.y = hdg;
+        sceneGroup.add(runway);
+      }
+
+      // 地面网格
+      const gridSize = 80;
+      const gridDiv = 32;
+      const grid = new THREE.GridHelper(gridSize, gridDiv, 0x1a3a5c, 0x0d2540);
+      grid.position.y = -0.01;
+      grid.material.transparent = true;
+      grid.material.opacity = 0.4;
+      sceneGroup.add(grid);
+
+      // —— 5.2 4 层半球防御壳 ——
+      DATA.DEFENSE_LAYERS.forEach((layer, idx) => {
+        const r = layer.r_km;
+        const c = new THREE.Color(layer.color);
+        const sph = new THREE.Mesh(
+          new THREE.SphereGeometry(r * 0.25, 32, 24, 0, Math.PI * 2, 0, Math.PI / 2),
+          new THREE.MeshBasicMaterial({
+            color: c,
+            transparent: true,
+            opacity: layer.alpha,
+            side: THREE.DoubleSide,
+            depthWrite: false
+          })
+        );
+        sceneGroup.add(sph);
+
+        // 范围环
+        const ringGeo = new THREE.RingGeometry(r * 0.25 - 0.05, r * 0.25 + 0.05, 64);
+        const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: layer.color, transparent: true, opacity: 0.5, side: THREE.DoubleSide }));
+        ring.rotation.x = -Math.PI / 2;
+        ring.position.y = 0.02;
+        sceneGroup.add(ring);
+
+        // 标签
+        const lbl = makeLabel(`L${idx + 1} ${layer.name_zh} · ${layer.r_km}km`, '#' + c.getHexString());
+        lbl.position.set(r * 0.18, 0.5, r * 0.18);
+        sceneGroup.add(lbl);
+      });
+
+      // —— 5.3 55 km 参数化演示边界（非监管净空范围） ——
+      const cylinder = new THREE.Mesh(
+        new THREE.CylinderGeometry(DATA.NET_CLEAR_KM * 0.25, DATA.NET_CLEAR_KM * 0.25, 8, 64, 1, true),
+        new THREE.MeshBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.05, side: THREE.DoubleSide, depthWrite: false })
+      );
+      cylinder.position.y = 4;
+      sceneGroup.add(cylinder);
+      const netLbl = makeLabel('⛔ 55 km 演示边界 · 北京大兴（非监管范围）', '#ff6666');
+      netLbl.position.set(0, 9, DATA.NET_CLEAR_KM * 0.25);
+      sceneGroup.add(netLbl);
+
+      // —— 5.4 4 类效应器 + 射程环 ——
+      const effOff = [[-10, -10], [10, -10], [10, 10], [-10, 10]];
+      DATA.EFFECTORS.forEach((eff, i) => {
+        const c = new THREE.Color(eff.color);
+        const effMesh = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.6, 0.6, 1.2, 8),
+          new THREE.MeshStandardMaterial({ color: eff.color, emissive: eff.color, emissiveIntensity: 0.4, metalness: 0.7, roughness: 0.3 })
+        );
+        effMesh.position.set(effOff[i][0], 0.6, effOff[i][1]);
+        sceneGroup.add(effMesh);
+
+        // 塔状顶部
+        const topMesh = new THREE.Mesh(
+          new THREE.ConeGeometry(0.3, 0.5, 6),
+          new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: eff.color, emissiveIntensity: 0.6 })
+        );
+        topMesh.position.set(effOff[i][0], 1.5, effOff[i][1]);
+        sceneGroup.add(topMesh);
+
+        // 射程环
+        const rangeRing = new THREE.Mesh(
+          new THREE.RingGeometry(eff.range_km * 0.25 - 0.04, eff.range_km * 0.25 + 0.04, 64),
+          new THREE.MeshBasicMaterial({ color: eff.color, transparent: true, opacity: 0.4, side: THREE.DoubleSide, depthWrite: false })
+        );
+        rangeRing.rotation.x = -Math.PI / 2;
+        rangeRing.position.set(effOff[i][0], 0.04, effOff[i][1]);
+        sceneGroup.add(rangeRing);
+
+        const lbl = makeLabel(`${eff.name_zh} · ${eff.range_km}km`, '#' + c.getHexString());
+        lbl.position.set(effOff[i][0], 2.5, effOff[i][1]);
+        sceneGroup.add(lbl);
+      });
+
+      // —— 5.5 PKX 中心 ——
+      const pkxCore = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(0.5, 1),
+        new THREE.MeshStandardMaterial({ color: 0x1abc9c, emissive: 0x1abc9c, emissiveIntensity: 1.0, metalness: 0.5, roughness: 0.2 })
+      );
+      pkxCore.position.set(0, 0.6, 0);
+      sceneGroup.add(pkxCore);
+
+      // 中心光晕
+      const haloGeo = new THREE.SphereGeometry(1.2, 16, 16);
+      const halo = new THREE.Mesh(haloGeo, new THREE.MeshBasicMaterial({ color: 0x1abc9c, transparent: true, opacity: 0.15 }));
+      halo.position.set(0, 0.6, 0);
+      sceneGroup.add(halo);
+
+      const pkxLbl = makeLabel('★ PKX · 北京大兴国际机场 (ZBAD)', '#1abc9c', 'rgba(10,30,30,0.85)', '13px');
+      pkxLbl.position.set(0, 2.2, 0);
+      sceneGroup.add(pkxLbl);
+
+      // —— 5.6 5 架入侵无人机 3D 折线 ——
+      const fleetColors = [0x27AE60, 0xF39C12, 0xE67E22, 0xE74C3C, 0xC0392B];
+      const fleetData = makeIntruderFleet(5);
+      fleetData.forEach((u, i) => {
+        const c = new THREE.Color(fleetColors[i]);
+        // 折线
+        const pts = u.pts.map(p => new THREE.Vector3(p[0], p[1], p[2]));
+        const curve = new THREE.CatmullRomCurve3(pts);
+        const linePts = curve.getPoints(60);
+        const lineGeo = new THREE.BufferGeometry().setFromPoints(linePts);
+        const lineMat = new THREE.LineBasicMaterial({ color: fleetColors[i], transparent: true, opacity: 0.85 });
+        const line = new THREE.Line(lineGeo, lineMat);
+        sceneGroup.add(line);
+
+        // 轨迹管（粗一点的视觉表现）
+        const tubeGeo = new THREE.TubeGeometry(curve, 60, 0.04, 6, false);
+        const tubeMat = new THREE.MeshBasicMaterial({ color: fleetColors[i], transparent: true, opacity: 0.55 });
+        const tube = new THREE.Mesh(tubeGeo, tubeMat);
+        sceneGroup.add(tube);
+
+        // 无人机模型（小三角）
+        const last = pts[pts.length - 1];
+        const drone = new THREE.Mesh(
+          new THREE.ConeGeometry(0.18, 0.4, 4),
+          new THREE.MeshStandardMaterial({ color: fleetColors[i], emissive: fleetColors[i], emissiveIntensity: 0.6, metalness: 0.6, roughness: 0.3 })
+        );
+        drone.position.copy(last);
+        drone.rotation.x = -Math.PI / 2;
+        sceneGroup.add(drone);
+
+        // 起点位置小球
+        const startPt = pts[0];
+        const startSphere = new THREE.Mesh(
+          new THREE.SphereGeometry(0.12, 8, 8),
+          new THREE.MeshBasicMaterial({ color: fleetColors[i] })
+        );
+        startSphere.position.copy(startPt);
+        sceneGroup.add(startSphere);
+
+        // 标签
+        const uLbl = makeLabel(`UAV-${i + 1} · T${u.class}`, '#' + c.getHexString());
+        uLbl.position.set(last.x, last.y + 0.5, last.z);
+        sceneGroup.add(uLbl);
+
+        // 入场动画
+        u.drone = drone;
+        u.curve = curve;
+        u.line = line;
+        u.tube = tube;
+      });
+      sceneGroup.userData.fleet = fleetData;
+
+      // —— 5.7 相机适配 ——
+      camera.position.set(20, 12, 25);
+      controls.target.set(0, 1, 0);
+    }
+
+    // 生成 5 架入侵无人机的 3D 轨迹
+    function makeIntruderFleet(n = 5) {
+      const trajectoryRandom = mulberry32(2026 + n);
+      const arr = [];
+      for (let i = 0; i < n; i++) {
+        const theta = (i / n) * Math.PI * 2 + (trajectoryRandom() - 0.5) * 0.4;
+        const startR = 18 + trajectoryRandom() * 4;
+        const endR = 2 + trajectoryRandom() * 4;
+        const pts = [];
+        const N = 30;
+        for (let k = 0; k < N; k++) {
+          const t = k / (N - 1);
+          const r = startR + (endR - startR) * t;
+          const wob = 0.4 * Math.sin(t * 4 * Math.PI);
+          const x = (r + wob) * Math.cos(theta);
+          const z = (r + wob) * Math.sin(theta);
+          const y = 0.5 + 2.0 * Math.sin(t * Math.PI) * 0.4 + trajectoryRandom() * 0.1;
+          pts.push([x, y, z]);
+        }
+        arr.push({ pts, class: 2 + Math.floor(trajectoryRandom() * 4) });
+      }
+      return arr;
+    }
+
+    // ===========================================================
+    // 6. 场景 2: 8 OT + 10 LT 本体
+    // ===========================================================
+    let ontologyNodes = [];
+    let ontologyEdges = [];
+
+    function buildOntologyScene() {
+      clearScene();
+      document.getElementById('statusText').textContent = '场景 2/3 · 8 OT + 10 LT 本体';
+
+      ontologyNodes = [];
+      ontologyEdges = [];
+
+      // —— 6.1 中心 hub（本体核心）——
+      const hub = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(0.35, 2),
+        new THREE.MeshStandardMaterial({ color: 0xffd700, emissive: 0xffd700, emissiveIntensity: 1.2, metalness: 0.7 })
+      );
+      sceneGroup.add(hub);
+      const hubLbl = makeLabel('本体核心', '#ffd700', 'rgba(40,30,5,0.85)');
+      hubLbl.position.set(0, 0.8, 0);
+      sceneGroup.add(hubLbl);
+
+      // 8 个 OT 节点（球面布局，Mission 在中心）
+      const R = 5;
+      const pos = {};
+      DATA.ONTOLOGY_OTS.forEach((ot, i) => {
+        if (ot.name === 'Mission') {
+          pos[ot.name] = new THREE.Vector3(0, 0, 0);
+        } else {
+          const phi = Math.acos(-1 + (2 * i) / DATA.ONTOLOGY_OTS.length);
+          const theta = Math.sqrt(DATA.ONTOLOGY_OTS.length * Math.PI) * phi;
+          pos[ot.name] = new THREE.Vector3(
+            R * Math.cos(theta) * Math.sin(phi),
+            R * Math.sin(theta) * Math.sin(phi),
+            R * Math.cos(phi)
+          );
+        }
+      });
+
+      // 创建节点
+      DATA.ONTOLOGY_OTS.forEach((ot) => {
+        const isCenter = ot.name === 'Mission';
+        const sphere = new THREE.Mesh(
+          new THREE.SphereGeometry(isCenter ? 0.9 : 0.65, 32, 32),
+          new THREE.MeshStandardMaterial({
+            color: ot.color,
+            emissive: ot.color,
+            emissiveIntensity: 0.45,
+            metalness: 0.4,
+            roughness: 0.25
+          })
+        );
+        sphere.position.copy(pos[ot.name]);
+        sphere.userData = { name: ot.name, name_zh: ot.name_zh, desc: ot.desc, isOT: true };
+        sceneGroup.add(sphere);
+        ontologyNodes.push(sphere);
+
+        // 外环
+        const ring = new THREE.Mesh(
+          new THREE.TorusGeometry(isCenter ? 1.2 : 0.95, 0.03, 8, 32),
+          new THREE.MeshBasicMaterial({ color: ot.color, transparent: true, opacity: 0.4 })
+        );
+        ring.position.copy(pos[ot.name]);
+        ring.lookAt(0, 0, 0);
+        sceneGroup.add(ring);
+
+        // 标签
+        const lbl = makeLabel(`${ot.name_zh} (${ot.name})`, '#' + new THREE.Color(ot.color).getHexString(), 'rgba(0,0,0,0.65)', '11px');
+        lbl.position.copy(pos[ot.name]);
+        lbl.position.multiplyScalar(1.35);
+        sceneGroup.add(lbl);
+      });
+
+      // 创建 10 条 LT 边
+      DATA.ONTOLOGY_LTS.forEach((lt) => {
+        if (!pos[lt.src] || !pos[lt.tgt]) return;
+        const points = [pos[lt.src], pos[lt.tgt]];
+        const geo = new THREE.BufferGeometry().setFromPoints(points);
+        const isHi = lt.highlight;
+        const mat = new THREE.LineBasicMaterial({
+          color: lt.color,
+          transparent: true,
+          opacity: isHi ? 0.95 : 0.55,
+          linewidth: isHi ? 3 : 1
+        });
+        const line = new THREE.Line(geo, mat);
+        line.userData = { name: lt.name, name_zh: lt.name_zh, src: lt.src, tgt: lt.tgt, highlight: isHi };
+        sceneGroup.add(line);
+        ontologyEdges.push(line);
+
+        if (isHi) {
+          // 高亮边加粗管
+          const curve = new THREE.LineCurve3(pos[lt.src], pos[lt.tgt]);
+          const tubeGeo = new THREE.TubeGeometry(curve, 1, 0.06, 8, false);
+          const tubeMat = new THREE.MeshBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.6 });
+          const tube = new THREE.Mesh(tubeGeo, tubeMat);
+          sceneGroup.add(tube);
+
+          // 边标签
+          const mid = pos[lt.src].clone().add(pos[lt.tgt]).multiplyScalar(0.5);
+          const lbl = makeLabel(`${lt.name_zh} (${lt.name}) · 反馈环`, '#ff6666', 'rgba(40,5,5,0.85)');
+          lbl.position.copy(mid);
+          sceneGroup.add(lbl);
+        } else {
+          const mid = pos[lt.src].clone().add(pos[lt.tgt]).multiplyScalar(0.5);
+          const lbl = makeLabel(`${lt.name_zh}`, '#' + new THREE.Color(lt.color).getHexString(), 'rgba(0,0,0,0.55)', '9px');
+          lbl.position.copy(mid);
+          sceneGroup.add(lbl);
+        }
+      });
+
+      // 装饰：中心球壳
+      const innerShell = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffd700, wireframe: true, transparent: true, opacity: 0.18 })
+      );
+      sceneGroup.add(innerShell);
+
+      camera.position.set(8, 6, 12);
+      controls.target.set(0, 0, 0);
+    }
+
+    // ===========================================================
+    // 7. 场景 3: 贝叶斯飞轮
+    // ===========================================================
+    let flywheelGroup = null;
+
+    function buildFlywheelScene() {
+      clearScene();
+      document.getElementById('statusText').textContent = '场景 3/3 · 贝叶斯飞轮闭环';
+
+      flywheelGroup = new THREE.Group();
+      sceneGroup.add(flywheelGroup);
+
+      // 节点位置 (圆形布局, y 轴倾斜以形成 3D 飞轮感)
+      const R = 4.5;
+      const positions = {
+        Mission:  new THREE.Vector3(0,  R * 0.7,  R * 0.7),
+        Scenario: new THREE.Vector3(R,  R * 0.4,  0),
+        Solution: new THREE.Vector3(0, -R * 0.7,  R * 0.7),
+        Effect:   new THREE.Vector3(-R, R * 0.4,  0)
+      };
+
+      // 4 个节点球
+      DATA.FLYWHEEL_NODES.forEach((n) => {
+        const sphere = new THREE.Mesh(
+          new THREE.SphereGeometry(0.85, 32, 32),
+          new THREE.MeshStandardMaterial({
+            color: n.color,
+            emissive: n.color,
+            emissiveIntensity: 0.5,
+            metalness: 0.4,
+            roughness: 0.3
+          })
+        );
+        sphere.position.copy(positions[n.id]);
+        sphere.userData = { name: n.id, name_zh: n.name_zh, desc: n.desc, isFW: true };
+        flywheelGroup.add(sphere);
+
+        // 外环
+        const ring = new THREE.Mesh(
+          new THREE.TorusGeometry(1.2, 0.04, 8, 32),
+          new THREE.MeshBasicMaterial({ color: n.color, transparent: true, opacity: 0.5 })
+        );
+        ring.position.copy(positions[n.id]);
+        ring.rotation.x = Math.PI / 2;
+        flywheelGroup.add(ring);
+
+        // 标签
+        const lbl = makeLabel(`${n.name_zh} (${n.id})`, '#' + new THREE.Color(n.color).getHexString(), 'rgba(0,0,0,0.75)', '13px');
+        const dir = positions[n.id].clone().normalize().multiplyScalar(1.9);
+        lbl.position.copy(positions[n.id]).add(dir);
+        flywheelGroup.add(lbl);
+      });
+
+      // 4 条贝塞尔曲线（闭环）
+      DATA.FLYWHEEL_EDGES.forEach((e) => {
+        const a = positions[e.src];
+        const b = positions[e.tgt];
+        const mid = a.clone().add(b).multiplyScalar(0.5);
+        mid.y += 1.0;
+        const curve = new THREE.QuadraticBezierCurve3(a, mid, b);
+        const pts = curve.getPoints(60);
+        const geo = new THREE.BufferGeometry().setFromPoints(pts);
+        const isHi = e.highlight;
+        const mat = new THREE.LineBasicMaterial({
+          color: isHi ? 0xff0000 : 0xffaa00,
+          transparent: true,
+          opacity: isHi ? 1.0 : 0.85
+        });
+        const line = new THREE.Line(geo, mat);
+        flywheelGroup.add(line);
+
+        // 粗管
+        const tube = new THREE.Mesh(
+          new THREE.TubeGeometry(curve, 60, isHi ? 0.07 : 0.05, 8, false),
+          new THREE.MeshBasicMaterial({
+            color: isHi ? 0xff0000 : 0xffaa00,
+            transparent: true,
+            opacity: isHi ? 0.7 : 0.55
+          })
+        );
+        flywheelGroup.add(tube);
+
+        // 边标签
+        const midP = curve.getPoint(0.5);
+        const lbl = makeLabel(`${e.label}${isHi ? ' · 🔁 反馈环' : ''}`, isHi ? '#ff7777' : '#ffcc66', 'rgba(0,0,0,0.65)', '10px');
+        lbl.position.copy(midP);
+        flywheelGroup.add(lbl);
+
+        // 沿曲线运动的粒子
+        const particleGeo = new THREE.SphereGeometry(0.1, 8, 8);
+        const particleMat = new THREE.MeshBasicMaterial({ color: isHi ? 0xff5555 : 0xffcc66 });
+        const particle = new THREE.Mesh(particleGeo, particleMat);
+        flywheelGroup.add(particle);
+        if (!flywheelGroup.userData.particles) flywheelGroup.userData.particles = [];
+        flywheelGroup.userData.particles.push({ mesh: particle, curve, t: auxiliaryRandom(), speed: 0.0025 + auxiliaryRandom() * 0.001 });
+      });
+
+      // 中心 P(M_success) 球（金色发光）
+      const center = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(0.55, 2),
+        new THREE.MeshStandardMaterial({ color: 0xffd700, emissive: 0xffd700, emissiveIntensity: 1.4, metalness: 0.7, roughness: 0.2 })
+      );
+      flywheelGroup.add(center);
+      const centerLbl = makeLabel('P(M_success) ≈ 0.92', '#ffd700', 'rgba(40,30,5,0.85)', '12px');
+      centerLbl.position.set(0, 1.0, 0);
+      flywheelGroup.add(centerLbl);
+
+      // 中心光晕
+      const halo = new THREE.Mesh(
+        new THREE.SphereGeometry(1.0, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffd700, transparent: true, opacity: 0.18, side: THREE.BackSide })
+      );
+      flywheelGroup.add(halo);
+
+      // 数学公式标签
+      const formulaLbl = makeLabel(
+        'Bayes: P(θ|D) = P(D|θ)·P(θ) / P(D)    CER(θ) = α·P_id + β·P_cov − γ·P_fa',
+        '#88ddff', 'rgba(0,15,30,0.85)', '11px'
+      );
+      formulaLbl.position.set(0, 4.5, 0);
+      flywheelGroup.add(formulaLbl);
+
+      camera.position.set(7, 5, 10);
+      controls.target.set(0, 0, 0);
+    }
+
+    // ===========================================================
+    // 8. 场景切换 UI 绑定
+    // ===========================================================
+    document.getElementById('btnAirport').onclick = buildAirportScene;
+    document.getElementById('btnOntology').onclick = buildOntologyScene;
+    document.getElementById('btnFlywheel').onclick = buildFlywheelScene;
+    document.getElementById('btnVR').onclick = () => {
+      try { renderer.xr.getSession() ? renderer.xr.endSession() : renderer.xr.requestSession('immersive-vr'); } catch (e) { console.warn(e); }
+    };
+    let autoRotate = true;
+    document.getElementById('btnAutoRotate').onclick = () => {
+      autoRotate = !autoRotate;
+      controls.autoRotate = autoRotate;
+    };
+
+    // 射线检测：点击节点查看详情
+    const raycaster = new THREE.Raycaster();
+    const mouseNDC = new THREE.Vector2();
+    let isDragging = false;
+    renderer.domElement.addEventListener('pointerdown', () => { isDragging = false; });
+    renderer.domElement.addEventListener('pointermove', () => { isDragging = true; });
+    renderer.domElement.addEventListener('pointerup', (e) => {
+      if (isDragging) return;
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouseNDC.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseNDC.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(mouseNDC, camera);
+      const hits = raycaster.intersectObjects(sceneGroup.children, true);
+      for (const h of hits) {
+        if (h.object.userData?.isOT || h.object.userData?.isFW) {
+          const d = h.object.userData;
+          window.showDetail(`${d.name_zh} (${d.name})`, d.desc);
+          // 闪烁高亮
+          h.object.material.emissiveIntensity = 1.5;
+          setTimeout(() => { h.object.material.emissiveIntensity = 0.45; }, 600);
+          break;
+        }
+      }
+    });
+
+    // ===========================================================
+    // 9. 主循环
+    // ===========================================================
+    const clock = new THREE.Clock();
+    function animate() {
+      const t = clock.getElapsedTime();
+      const dt = clock.getDelta();
+      controls.update();
+
+      // 机场无人机沿轨迹运动
+      if (sceneGroup.userData.fleet) {
+        sceneGroup.userData.fleet.forEach((u, i) => {
+          if (!u.drone) return;
+          const phase = (t * 0.06 + i * 0.2) % 1;
+          const p = u.curve.getPoint(phase);
+          u.drone.position.copy(p);
+        });
+      }
+
+      // 飞轮自转
+      if (flywheelGroup) {
+        flywheelGroup.rotation.y = t * 0.25;
+        flywheelGroup.rotation.x = Math.sin(t * 0.15) * 0.15;
+        // 粒子沿曲线运动
+        if (flywheelGroup.userData.particles) {
+          flywheelGroup.userData.particles.forEach(p => {
+            p.t = (p.t + p.speed) % 1;
+            const pos = p.curve.getPoint(p.t);
+            p.mesh.position.copy(pos);
+          });
+        }
+      }
+
+      // 本体节点脉动
+      ontologyNodes.forEach((n, i) => {
+        const s = 1 + 0.05 * Math.sin(t * 1.5 + i);
+        n.scale.setScalar(s);
+      });
+
+      // 陀螺仪微调
+      if (gyroEnabled) {
+        const targetX = -gyroState.gamma * 0.02;
+        const targetY = -gyroState.beta * 0.02;
+        camera.position.x += (targetX - camera.position.x * 0) * 0; // 留给后续扩展
+      }
+
+      renderer.render(scene, camera);
+      labelRenderer.render(scene, camera);
+    }
+    renderer.setAnimationLoop(animate);
+
+    // ===========================================================
+    // 10. 响应式 + 关闭提示
+    // ===========================================================
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // 默认场景
+    setTimeout(() => {
+      buildAirportScene();
+      document.getElementById('loader').classList.add('gone');
+    }, 300);
+  </script>
+</body>
+</html>

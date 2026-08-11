@@ -1,0 +1,80 @@
+{
+  "schema_version": 2,
+  "scope": "formal_owl2dl_consistency_and_shacl_validation",
+  "not_field_test": true,
+  "formal_owl_consistency_test_completed": true,
+  "swrl_execution_in_scope": false,
+  "executed_at": "2026-08-11T10:46:35+08:00",
+  "validator_report": "05_Notebook与数据\\验证输出\\ontology_consistency_report.json",
+  "validator_report_sha256": "3ac898edb29c020fc28dc46f2ee4a029427aad9ea03e8651ba019868bbc0c801",
+  "environment": {
+    "python": "3.11.15",
+    "java": "java version \"20.0.1\" 2023-04-18",
+    "rdflib": "7.6.0",
+    "pyshacl": "0.40.1",
+    "owlready2": "0.51"
+  },
+  "input_triples": {
+    "cuas-ontology.ttl": 288,
+    "cuas-data-valid.ttl": 175,
+    "cuas-data-test.ttl": 2,
+    "cuas-shapes.ttl": 419
+  },
+  "core_ot_declared": 8,
+  "core_lt_declared": 10,
+  "real_core_instance_counts": {
+    "Mission": 1,
+    "Scenario": 5,
+    "TechnicalCapability": 6,
+    "Equipment": 4,
+    "EffectMetric": 5,
+    "Threat": 1,
+    "Asset": 1,
+    "Operator": 1
+  },
+  "combined_tbox_valid_abox_triples": 463,
+  "shacl_negative_violation_count": 2,
+  "sparql_repetitions_per_query": 30,
+  "sparql_queryability": [
+    {
+      "query": "Q1_OT实例计数",
+      "result_rows": 8,
+      "p50_ms": 15.282450011000037,
+      "p95_ms": 26.231320007354938
+    },
+    {
+      "query": "Q2_使命场景",
+      "result_rows": 5,
+      "p50_ms": 5.118100001709536,
+      "p95_ms": 9.264634999271948
+    },
+    {
+      "query": "Q3_装备能力场景",
+      "result_rows": 8,
+      "p50_ms": 7.407849989249371,
+      "p95_ms": 11.219669996353328
+    },
+    {
+      "query": "Q4_能力效果回证",
+      "result_rows": 6,
+      "p50_ms": 8.538699999917299,
+      "p95_ms": 11.975854996126145
+    },
+    {
+      "query": "Q5_效果门槛",
+      "result_rows": 5,
+      "p50_ms": 8.601900000940077,
+      "p95_ms": 15.66986501711653
+    }
+  ],
+  "checks": {
+    "rdf_turtle_parse_pass": true,
+    "core_8_ot_10_lt_pass": true,
+    "shacl_positive_conforms": true,
+    "shacl_negative_control_detected_exactly_two": true,
+    "hermit_positive_consistent": true,
+    "hermit_disjointness_negative_control_rejected": true,
+    "all_formal_checks_pass": true
+  },
+  "verdict": "PASS"
+}

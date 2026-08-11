@@ -1,0 +1,233 @@
+{
+  "schema_version": 2,
+  "scope": "synthetic_engineering_assumptions_pending_field_calibration",
+  "time_unit": "seconds",
+  "full_loop_deadline_s": 5.0,
+  "distribution": "triangular(low, mode, high)",
+  "interpretation": {
+    "decision_loop": "Observe + Orient + Decide, ending at authorization/allocation",
+    "time_to_first_effect": "decision_loop + command downlink + cue/aim + effect delivery",
+    "full_closed_loop": "time_to_first_effect + battle-damage assessment",
+    "multi_package_coordination": "协调感知口径在 Decide 阶段加入跨资源包航迹同步、任务去冲突和指令编组时延；理想并行口径不加入该分量，仅作为容量上界"
+  },
+  "authorization_modes": {
+    "preauthorized": {
+      "name_zh": "预授权规则",
+      "base_factor": 0.35,
+      "per_extra_target_factor": 0.0
+    },
+    "batch": {
+      "name_zh": "单批次人工授权",
+      "base_factor": 1.0,
+      "per_extra_target_factor": 0.0
+    },
+    "per_target": {
+      "name_zh": "逐目标人工授权",
+      "base_factor": 1.0,
+      "per_extra_target_factor": 0.18
+    }
+  },
+  "coordination_modes": {
+    "ideal_parallel": {
+      "name_zh": "理想并行容量上界",
+      "enabled": false,
+      "notes": "不计跨资源包同步与去冲突附加时延，只用于显示理想容量上界，不作为多资源包主结论"
+    },
+    "coordination_aware": {
+      "name_zh": "协调感知主口径",
+      "enabled": true,
+      "reference_threat_count": 20,
+      "threat_ratio_log2_scale": 0.25,
+      "component": {
+        "id": "multi_package_coordination",
+        "phase": "Decide",
+        "name_zh": "跨资源包同步、去冲突与指令编组",
+        "low_s": 0.02,
+        "mode_s": 0.06,
+        "high_s": 0.14,
+        "count_log2_scale": 0.0,
+        "degradation_group": "communication",
+        "notes": "每增加一个同构资源包增加一次协调负担，并按 max(0, log2(N/20)) 放大；数值为待台架/外场标定的工程假设"
+      }
+    }
+  },
+  "degradation_profiles": {
+    "nominal": {
+      "name_zh": "标称链路",
+      "sensor_factor": 1.0,
+      "communication_factor": 1.0,
+      "decision_factor": 1.0,
+      "effect_factor": 1.0
+    },
+    "contested": {
+      "name_zh": "电磁对抗链路",
+      "sensor_factor": 1.25,
+      "communication_factor": 1.8,
+      "decision_factor": 1.2,
+      "effect_factor": 1.1
+    },
+    "manual_fallback": {
+      "name_zh": "人工降级接管",
+      "sensor_factor": 1.1,
+      "communication_factor": 1.5,
+      "decision_factor": 1.45,
+      "effect_factor": 1.15
+    }
+  },
+  "common_components": [
+    {
+      "id": "sensor_revisit_confirmation",
+      "phase": "Observe",
+      "name_zh": "传感器重访与连续确认",
+      "low_s": 0.12,
+      "mode_s": 0.25,
+      "high_s": 0.55,
+      "count_log2_scale": 0.04,
+      "degradation_group": "sensor",
+      "notes": "雷达/RF 至少一次重访，形成可用初始告警"
+    },
+    {
+      "id": "track_initiation",
+      "phase": "Observe",
+      "name_zh": "航迹起始与稳定化",
+      "low_s": 0.08,
+      "mode_s": 0.18,
+      "high_s": 0.40,
+      "count_log2_scale": 0.06,
+      "degradation_group": "sensor",
+      "notes": "多目标规模增加关联与稳定化负担"
+    },
+    {
+      "id": "sensor_data_uplink",
+      "phase": "Observe",
+      "name_zh": "传感数据上行通信",
+      "low_s": 0.015,
+      "mode_s": 0.04,
+      "high_s": 0.10,
+      "count_log2_scale": 0.02,
+      "degradation_group": "communication",
+      "notes": "传感节点至融合/C2 节点的数据传输与排队"
+    },
+    {
+      "id": "multisensor_correlation_id",
+      "phase": "Orient",
+      "name_zh": "多传感关联与身份识别",
+      "low_s": 0.10,
+      "mode_s": 0.24,
+      "high_s": 0.55,
+      "count_log2_scale": 0.08,
+      "degradation_group": "decision",
+      "notes": "雷达/RF/光电航迹关联、分类与置信度更新"
+    },
+    {
+      "id": "semantic_threat_assessment",
+      "phase": "Orient",
+      "name_zh": "本体语义威胁评估",
+      "low_s": 0.025,
+      "mode_s": 0.07,
+      "high_s": 0.16,
+      "count_log2_scale": 0.08,
+      "degradation_group": "decision",
+      "notes": "结合资产、轨迹、ROE 和能力约束生成威胁排序"
+    },
+    {
+      "id": "c2_data_transport",
+      "phase": "Decide",
+      "name_zh": "C2 数据与告警通信",
+      "low_s": 0.015,
+      "mode_s": 0.05,
+      "high_s": 0.12,
+      "count_log2_scale": 0.02,
+      "degradation_group": "communication",
+      "notes": "融合节点、指挥席和效应器控制节点之间的消息传输"
+    },
+    {
+      "id": "weapon_target_allocation",
+      "phase": "Decide",
+      "name_zh": "资源约束武器-目标分配",
+      "low_s": 0.04,
+      "mode_s": 0.11,
+      "high_s": 0.28,
+      "count_log2_scale": 0.12,
+      "degradation_group": "decision",
+      "notes": "显式考虑通道数、循环周期、弹药/能量与射界"
+    },
+    {
+      "id": "human_authorization",
+      "phase": "Decide",
+      "name_zh": "人工授权与 ROE 核验",
+      "low_s": 0.20,
+      "mode_s": 0.55,
+      "high_s": 1.20,
+      "count_log2_scale": 0.0,
+      "degradation_group": "decision",
+      "notes": "主场景按单批次授权；逐目标授权作为压力工况"
+    },
+    {
+      "id": "exception_rework_queue",
+      "phase": "Decide",
+      "name_zh": "异常复核与排队附加时延",
+      "low_s": 0.40,
+      "mode_s": 1.00,
+      "high_s": 2.40,
+      "occurrence_probability": 0.06,
+      "count_log2_scale": 0.02,
+      "degradation_group": "decision",
+      "notes": "仅在 6% 标称仿真中触发，表示身份冲突、ROE 复核或链路重传；未触发时为 0"
+    },
+    {
+      "id": "effector_command_downlink",
+      "phase": "Act",
+      "name_zh": "效应器指令下行通信",
+      "low_s": 0.015,
+      "mode_s": 0.045,
+      "high_s": 0.11,
+      "count_log2_scale": 0.01,
+      "degradation_group": "communication",
+      "notes": "授权指令、目标指示和交战参数下发"
+    },
+    {
+      "id": "battle_damage_assessment",
+      "phase": "Feedback",
+      "name_zh": "毁伤/失效评估与反馈",
+      "low_s": 0.12,
+      "mode_s": 0.30,
+      "high_s": 0.70,
+      "count_log2_scale": 0.04,
+      "degradation_group": "sensor",
+      "notes": "传感器确认目标失效或需要再次分配"
+    }
+  ],
+  "effector_profiles": {
+    "EW": {
+      "name_zh": "定向电磁干扰",
+      "cue_and_aim": {"low_s": 0.06, "mode_s": 0.14, "high_s": 0.28},
+      "effect_delivery": {"low_s": 0.18, "mode_s": 0.38, "high_s": 0.75},
+      "delivery_note": "波束指向、协议压制/欺骗建立与维持"
+    },
+    "HPM": {
+      "name_zh": "高功率微波",
+      "cue_and_aim": {"low_s": 0.10, "mode_s": 0.22, "high_s": 0.48},
+      "effect_delivery": {"low_s": 0.06, "mode_s": 0.15, "high_s": 0.32},
+      "delivery_note": "阵面指向、脉冲序列与首个群目标效应"
+    },
+    "HEL": {
+      "name_zh": "高能激光",
+      "cue_and_aim": {"low_s": 0.22, "mode_s": 0.55, "high_s": 1.15},
+      "effect_delivery": {"low_s": 0.55, "mode_s": 1.25, "high_s": 2.50},
+      "delivery_note": "精跟瞄准、稳定驻留至目标失效"
+    },
+    "Kinetic": {
+      "name_zh": "动能拦截",
+      "cue_and_aim": {"low_s": 0.18, "mode_s": 0.45, "high_s": 0.95},
+      "effect_delivery": {"low_s": 0.65, "mode_s": 1.45, "high_s": 3.00},
+      "delivery_note": "解算、发射与拦截器飞行至交会点"
+    },
+    "Net": {
+      "name_zh": "拦截网",
+      "cue_and_aim": {"low_s": 0.25, "mode_s": 0.65, "high_s": 1.40},
+      "effect_delivery": {"low_s": 0.45, "mode_s": 1.10, "high_s": 2.30},
+      "delivery_note": "发射平台瞄准与网弹/捕获器飞行"
+    }
+  }
+}

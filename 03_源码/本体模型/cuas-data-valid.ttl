@@ -1,0 +1,205 @@
+###########################################################################
+# C-UAS Ontology — 一致性正向实例集
+# 版本: V1.1 (2026-08)
+# 用途: HermiT ABox 一致性与 SHACL 正向验证；不包含故意违规数据。
+###########################################################################
+
+@prefix cuas: <http://cuas-ontology.org/cuas#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# 标准剖面
+cuas:STANAG_4817_PMO a cuas:STANAGProfile ;
+    rdfs:label "STANAG 4817 PMO" .
+
+# 被保护对象与威胁
+cuas:Asset_HangzhouConventionCenter a cuas:Asset ;
+    cuas:assetType "MassEvent" ;
+    cuas:criticalityScore 10 ;
+    cuas:hasGeoLocation "120.155E, 30.245N" .
+
+cuas:Threat_Swarm_20 a cuas:Threat ;
+    cuas:threatClass "ClassI" ;
+    cuas:threatLevel 5 ;
+    cuas:threatTrajectory "20 机蜂群由东南方向分三轴接近" ;
+    cuas:isSwarmMember true .
+
+# 五阶段场景，阶段预算统一采用 xsd:decimal 秒值
+cuas:Scenario_Detect_MSN001 a cuas:Scenario ;
+    cuas:scenarioId "SCN-001-DET" ;
+    cuas:scenarioStage "Detection" ;
+    cuas:triggerCondition "雷达新航迹或 RF 监听触发" ;
+    cuas:expectedOutcome "形成带时间戳的初始航迹" ;
+    cuas:scenarioLatencyBudget "0.8"^^xsd:decimal .
+
+cuas:Scenario_Track_MSN001 a cuas:Scenario ;
+    cuas:scenarioId "SCN-001-TRK" ;
+    cuas:scenarioStage "TrackingIdentification" ;
+    cuas:triggerCondition "初始航迹连续确认" ;
+    cuas:expectedOutcome "稳定跟踪并给出类别置信度" ;
+    cuas:scenarioLatencyBudget "1.0"^^xsd:decimal .
+
+cuas:Scenario_Assess_MSN001 a cuas:Scenario ;
+    cuas:scenarioId "SCN-001-ASM" ;
+    cuas:scenarioStage "ThreatAssessment" ;
+    cuas:triggerCondition "目标进入防御包络" ;
+    cuas:expectedOutcome "生成威胁排序与预计到达时间" ;
+    cuas:scenarioLatencyBudget "0.5"^^xsd:decimal .
+
+cuas:Scenario_Decide_MSN001 a cuas:Scenario ;
+    cuas:scenarioId "SCN-001-DEC" ;
+    cuas:scenarioStage "DecisionAllocation" ;
+    cuas:triggerCondition "威胁等级达到处置阈值" ;
+    cuas:expectedOutcome "完成武器目标分配与人工授权" ;
+    cuas:scenarioLatencyBudget "1.2"^^xsd:decimal .
+
+cuas:Scenario_Engage_MSN001 a cuas:Scenario ;
+    cuas:scenarioId "SCN-001-ENG" ;
+    cuas:scenarioStage "EngagementVerification" ;
+    cuas:triggerCondition "授权后的处置指令下发" ;
+    cuas:expectedOutcome "效应到达并完成毁伤评估" ;
+    cuas:scenarioLatencyBudget "1.5"^^xsd:decimal .
+
+# 六类技术能力
+cuas:Cap_Radar_GaN_AESA a cuas:TechnicalCapability ;
+    cuas:capabilityId "CAP-RDR-001" ;
+    cuas:capabilityClass "Detection" ;
+    cuas:capabilityMetric "探测距离 25 km，跟踪容量 200" ;
+    cuas:capabilityVersion "v3.2" ;
+    cuas:produces cuas:EM_DetectionCoverage .
+
+cuas:Cap_Fusion_MultiSensor a cuas:TechnicalCapability ;
+    cuas:capabilityId "CAP-FUS-001" ;
+    cuas:capabilityClass "FusionID" ;
+    cuas:capabilityMetric "多源识别准确率 0.92" ;
+    cuas:capabilityVersion "v2.1" ;
+    cuas:produces cuas:EM_IdentificationAccuracy .
+
+cuas:Cap_C2_Semantic a cuas:TechnicalCapability ;
+    cuas:capabilityId "CAP-C2S-001" ;
+    cuas:capabilityClass "C2" ;
+    cuas:capabilityMetric "OODA 全链路 P90 小于 5 秒" ;
+    cuas:capabilityVersion "v1.1" ;
+    cuas:produces cuas:EM_OODAClosureTime .
+
+cuas:Cap_EW_Directional a cuas:TechnicalCapability ;
+    cuas:capabilityId "CAP-EWD-001" ;
+    cuas:capabilityClass "SoftKill" ;
+    cuas:capabilityMetric "方向性压制扇区 70 度" ;
+    cuas:capabilityVersion "v2.0" ;
+    cuas:produces cuas:EM_InterceptionSuccess .
+
+cuas:Cap_HPM_Group a cuas:TechnicalCapability ;
+    cuas:capabilityId "CAP-HPM-001" ;
+    cuas:capabilityClass "HardKill" ;
+    cuas:capabilityMetric "群目标单周期并发 6 架" ;
+    cuas:capabilityVersion "v1.3" ;
+    cuas:produces cuas:EM_InterceptionSuccess .
+
+cuas:Cap_Data_Integration a cuas:TechnicalCapability ;
+    cuas:capabilityId "CAP-INT-001" ;
+    cuas:capabilityClass "IntegrationEnablement" ;
+    cuas:capabilityMetric "统一航迹与告警去重" ;
+    cuas:capabilityVersion "v1.4" ;
+    cuas:produces cuas:EM_FalseAlarmRate .
+
+# 装备实现能力并覆盖场景
+cuas:Eq_RadarUnit_007 a cuas:Equipment ;
+    cuas:equipmentSN "RDR-AESA-007" ;
+    cuas:stanagProfile cuas:STANAG_4817_PMO ;
+    cuas:operationalStatus "Available" ;
+    cuas:geoPosition "120.155E, 30.245N" ;
+    cuas:implements cuas:Cap_Radar_GaN_AESA ;
+    cuas:covers cuas:Scenario_Detect_MSN001 .
+
+cuas:Eq_FusionNode_001 a cuas:Equipment ;
+    cuas:equipmentSN "FUS-NODE-001" ;
+    cuas:stanagProfile cuas:STANAG_4817_PMO ;
+    cuas:operationalStatus "Available" ;
+    cuas:geoPosition "120.156E, 30.245N" ;
+    cuas:implements cuas:Cap_Fusion_MultiSensor, cuas:Cap_Data_Integration ;
+    cuas:covers cuas:Scenario_Track_MSN001, cuas:Scenario_Assess_MSN001 .
+
+cuas:Eq_CommandPost_001 a cuas:Equipment ;
+    cuas:equipmentSN "CMD-POST-001" ;
+    cuas:stanagProfile cuas:STANAG_4817_PMO ;
+    cuas:operationalStatus "Available" ;
+    cuas:geoPosition "120.154E, 30.244N" ;
+    cuas:implements cuas:Cap_C2_Semantic ;
+    cuas:covers cuas:Scenario_Decide_MSN001 .
+
+cuas:Eq_EW_HPM_001 a cuas:Equipment ;
+    cuas:equipmentSN "HPM-ARRAY-001" ;
+    cuas:stanagProfile cuas:STANAG_4817_PMO ;
+    cuas:operationalStatus "Available" ;
+    cuas:geoPosition "120.157E, 30.246N" ;
+    cuas:implements cuas:Cap_EW_Directional, cuas:Cap_HPM_Group ;
+    cuas:covers cuas:Scenario_Engage_MSN001 .
+
+# 五项 Effect 指标；显式 validates 构成 Effect -> Mission 反馈边
+cuas:EM_DetectionCoverage a cuas:EffectMetric ;
+    cuas:metricId "EM-DET-2026Q3" ;
+    cuas:metricName "DetectionCoverage" ;
+    cuas:metricValue "0.96"^^xsd:double ;
+    cuas:metricThreshold "0.95"^^xsd:double ;
+    cuas:metricLayer "KPP" ;
+    cuas:validates cuas:Mission_G20Summit .
+
+cuas:EM_IdentificationAccuracy a cuas:EffectMetric ;
+    cuas:metricId "EM-IDN-2026Q3" ;
+    cuas:metricName "IdentificationAccuracy" ;
+    cuas:metricValue "0.93"^^xsd:double ;
+    cuas:metricThreshold "0.92"^^xsd:double ;
+    cuas:metricLayer "KPP" ;
+    cuas:validates cuas:Mission_G20Summit .
+
+cuas:EM_OODAClosureTime a cuas:EffectMetric ;
+    cuas:metricId "EM-OOD-2026Q3" ;
+    cuas:metricName "OODAClosureTime" ;
+    cuas:metricValue "4.30"^^xsd:double ;
+    cuas:metricThreshold "5.00"^^xsd:double ;
+    cuas:metricLayer "MOE" ;
+    cuas:validates cuas:Mission_G20Summit .
+
+cuas:EM_InterceptionSuccess a cuas:EffectMetric ;
+    cuas:metricId "EM-INT-2026Q3" ;
+    cuas:metricName "InterceptionSuccessRate" ;
+    cuas:metricValue "0.87"^^xsd:double ;
+    cuas:metricThreshold "0.85"^^xsd:double ;
+    cuas:metricLayer "MOE" ;
+    cuas:validates cuas:Mission_G20Summit .
+
+cuas:EM_FalseAlarmRate a cuas:EffectMetric ;
+    cuas:metricId "EM-FAR-2026Q3" ;
+    cuas:metricName "FalseAlarmRate" ;
+    cuas:metricValue "0.018"^^xsd:double ;
+    cuas:metricThreshold "0.020"^^xsd:double ;
+    cuas:metricLayer "MOP" ;
+    cuas:validates cuas:Mission_G20Summit .
+
+# 使命卡：Mission -> Scenario -> Solution -> Effect，并回到 Mission
+cuas:Mission_G20Summit a cuas:Mission ;
+    cuas:missionId "MSN-2026-G20-001" ;
+    cuas:missionType "Defense" ;
+    cuas:priority 5 ;
+    cuas:protectedAsset cuas:Asset_HangzhouConventionCenter ;
+    cuas:geoFence "POLYGON((120.10 30.20, 120.20 30.20, 120.20 30.30, 120.10 30.30, 120.10 30.20))" ;
+    cuas:timeWindow "2026-09-04T00:00:00Z/2026-09-06T23:59:59Z" ;
+    cuas:rulesOfEngagement "优先软杀伤；高威胁且授权后启用 HPM" ;
+    cuas:successCriteria "探测覆盖率不低于 0.95，识别准确率不低于 0.92，OODA 小于 5 秒，拦截成功率不低于 0.85，虚警率小于 0.02" ;
+    cuas:governs cuas:Scenario_Detect_MSN001, cuas:Scenario_Track_MSN001,
+        cuas:Scenario_Assess_MSN001, cuas:Scenario_Decide_MSN001,
+        cuas:Scenario_Engage_MSN001 ;
+    cuas:allocates cuas:Cap_Radar_GaN_AESA, cuas:Cap_Fusion_MultiSensor,
+        cuas:Cap_C2_Semantic, cuas:Cap_EW_Directional,
+        cuas:Cap_HPM_Group, cuas:Cap_Data_Integration ;
+    cuas:confronts cuas:Threat_Swarm_20 ;
+    cuas:protects cuas:Asset_HangzhouConventionCenter ;
+    cuas:measuredBy cuas:EM_DetectionCoverage, cuas:EM_IdentificationAccuracy,
+        cuas:EM_OODAClosureTime, cuas:EM_InterceptionSuccess,
+        cuas:EM_FalseAlarmRate .
+
+cuas:Operator_Commander_01 a cuas:Operator ;
+    cuas:operatorRole "Commander" ;
+    cuas:clearanceLevel "TOP_SECRET" ;
+    cuas:operates cuas:Eq_CommandPost_001, cuas:Eq_EW_HPM_001 .

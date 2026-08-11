@@ -1,0 +1,20 @@
+###########################################################################
+# C-UAS Ontology — SHACL 负向对照覆盖集
+# 版本: V1.1 (2026-08)
+#
+# 本文件不是独立 ABox，而是对 cuas-data-valid.ttl 的两个受控替换：
+#   1) Mission_G20Summit.priority: 5 -> 10
+#   2) Eq_RadarUnit_007.operationalStatus: Available -> Unknown
+#
+# 使用 06_部署脚本/validate_ontology_consistency.py 执行。验证器会先移除
+# 正向值，再合并本覆盖集；期望精确产生 2 个 SHACL ValidationResult。
+###########################################################################
+
+@prefix cuas: <http://cuas-ontology.org/cuas#> .
+
+cuas:Mission_G20Summit
+    cuas:priority 10 .
+
+cuas:Eq_RadarUnit_007
+    cuas:operationalStatus "Unknown" .
+

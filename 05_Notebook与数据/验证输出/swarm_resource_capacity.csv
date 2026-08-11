@@ -1,0 +1,5 @@
+﻿effector_id,name_zh,engagement_type,base_single_target_pk,channels,cycle_time_s,allocated_window_s,inventory,resource_package_count,actions_per_package,available_actions,targets_per_action,max_target_engagements,cost_per_action,disabled,notes
+EW,定向电磁干扰,area,0.25,1,1.2,1.2,1,1,1,1,20,20,0.2,False,单次扇区压制覆盖当前全部存活目标，存在目标抗干扰差异
+HPM,高功率微波,group,0.62,1,0.75,1.6,4,1,2,2,6,12,0.8,False,两次群目标脉冲，每次最多覆盖 6 个当前存活目标
+HEL,高能激光,precision,0.88,1,1.05,3.3,8,1,3,3,1,3,0.6,False,单通道精确补射，受跟踪可用性约束
+Kinetic,动能拦截,precision,0.84,2,1.45,4.5,6,1,6,6,1,6,0.7,False,双通道、总弹药 6 发，用于穿透软杀伤层的剩余目标

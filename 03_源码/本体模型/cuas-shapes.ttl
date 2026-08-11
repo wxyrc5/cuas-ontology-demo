@@ -1,0 +1,488 @@
+###########################################################################
+# C-UAS Ontology — SHACL Shapes (数据验证约束)
+# 版本 V1.0 (2026-08)
+# 配套研究 《反无人机体系本体模型技术方案》 第 5 章
+#
+# 用途
+#   - 为 8 个核心 Object Type 定义数据验证 Shape
+#   - 包含枚举约束、基数约束、数据类型约束、模式约束、范围约束
+#
+# 验证工具
+#   - pyshacl 0.25+ (Python)
+#   - Apache Jena Fuseki 4.10+ (Java SHACL API)
+#   - TopQuadrant SHACL Validator
+###########################################################################
+
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix cuas: <http://cuas-ontology.org/cuas#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo:  <http://www.opengis.net/ont/geosparql#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ===================================================================
+# Shape 1 — MissionShape （反无人机使命）
+# ===================================================================
+
+cuas:MissionShape a sh:NodeShape ;
+    sh:targetClass cuas:Mission ;
+    sh:name "使命形状"@zh , "Mission Shape"@en ;
+    sh:description "约束反无人机使命的必填字段、取值范围与关联对象"@zh ;
+    # missionId 必填、唯一、字符串、正则
+    sh:property [
+        sh:path cuas:missionId ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^MSN-\\d{4}-[A-Z0-9]+-\\d{3}$" ;
+        sh:message "missionId 必须匹配 ^MSN-\\d{4}-[A-Z0-9]+-\\d{3}$"@zh ;
+    ] ;
+    # missionType 4 枚举 Defense/Escort/Area-Denial/Patrol
+    sh:property [
+        sh:path cuas:missionType ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "Defense" "Escort" "Area-Denial" "Patrol" ) ;
+        sh:message "missionType 必须是 Defense / Escort / Area-Denial / Patrol 之一"@zh ;
+    ] ;
+    # priority 整数 1-5
+    sh:property [
+        sh:path cuas:priority ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 5 ;
+        sh:message "priority 必须在 [1,5] 范围内，5 为最高优先级"@zh ;
+    ] ;
+    # protectedAsset 至少 1 个 Asset 对象
+    sh:property [
+        sh:path cuas:protectedAsset ;
+        sh:class cuas:Asset ;
+        sh:minCount 1 ;
+        sh:message "protectedAsset 至少关联 1 个被保护资产"@zh ;
+    ] ;
+    # geoFence 必填；OWL 层按字符串保存，应用层校验 WKT 外形
+    sh:property [
+        sh:path cuas:geoFence ;
+        sh:datatype xsd:string ;
+        sh:pattern "^POLYGON\\s*\\(\\(.+\\)\\)$" ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "geoFence 必须是 POLYGON WKT 字符串"@zh ;
+    ] ;
+    # timeWindow xsd:dateTimeInterval
+    sh:property [
+        sh:path cuas:timeWindow ;
+        sh:datatype xsd:string ;
+        sh:pattern ".+/.+" ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "timeWindow 必须形如 start/end"@zh ;
+    ] ;
+    # rulesOfEngagement 必填字符串
+    sh:property [
+        sh:path cuas:rulesOfEngagement ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    # successCriteria 必填字符串
+    sh:property [
+        sh:path cuas:successCriteria ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    # Link governs 至少 1 个 Scenario
+    sh:property [
+        sh:path cuas:governs ;
+        sh:class cuas:Scenario ;
+        sh:minCount 1 ;
+        sh:message "governs 至少支配 1 个工作场景"@zh ;
+    ] ;
+    # Link allocates 至少 1 个 TechnicalCapability（承载 Solution 语义）
+    sh:property [
+        sh:path cuas:allocates ;
+        sh:class cuas:TechnicalCapability ;
+        sh:minCount 1 ;
+        sh:message "allocates 至少分配 1 个技术方案/能力"@zh ;
+    ] ;
+    # Link confronts 至少 1 个 Threat
+    sh:property [
+        sh:path cuas:confronts ;
+        sh:class cuas:Threat ;
+        sh:minCount 1 ;
+        sh:message "confronts 至少关联 1 个敌方威胁目标"@zh ;
+    ] ;
+    # Link protects 与 protectedAsset 等价
+    sh:property [
+        sh:path cuas:protects ;
+        sh:class cuas:Asset ;
+        sh:minCount 1 ;
+    ] ;
+    # Link measuredBy 至少 1 个 EffectMetric
+    sh:property [
+        sh:path cuas:measuredBy ;
+        sh:class cuas:EffectMetric ;
+        sh:minCount 1 ;
+        sh:message "measuredBy 至少关联 1 个效果指标"@zh ;
+    ] .
+
+# ===================================================================
+# Shape 2 — ScenarioShape （工作场景）
+# ===================================================================
+
+cuas:ScenarioShape a sh:NodeShape ;
+    sh:targetClass cuas:Scenario ;
+    sh:name "场景形状"@zh , "Scenario Shape"@en ;
+    sh:description "约束作战场景的 5 阶段枚举与时延预算"@zh ;
+    # scenarioId 必填、唯一值、受控格式
+    sh:property [
+        sh:path cuas:scenarioId ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^SCN-\\d{3}-[A-Z]{3}$" ;
+        sh:message "scenarioId 必须匹配 ^SCN-\\d{3}-[A-Z]{3}$"@zh ;
+    ] ;
+    # scenarioStage 5 阶段枚举
+    sh:property [
+        sh:path cuas:scenarioStage ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "Detection" "TrackingIdentification" "ThreatAssessment" "DecisionAllocation" "EngagementVerification" ) ;
+        sh:message "scenarioStage 必须是 5 阶段枚举之一"@zh ;
+    ] ;
+    # triggerCondition 必填
+    sh:property [
+        sh:path cuas:triggerCondition ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    # expectedOutcome 必填
+    sh:property [
+        sh:path cuas:expectedOutcome ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    # scenarioLatencyBudget：十进制秒
+    sh:property [
+        sh:path cuas:scenarioLatencyBudget ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minExclusive 0.0 ;
+        sh:message "scenarioLatencyBudget 必须是大于 0 的 xsd:decimal 秒值"@zh ;
+    ] ;
+    # covers 的方向为 Equipment -> Scenario；用反向路径验证场景有装备覆盖
+    sh:property [
+        sh:path [ sh:inversePath cuas:covers ] ;
+        sh:class cuas:Equipment ;
+        sh:minCount 1 ;
+        sh:message "每个 Scenario 至少被 1 个 Equipment 通过 covers 覆盖"@zh ;
+    ] .
+
+# ===================================================================
+# Shape 3 — TechnicalCapabilityShape （技术能力）
+# ===================================================================
+
+cuas:TechnicalCapabilityShape a sh:NodeShape ;
+    sh:targetClass cuas:TechnicalCapability ;
+    sh:name "技术能力形状"@zh , "Technical Capability Shape"@en ;
+    sh:description "约束 6 类技术能力枚举"@zh ;
+    # capabilityId 必填、唯一值、受控格式
+    sh:property [
+        sh:path cuas:capabilityId ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^CAP-[A-Z0-9]{2,4}-\\d{3}$" ;
+        sh:message "capabilityId 必须匹配 ^CAP-[A-Z0-9]{2,4}-\\d{3}$"@zh ;
+    ] ;
+    # capabilityClass 6 类枚举
+    sh:property [
+        sh:path cuas:capabilityClass ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "Detection" "FusionID" "C2" "SoftKill" "HardKill" "IntegrationEnablement" ) ;
+        sh:message "capabilityClass 必须是 6 大类之一"@zh ;
+    ] ;
+    # capabilityMetric 必填字符串
+    sh:property [
+        sh:path cuas:capabilityMetric ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    # capabilityVersion 必填、模式 vX.Y
+    sh:property [
+        sh:path cuas:capabilityVersion ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^v\\d+\\.\\d+(\\.\\d+)?$" ;
+        sh:message "capabilityVersion 必须匹配 ^v\\d+\\.\\d+(\\.\\d+)?$"@zh ;
+    ] ;
+    # produces 的方向为 TechnicalCapability -> EffectMetric
+    sh:property [
+        sh:path cuas:produces ;
+        sh:class cuas:EffectMetric ;
+        sh:minCount 1 ;
+        sh:message "每个技术方案/能力至少产出 1 个 EffectMetric"@zh ;
+    ] .
+
+# ===================================================================
+# Shape 4 — EquipmentShape （装备）
+# ===================================================================
+
+cuas:EquipmentShape a sh:NodeShape ;
+    sh:targetClass cuas:Equipment ;
+    sh:name "装备形状"@zh , "Equipment Shape"@en ;
+    sh:description "约束装备的序列号、STANAG 剖面与 4 态运行状态"@zh ;
+    # equipmentSN 必填模式
+    sh:property [
+        sh:path cuas:equipmentSN ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[A-Z]{3,4}-[A-Z0-9]+-\\d{3,4}$" ;
+        sh:message "equipmentSN 必须匹配 ^[A-Z]{3,4}-[A-Z0-9]+-\\d{3,4}$"@zh ;
+    ] ;
+    # stanagProfile 至少 1 个 STANAGProfile
+    sh:property [
+        sh:path cuas:stanagProfile ;
+        sh:class cuas:STANAGProfile ;
+        sh:minCount 1 ;
+        sh:message "stanagProfile 至少声明 1 个 STANAG 剖面"@zh ;
+    ] ;
+    # operationalStatus 4 态枚举
+    sh:property [
+        sh:path cuas:operationalStatus ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "Available" "Engaged" "Maintenance" "Failed" ) ;
+        sh:message "operationalStatus 必须是 Available / Engaged / Maintenance / Failed 之一"@zh ;
+    ] ;
+    # geoPosition 必填坐标字符串
+    sh:property [
+        sh:path cuas:geoPosition ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^\\d{2,3}\\.\\d{2,4}[EW]\\s*,\\s*\\d{1,2}\\.\\d{2,4}[NS]$" ;
+        sh:message "geoPosition 必须形如 120.155E, 30.245N"@zh ;
+    ] ;
+    # implements 至少 1 个 TechnicalCapability
+    sh:property [
+        sh:path cuas:implements ;
+        sh:class cuas:TechnicalCapability ;
+        sh:minCount 1 ;
+        sh:message "implements 至少实现 1 个技术能力"@zh ;
+    ] ;
+    # covers 的方向为 Equipment -> Scenario
+    sh:property [
+        sh:path cuas:covers ;
+        sh:class cuas:Scenario ;
+        sh:minCount 1 ;
+        sh:message "covers 至少覆盖 1 个 Scenario"@zh ;
+    ] .
+
+# STANAGProfile 形状 作为对象值约束
+cuas:STANAGProfileShape a sh:NodeShape ;
+    sh:targetClass cuas:STANAGProfile ;
+    sh:name "STANAG 剖面形状"@zh ;
+    sh:description "STANAG 4586/4660/4817 等剖面标识"@zh ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:nodeKind sh:Literal ;
+        sh:minCount 1 ;
+    ] .
+
+# ===================================================================
+# Shape 5 — EffectMetricShape （效果指标）
+# ===================================================================
+
+cuas:EffectMetricShape a sh:NodeShape ;
+    sh:targetClass cuas:EffectMetric ;
+    sh:name "效果指标形状"@zh , "Effect Metric Shape"@en ;
+    sh:description "约束 KPP/MOE/MOP 三段式效果度量"@zh ;
+    # metricId 必填、唯一值、受控格式
+    sh:property [
+        sh:path cuas:metricId ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^EM-[A-Z]{3}-\\d{4}Q[1-4]$" ;
+        sh:message "metricId 必须匹配 ^EM-[A-Z]{3}-\\d{4}Q[1-4]$"@zh ;
+    ] ;
+    # metricName 5 指标枚举
+    sh:property [
+        sh:path cuas:metricName ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "DetectionCoverage" "IdentificationAccuracy" "OODAClosureTime" "InterceptionSuccessRate" "FalseAlarmRate" ) ;
+        sh:message "metricName 必须是 5 指标之一"@zh ;
+    ] ;
+    # metricValue double 范围 0..1e9
+    sh:property [
+        sh:path cuas:metricValue ;
+        sh:datatype xsd:double ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0.0 ;
+        sh:maxInclusive 1.0e9 ;
+        sh:message "metricValue 数值必须非负"@zh ;
+    ] ;
+    # metricThreshold double
+    sh:property [
+        sh:path cuas:metricThreshold ;
+        sh:datatype xsd:double ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0.0 ;
+    ] ;
+    # metricLayer MOP/MOE/OperationalEffectiveness/KPP
+    sh:property [
+        sh:path cuas:metricLayer ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "MOP" "MOE" "OperationalEffectiveness" "KPP" ) ;
+        sh:message "metricLayer 必须是 MOP / MOE / OperationalEffectiveness / KPP 之一"@zh ;
+    ] ;
+    # validates 形成 Effect -> Mission 反馈环
+    sh:property [
+        sh:path cuas:validates ;
+        sh:class cuas:Mission ;
+        sh:minCount 1 ;
+        sh:message "每个效果指标至少反哺 1 个 Mission"@zh ;
+    ] .
+
+# ===================================================================
+# Shape 6 — ThreatShape （威胁）
+# ===================================================================
+
+cuas:ThreatShape a sh:NodeShape ;
+    sh:targetClass cuas:Threat ;
+    sh:name "威胁形状"@zh , "Threat Shape"@en ;
+    sh:description "约束敌方无人机 UN 4 类分类与威胁等级"@zh ;
+    # threatClass UN 4 类
+    sh:property [
+        sh:path cuas:threatClass ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "ClassI" "ClassII" "ClassIII" "ClassIV" ) ;
+        sh:message "threatClass 必须是 UN 4 类 (ClassI/II/III/IV) 之一"@zh ;
+    ] ;
+    # threatLevel 1-5
+    sh:property [
+        sh:path cuas:threatLevel ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 5 ;
+        sh:message "threatLevel 必须在 [1,5]"@zh ;
+    ] ;
+    # isSwarmMember boolean
+    sh:property [
+        sh:path cuas:isSwarmMember ;
+        sh:datatype xsd:boolean ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    # threatTrajectory 可选字符串
+    sh:property [
+        sh:path cuas:threatTrajectory ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+    ] .
+
+# ===================================================================
+# Shape 7 — AssetShape （被保护资产）
+# ===================================================================
+
+cuas:AssetShape a sh:NodeShape ;
+    sh:targetClass cuas:Asset ;
+    sh:name "资产形状"@zh , "Asset Shape"@en ;
+    sh:description "约束被保护资产类型与关键性评分"@zh ;
+    # assetType 4 类枚举
+    sh:property [
+        sh:path cuas:assetType ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "CriticalInfrastructure" "VIP" "MassEvent" "MilitaryAsset" ) ;
+        sh:message "assetType 必须是 CriticalInfrastructure / VIP / MassEvent / MilitaryAsset 之一"@zh ;
+    ] ;
+    # criticalityScore 1-10
+    sh:property [
+        sh:path cuas:criticalityScore ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 10 ;
+        sh:message "criticalityScore 必须在 [1,10]"@zh ;
+    ] ;
+    # hasGeoLocation 共享属性（可选）
+    sh:property [
+        sh:path cuas:hasGeoLocation ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+    ] .
+
+# ===================================================================
+# Shape 8 — OperatorShape （操作员）
+# ===================================================================
+
+cuas:OperatorShape a sh:NodeShape ;
+    sh:targetClass cuas:Operator ;
+    sh:name "操作员形状"@zh , "Operator Shape"@en ;
+    sh:description "约束操作员角色与权限等级"@zh ;
+    # operatorRole 4 角色枚举
+    sh:property [
+        sh:path cuas:operatorRole ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "Commander" "SensorOperator" "EffectorOperator" "Analyst" ) ;
+        sh:message "operatorRole 必须是 Commander / SensorOperator / EffectorOperator / Analyst 之一"@zh ;
+    ] ;
+    # clearanceLevel 受控词表 UNCLASS/CONFIDENTIAL/SECRET/TOP_SECRET
+    sh:property [
+        sh:path cuas:clearanceLevel ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "UNCLASS" "CONFIDENTIAL" "SECRET" "TOP_SECRET" ) ;
+        sh:message "clearanceLevel 必须是 UNCLASS / CONFIDENTIAL / SECRET / TOP_SECRET 之一"@zh ;
+    ] ;
+    # operates 至少 1 个 Equipment
+    sh:property [
+        sh:path cuas:operates ;
+        sh:class cuas:Equipment ;
+        sh:minCount 1 ;
+        sh:message "operates 至少操作 1 个装备"@zh ;
+    ] .
+
+###########################################################################
+# 文档结束
+###########################################################################
+# 验证步骤
+#   1. 用 pyshacl 验证
+#        python3 -m pyshacl -s cuas-shapes.ttl -d cuas-data-test.ttl -f human
+#   2. 用 Java SHACL API — shacl4java 或 Apache Jena SHACL
+#   3. 集成到 Fuseki — 上传 shapes 到 /sh 文件图谱，通过 SPARQL 端点验证
+###########################################################################
