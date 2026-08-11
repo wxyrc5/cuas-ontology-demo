@@ -1,43 +1,43 @@
 {
   "schema_version": "1.0",
-  "executed_at": "2026-08-11T10:46:35+08:00",
+  "executed_at": "2026-08-11T17:17:39+08:00",
   "all_passed": true,
   "checks": [
     {
       "name": "RDF/Turtle 语法解析",
       "passed": true,
       "evidence": "cuas-ontology.ttl=288, cuas-data-valid.ttl=175, cuas-data-test.ttl=2, cuas-shapes.ttl=419",
-      "duration_seconds": 0.03187370000523515
+      "duration_seconds": 0.04454999999143183
     },
     {
       "name": "8 OT / 10 LT 结构审计",
       "passed": true,
       "evidence": "core_classes=8/8; core_links=10/10; unsupported_datatype_ranges=0",
-      "duration_seconds": 0.00021389999892562628
+      "duration_seconds": 0.00026760000037029386
     },
     {
       "name": "SHACL 正向实例验证",
       "passed": true,
       "evidence": "Conforms=True",
-      "duration_seconds": 0.17607739998493344
+      "duration_seconds": 0.1803514999919571
     },
     {
       "name": "SHACL 负向对照",
       "passed": true,
       "evidence": "Conforms=False; violations=2; expected_paths=priority,operationalStatus",
-      "duration_seconds": 0.1191607000073418
+      "duration_seconds": 0.1323516999837011
     },
     {
       "name": "HermiT 正向一致性",
       "passed": true,
       "evidence": "HermiT consistent=True; expected=True; input_triples=463",
-      "duration_seconds": 0.9267248000251129
+      "duration_seconds": 0.9726599999994505
     },
     {
       "name": "HermiT 类型互斥负向对照",
       "passed": true,
       "evidence": "HermiT consistent=False; expected=False; input_triples=465",
-      "duration_seconds": 0.7565236000227742
+      "duration_seconds": 0.8178420000185724
     }
   ],
   "shacl_negative_results": [
@@ -63,22 +63,22 @@
   },
   "inputs": {
     "cuas-ontology.ttl": {
-      "path": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\03_源码\\本体模型\\cuas-ontology.ttl",
+      "path": "D:\\Downloads\\反无人机体系\\智信2026_新概念反无_完整项目包\\03_源码\\本体模型\\cuas-ontology.ttl",
       "triples": 288,
       "sha256": "25c71137474a1da19aad3657717e8004c22c2b137dc5230559930733749fe839"
     },
     "cuas-data-valid.ttl": {
-      "path": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\03_源码\\本体模型\\cuas-data-valid.ttl",
+      "path": "D:\\Downloads\\反无人机体系\\智信2026_新概念反无_完整项目包\\03_源码\\本体模型\\cuas-data-valid.ttl",
       "triples": 175,
       "sha256": "1f1cffeb04e4ef9577d0aaebf92ae1eaaf5bc10802c464a575fa028108638f7f"
     },
     "cuas-data-test.ttl": {
-      "path": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\03_源码\\本体模型\\cuas-data-test.ttl",
+      "path": "D:\\Downloads\\反无人机体系\\智信2026_新概念反无_完整项目包\\03_源码\\本体模型\\cuas-data-test.ttl",
       "triples": 2,
       "sha256": "db3ddfd0fdd6186b184b5a78e7677f8b660a0a10a7d3e9f5d864c09ade17754d"
     },
     "cuas-shapes.ttl": {
-      "path": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\03_源码\\本体模型\\cuas-shapes.ttl",
+      "path": "D:\\Downloads\\反无人机体系\\智信2026_新概念反无_完整项目包\\03_源码\\本体模型\\cuas-shapes.ttl",
       "triples": 419,
       "sha256": "e6ed57dcbb41416c22f61e582c181d9692455e3f40c62bc496b8109dbf4c0a1c"
     }

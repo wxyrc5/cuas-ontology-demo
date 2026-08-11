@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T10:59:28+08:00",
-  "snapshot_id": "ZX2026-TECH-20260811-52CB54E80CF2",
+  "generated_at": "2026-08-11T17:29:28+08:00",
+  "snapshot_id": "ZX2026-TECH-20260811-724208FF6FD5",
   "status": "PUBLIC_TECHNICAL_BASELINE_VERIFIED_SUBMISSION_ARTIFACTS_EXCLUDED",
   "package_root": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated",
   "git_repository_present": true,
-  "source_tree_sha256": "52CB54E80CF26AA90540F331A48D455BE6ACBAB75DAC9D5763308E560E1A9221",
+  "source_tree_sha256": "724208FF6FD5408DDE0747FA029907048566914F14988DE7D9B100080F9A3BB9",
   "source_groups": {
     "canonical_formal_model": [
       {
@@ -230,9 +230,9 @@
       },
       {
         "path": "05_Notebook与数据/notebook_03_bayesian_adaptive.ipynb",
-        "bytes": 17893,
-        "modified_at": "2026-08-10T02:09:44+08:00",
-        "sha256": "F2B64449456D171716960458D72DA845D47E040E34D8D2F542BD4B5EBA2C6043"
+        "bytes": 17851,
+        "modified_at": "2026-08-11T17:17:31+08:00",
+        "sha256": "24A3611800DD155546AD884622D0101BAB17BC42C992E8518C270265286B14DD"
       },
       {
         "path": "05_Notebook与数据/notebook_04_demo_end_to_end.ipynb",
@@ -286,9 +286,9 @@
       },
       {
         "path": "06_部署脚本/repair_bayesian_notebook.py",
-        "bytes": 14033,
-        "modified_at": "2026-08-10T02:09:35+08:00",
-        "sha256": "2FC198A5D95F905A46F59EF21D9E76772CEDF6C73EA514FF26873A1DFB533D33"
+        "bytes": 14001,
+        "modified_at": "2026-08-11T17:17:23+08:00",
+        "sha256": "FBAB570542E3AB133AF7E4CA8273EE4B5B21517510A75138E489A619A37CD000"
       },
       {
         "path": "06_部署脚本/repair_end_to_end_notebook.py",
@@ -523,104 +523,104 @@
       {
         "path": "03_源码/streamlit_app/data/current_metrics.json",
         "bytes": 85752,
-        "modified_at": "2026-08-11T10:55:18+08:00",
-        "sha256": "CE9CDD62CAE3DA7B0E5F0EFF934E970F96E5981509A565D19685C98E920ED62A"
+        "modified_at": "2026-08-11T17:26:50+08:00",
+        "sha256": "A2ACA6DF8C28D2729ECB7FC3F51A3308EABC3DC287E386635057E2BF8E8DD34A"
       },
       {
         "path": "05_Notebook与数据/验证输出/action_feedback_demo.json",
         "bytes": 7478,
-        "modified_at": "2026-08-11T10:54:39+08:00",
+        "modified_at": "2026-08-11T17:26:10+08:00",
         "sha256": "BCEC24ECA1934D3235CAF6D14B4213F9029C5222D4497E0BDE3123FFBE2A5A7A"
       },
       {
         "path": "05_Notebook与数据/验证输出/action_feedback_writeback.ttl",
         "bytes": 7323,
-        "modified_at": "2026-08-11T10:54:39+08:00",
+        "modified_at": "2026-08-11T17:26:10+08:00",
         "sha256": "1925EDCCB3639FF259FC842035DB8F2162B96180557CC53162DB41E1692DE4E4"
       },
       {
         "path": "05_Notebook与数据/验证输出/fig2_5_resource_scaling.png",
         "bytes": 344382,
-        "modified_at": "2026-08-11T10:54:26+08:00",
+        "modified_at": "2026-08-11T17:25:57+08:00",
         "sha256": "853E4CC366D2213BF1A046F88389C61A1BBF1060854ACBD8921CB329E31E3A9A"
       },
       {
         "path": "05_Notebook与数据/验证输出/live_streamlit_smoke.json",
         "bytes": 816,
-        "modified_at": "2026-08-11T10:55:22+08:00",
-        "sha256": "653A17CDFC2A9678A369FB4D2A5D280231D08D0B6E09A3D3E3A0E66C3007B2DF"
+        "modified_at": "2026-08-11T17:29:28+08:00",
+        "sha256": "E21EDADC22A8B176DF97FA17CD20B028652668839DECBC68260C63F4F177B7CB"
       },
       {
         "path": "05_Notebook与数据/验证输出/metrics_notebook_01.json",
-        "bytes": 2286,
-        "modified_at": "2026-08-11T10:46:38+08:00",
-        "sha256": "0E127EE167985697369801F41A828594C28BC633B356741B247582C9F93AA1D4"
+        "bytes": 2284,
+        "modified_at": "2026-08-11T17:17:42+08:00",
+        "sha256": "5BC8A55E0F8F8D039C95721478CEC1C0E338148253891C4D3A9C2D98D80ABDC9"
       },
       {
         "path": "05_Notebook与数据/验证输出/metrics_notebook_02.json",
         "bytes": 86061,
-        "modified_at": "2026-08-11T10:54:27+08:00",
+        "modified_at": "2026-08-11T17:25:58+08:00",
         "sha256": "7DB0180BC02E330E799887F6D03B45525418A159BF1FA841974E9120FAEB4D50"
       },
       {
         "path": "05_Notebook与数据/验证输出/metrics_notebook_03.json",
         "bytes": 3662,
-        "modified_at": "2026-08-11T10:54:34+08:00",
+        "modified_at": "2026-08-11T17:26:06+08:00",
         "sha256": "5C79B0E5E998F8B4BC6713A93A66D0853F46D9D83F04F957957647B70A676F1A"
       },
       {
         "path": "05_Notebook与数据/验证输出/ontology_consistency_report.json",
-        "bytes": 3330,
-        "modified_at": "2026-08-11T10:46:35+08:00",
-        "sha256": "3AC898EDB29C020FC28DC46F2EE4A029427AAD9EA03E8651BA019868BBC0C801"
+        "bytes": 3373,
+        "modified_at": "2026-08-11T17:17:40+08:00",
+        "sha256": "A29166AF78E17B8E5F1A2670770AA3B83840529571CFCCD8CCEC935F2A911ADE"
       },
       {
         "path": "05_Notebook与数据/验证输出/ooda_coordination_parameters_100_swarm_6_packages.csv",
         "bytes": 379,
-        "modified_at": "2026-08-11T10:46:43+08:00",
+        "modified_at": "2026-08-11T17:17:46+08:00",
         "sha256": "0520234402A15B035E99A5671D648E46980705551B92AFA3F95C89CD1673DDE3"
       },
       {
         "path": "05_Notebook与数据/验证输出/streamlit_acceptance.json",
-        "bytes": 4946,
-        "modified_at": "2026-08-11T10:55:18+08:00",
-        "sha256": "11A7224FEDFB8DF4FC5481417AE2363C297FE1FB207A4BC1561F73D579EC37EE"
+        "bytes": 4957,
+        "modified_at": "2026-08-11T17:26:50+08:00",
+        "sha256": "F184F88259CD7B6A89A4B17F8F28D67487C88505F377BA300E1C05A57B7580A3"
       },
       {
         "path": "05_Notebook与数据/验证输出/swarm_resource_scaling_grid.csv",
         "bytes": 15224,
-        "modified_at": "2026-08-11T10:54:24+08:00",
+        "modified_at": "2026-08-11T17:25:55+08:00",
         "sha256": "76D6E3B6F5F3AEA785475F7D0C3806EDDD35DA8544BE37E89C7143810BDBD9FE"
       },
       {
         "path": "05_Notebook与数据/验证输出/swarm_resource_scaling_minimum.csv",
         "bytes": 1424,
-        "modified_at": "2026-08-11T10:54:24+08:00",
+        "modified_at": "2026-08-11T17:25:55+08:00",
         "sha256": "0018D49562E5E64A78943F4FB26E8D9F3E059A8ADA2CCADDEBF57DE5A3F92055"
       },
       {
         "path": "05_Notebook与数据/验证输出/swarm_resource_scaling_thresholds.csv",
         "bytes": 2455,
-        "modified_at": "2026-08-11T10:54:24+08:00",
+        "modified_at": "2026-08-11T17:25:55+08:00",
         "sha256": "3464DADC29E08668914438B0192093DE51BF5CF64DE4FE8EC0865B5BEA3157EB"
       },
       {
         "path": "05_Notebook与数据/验证输出/technical_acceptance_summary.json",
         "bytes": 3738,
-        "modified_at": "2026-08-11T10:55:22+08:00",
-        "sha256": "483CDEDB9D1A3091A7F882CEE9BAE3D4B0EAE582DF577020E7EF160C196DDBF0"
+        "modified_at": "2026-08-11T17:29:28+08:00",
+        "sha256": "D409AF0D11639C542CCAB3D033C3F4949D393C5DFD03C184A61FF29F7EBA91E3"
       },
       {
         "path": "05_Notebook与数据/验证输出/指标裁决.json",
         "bytes": 86909,
-        "modified_at": "2026-08-11T10:54:39+08:00",
-        "sha256": "0B6C0BB558C42BFFB66B83798BF59E8F9644B3AE1DB7E8DBCB85940445551ED8"
+        "modified_at": "2026-08-11T17:26:10+08:00",
+        "sha256": "6A38FFBC76F1FF6834C90BC3F292850375EF7109676F5629CB84ABC5F98241B4"
       },
       {
         "path": "05_Notebook与数据/验证输出/最新执行/execution_manifest.json",
-        "bytes": 3436,
-        "modified_at": "2026-08-11T10:54:40+08:00",
-        "sha256": "C0B5B2488DD95A9EE6971F00077EA5111ACB6CE81624A18CA4301ECC911C7383"
+        "bytes": 3447,
+        "modified_at": "2026-08-11T17:26:11+08:00",
+        "sha256": "E66F922B50DBE0033D26C0A01F5154E906B600754670BF6C7EE25BD92E6D3524"
       }
     ]
   },

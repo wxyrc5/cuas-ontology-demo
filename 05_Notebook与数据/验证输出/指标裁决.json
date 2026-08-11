@@ -1,13 +1,13 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-08-11T02:54:39.017170+00:00",
+  "generated_at_utc": "2026-08-11T09:26:10.573771+00:00",
   "purpose": "single_source_of_truth_for_current_reproducible_project_metrics",
   "not_official_competition_score": true,
   "not_field_test": true,
   "inputs": {
     "notebook_01": {
       "path": "05_Notebook与数据\\验证输出\\metrics_notebook_01.json",
-      "sha256": "0e127ee167985697369801f41a828594c28bc633b356741b247582c9f93aa1d4",
+      "sha256": "5bc8a55e0f8f8d039c95721478cec1c0e338148253891c4d3a9c2d98d80abdc9",
       "scope": "formal_owl2dl_consistency_and_shacl_validation"
     },
     "notebook_02": {

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T10:55:22+08:00",
+  "generated_at": "2026-08-11T17:29:28+08:00",
   "package_root": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated",
   "all_passed": true,
   "checks": [
@@ -52,7 +52,7 @@
     {
       "name": "本地 Streamlit 隔离端口真实启动",
       "passed": true,
-      "evidence": "port=8510; startup=1.583s; health=200/ok; root=200; cleanup=True"
+      "evidence": "port=8510; startup=1.627s; health=200/ok; root=200; cleanup=True"
     },
     {
       "name": "本体 Effect→Action→Mission 写回原型",

@@ -1,0 +1,35 @@
+{
+  "generated_at": "2026-08-10T01:20:16.2475658+08:00",
+  "artifact": "01_参赛交付物/演示视频_8分钟_无旁白审片版_非最终提交.mp4",
+  "review_only": true,
+  "final_submission_ready": false,
+  "reason_not_final": "旁白选择与实名信息尚未由参赛方提供；本文件仅用于画面、字幕和节奏审片。",
+  "source": {
+    "deck": ".runlogs/video-review/演示视频_8分钟_无旁白审片版_源演示稿.pptx",
+    "schedule": ".runlogs/video-review/review_video_schedule.json",
+    "segments": 25,
+    "scripted_duration_seconds": 480.0,
+    "powerpoint_transition_duration_seconds": 479.0,
+    "powerpoint_padding_compensation_seconds": 1.0
+  },
+  "media": {
+    "container_duration_seconds": 479.96,
+    "windows_media_player_duration_seconds": 479.0,
+    "width": 1920,
+    "height": 1080,
+    "frame_rate_fps": 25.0,
+    "video_bitrate_bps": 773248,
+    "windows_shell_audio_bitrate": null,
+    "bytes": 46445305,
+    "sha256": "238248AAFFDCCD57A0A96CAFBCAAFBF04D11F7E16F997050029A2077F82375C7"
+  },
+  "checks": {
+    "subtitle_timeline_continuous_0_to_480_seconds": "pass",
+    "all_25_source_frames_visually_reviewed": "pass",
+    "slide_overflow_test": "pass",
+    "powerpoint_export_status": "done",
+    "container_duration_not_over_480_seconds": "pass",
+    "full_hd_1920x1080": "pass",
+    "expected_silent_review_version": "pass"
+  }
+}

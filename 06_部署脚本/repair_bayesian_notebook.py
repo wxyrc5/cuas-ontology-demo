@@ -16,7 +16,7 @@ def main() -> None:
         new_markdown_cell(
             """# 实验 3：五通道 Beta-Binomial 贝叶斯反馈飞轮
 
-本 Notebook 复现旧版 `Bayesian Adaptive Convergence (5-Channel Beta-Binomial, seed=42)`，并修正旧图中综合权重只累加到 0.50 的实现错误。
+本 Notebook 复现旧版“五通道 Beta-Binomial 贝叶斯自适应收敛（seed=42）”实验，并修正旧图中综合权重只累加到 0.50 的实现错误。
 
 五个 Effect 通道为：探测覆盖、识别准确、拦截成功、OODA 全链路在 5 秒内闭环、低虚警合规（`1-FAR`）。每个通道保留独立 Beta 后验；综合任务满足度定义为：
 
@@ -68,7 +68,6 @@ print('共享模型加载完成:', APP_DIR / 'utils' / 'bayesian_flywheel.py')""
             """channel_spec_table = pd.DataFrame([
     {
         '通道': c.label_zh,
-        '英文': c.label_en,
         'Effect 映射': c.source_metric,
         '合成真值': c.true_satisfaction_probability,
         '工程门槛': c.requirement_probability,
@@ -114,7 +113,7 @@ for channel in CHANNELS:
         flywheel.posterior_mean[key],
         color=color,
         lw=2.2,
-        label=channel.label_en,
+        label=channel.label_zh,
     )
 
 ax.fill_between(
@@ -130,20 +129,20 @@ ax.plot(
     color='black',
     lw=4,
     ls='--',
-    label='Combined P(M_success)',
+    label='综合任务满足概率 P(M_success)',
 )
 ax.axhline(
     COMPOSITE_THRESHOLD,
     color='#E53935',
     lw=2.5,
     ls=':',
-    label=f'Composite threshold={COMPOSITE_THRESHOLD:.2f}',
+    label=f'综合判定阈值={COMPOSITE_THRESHOLD:.2f}',
 )
 ax.set_xlim(1, flywheel.n_observations)
 ax.set_ylim(0.35, 1.01)
-ax.set_xlabel('Observation Count n', fontsize=12)
-ax.set_ylabel('Posterior Requirement-Satisfaction Probability', fontsize=12)
-ax.set_title('Bayesian Adaptive Convergence (5-Channel Beta-Binomial, seed=42)', fontsize=16, weight='bold')
+ax.set_xlabel('观测次数 n', fontsize=12)
+ax.set_ylabel('后验需求满足概率', fontsize=12)
+ax.set_title('贝叶斯自适应收敛（五通道 Beta-Binomial，seed=42）', fontsize=16, weight='bold')
 ax.grid(alpha=0.25)
 ax.legend(loc='lower right', ncol=2, fontsize=9)
 plt.tight_layout()
@@ -222,7 +221,7 @@ ax.plot(
     comparison.bayesian_roc['tpr'],
     color='#1F77B4',
     lw=3,
-    label=f'Bayesian posterior (AUC={comparison.bayesian_auc:.3f})',
+    label=f'贝叶斯后验（AUC={comparison.bayesian_auc:.3f}）',
 )
 ax.plot(
     comparison.fixed_rule_roc['fpr'],
@@ -232,11 +231,11 @@ ax.plot(
     ls='--',
     marker='o',
     ms=3,
-    label=f'Fixed rules (AUC={comparison.fixed_rule_auc:.3f})',
+    label=f'固定规则（AUC={comparison.fixed_rule_auc:.3f}）',
 )
-ax.plot([0, 1], [0, 1], color='gray', ls=':', label='Random baseline')
-ax.set(xlabel='False Positive Rate', ylabel='True Positive Rate', xlim=(0, 1), ylim=(0, 1.01))
-ax.set_title('Fair AUC Comparison: Same Cases and Observation Budget')
+ax.plot([0, 1], [0, 1], color='gray', ls=':', label='随机基线')
+ax.set(xlabel='假阳性率', ylabel='真阳性率', xlim=(0, 1), ylim=(0, 1.01))
+ax.set_title('同案例、同观测预算下的公平 AUC 对比')
 ax.grid(alpha=0.25)
 ax.legend(loc='lower right')
 plt.tight_layout()
@@ -264,12 +263,12 @@ budget_table"""
         ),
         new_code_cell(
             """fig, ax = plt.subplots(figsize=(8.5, 5))
-ax.plot(budget_table['每通道观测数'], budget_table['贝叶斯AUC'], 'o-', lw=2.5, label='Bayesian')
-ax.plot(budget_table['每通道观测数'], budget_table['固定规则AUC'], 's--', lw=2.5, label='Fixed rules')
-ax.set_xlabel('Observations per channel')
-ax.set_ylabel('AUC')
+ax.plot(budget_table['每通道观测数'], budget_table['贝叶斯AUC'], 'o-', lw=2.5, label='贝叶斯模型')
+ax.plot(budget_table['每通道观测数'], budget_table['固定规则AUC'], 's--', lw=2.5, label='固定规则模型')
+ax.set_xlabel('每通道观测数')
+ax.set_ylabel('ROC 曲线下面积（AUC）')
 ax.set_ylim(0.70, 1.00)
-ax.set_title('AUC Sensitivity under Equal Observation Budgets')
+ax.set_title('等观测预算下的 AUC 敏感性')
 ax.grid(alpha=0.25)
 ax.legend()
 plt.tight_layout()

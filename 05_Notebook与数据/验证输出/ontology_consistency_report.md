@@ -1,7 +1,7 @@
 # C-UAS 本体一致性验证报告
 
 - 总结论：**通过**
-- 执行时间：2026-08-11T10:46:35+08:00
+- 执行时间：2026-08-11T17:17:39+08:00
 - Python：3.11.15
 - Java：java version "20.0.1" 2023-04-18
 - Owlready2 / HermiT：0.51 / bundled
@@ -10,12 +10,12 @@
 
 | 检查 | 结果 | 实际证据 | 用时（秒） |
 |---|---:|---|---:|
-| RDF/Turtle 语法解析 | 通过 | cuas-ontology.ttl=288, cuas-data-valid.ttl=175, cuas-data-test.ttl=2, cuas-shapes.ttl=419 | 0.032 |
+| RDF/Turtle 语法解析 | 通过 | cuas-ontology.ttl=288, cuas-data-valid.ttl=175, cuas-data-test.ttl=2, cuas-shapes.ttl=419 | 0.045 |
 | 8 OT / 10 LT 结构审计 | 通过 | core_classes=8/8; core_links=10/10; unsupported_datatype_ranges=0 | 0.000 |
-| SHACL 正向实例验证 | 通过 | Conforms=True | 0.176 |
-| SHACL 负向对照 | 通过 | Conforms=False; violations=2; expected_paths=priority,operationalStatus | 0.119 |
-| HermiT 正向一致性 | 通过 | HermiT consistent=True; expected=True; input_triples=463 | 0.927 |
-| HermiT 类型互斥负向对照 | 通过 | HermiT consistent=False; expected=False; input_triples=465 | 0.757 |
+| SHACL 正向实例验证 | 通过 | Conforms=True | 0.180 |
+| SHACL 负向对照 | 通过 | Conforms=False; violations=2; expected_paths=priority,operationalStatus | 0.132 |
+| HermiT 正向一致性 | 通过 | HermiT consistent=True; expected=True; input_triples=463 | 0.973 |
+| HermiT 类型互斥负向对照 | 通过 | HermiT consistent=False; expected=False; input_triples=465 | 0.818 |
 
 ## SHACL 负向对照（期望且仅期望 2 项）
 

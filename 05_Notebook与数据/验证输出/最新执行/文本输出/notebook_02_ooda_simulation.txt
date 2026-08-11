@@ -1,6 +1,6 @@
 --- cell 1 / stream ---
-OODA 参数: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\03_源码\streamlit_app\data\ooda_timing_params.json
-蜂群资源参数: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\03_源码\streamlit_app\data\swarm_resources.json
+OODA 参数: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\03_源码\streamlit_app\data\ooda_timing_params.json
+蜂群资源参数: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\03_源码\streamlit_app\data\swarm_resources.json
 
 --- cell 3 / stream ---
 20 机单包完整参数：
@@ -389,4 +389,4 @@ Wilson 95% CI = [0.7596, 0.7713]
   "coordination_delay_zero_for_one_package_positive_for_multiple": true,
   "high_reliability_frontier_reported_for_every_threat_count": true
 }
-机器可读指标: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\metrics_notebook_02.json
+机器可读指标: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\05_Notebook与数据\验证输出\metrics_notebook_02.json

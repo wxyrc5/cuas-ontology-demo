@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T10:55:22.2782116+08:00",
+  "generated_at": "2026-08-11T17:29:28.2390041+08:00",
   "status": "passed",
   "app": "03_源码/streamlit_app/app.py",
   "preferred_port": 8510,
   "tested_port": 8510,
-  "startup_seconds": 1.583,
+  "startup_seconds": 1.627,
   "health_status": 200,
   "health_body": "ok",
   "root_status": 200,
@@ -14,8 +14,8 @@
   "process_still_running_after_cleanup": false,
   "stderr_contains_traceback": false,
   "logs": {
-    "stdout": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\.runlogs\\live_smoke\\streamlit_20260811_105520_8510_stdout.log",
-    "stderr": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\.runlogs\\live_smoke\\streamlit_20260811_105520_8510_stderr.log",
+    "stdout": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\.runlogs\\live_smoke\\streamlit_20260811_172926_8510_stdout.log",
+    "stderr": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\.runlogs\\live_smoke\\streamlit_20260811_172926_8510_stderr.log",
     "excluded_from_release": true
   }
 }

@@ -4,9 +4,9 @@
   "not_field_test": true,
   "formal_owl_consistency_test_completed": true,
   "swrl_execution_in_scope": false,
-  "executed_at": "2026-08-11T10:46:35+08:00",
+  "executed_at": "2026-08-11T17:17:39+08:00",
   "validator_report": "05_Notebook与数据\\验证输出\\ontology_consistency_report.json",
-  "validator_report_sha256": "3ac898edb29c020fc28dc46f2ee4a029427aad9ea03e8651ba019868bbc0c801",
+  "validator_report_sha256": "a29166af78e17b8e5f1a2670770aa3b83840529571cfccd8ccec935f2a911ade",
   "environment": {
     "python": "3.11.15",
     "java": "java version \"20.0.1\" 2023-04-18",
@@ -39,32 +39,32 @@
     {
       "query": "Q1_OT实例计数",
       "result_rows": 8,
-      "p50_ms": 15.282450011000037,
-      "p95_ms": 26.231320007354938
+      "p50_ms": 14.377700004843064,
+      "p95_ms": 20.314149992191222
     },
     {
       "query": "Q2_使命场景",
       "result_rows": 5,
-      "p50_ms": 5.118100001709536,
-      "p95_ms": 9.264634999271948
+      "p50_ms": 4.31225000647828,
+      "p95_ms": 5.8835899966652505
     },
     {
       "query": "Q3_装备能力场景",
       "result_rows": 8,
-      "p50_ms": 7.407849989249371,
-      "p95_ms": 11.219669996353328
+      "p50_ms": 5.2163499931339175,
+      "p95_ms": 6.46177499438636
     },
     {
       "query": "Q4_能力效果回证",
       "result_rows": 6,
-      "p50_ms": 8.538699999917299,
-      "p95_ms": 11.975854996126145
+      "p50_ms": 5.313599991495721,
+      "p95_ms": 6.822604994522407
     },
     {
       "query": "Q5_效果门槛",
       "result_rows": 5,
-      "p50_ms": 8.601900000940077,
-      "p95_ms": 15.66986501711653
+      "p50_ms": 5.718499989598058,
+      "p95_ms": 7.654449997062328
     }
   ],
   "checks": {

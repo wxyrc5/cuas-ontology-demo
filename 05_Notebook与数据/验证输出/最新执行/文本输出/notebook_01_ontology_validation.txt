@@ -1,5 +1,5 @@
 --- cell 1 / stream ---
-项目根目录: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated
+项目根目录: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包
 Python: D:\Downloads\反无人机体系\.venv-cuas\python.exe
 
 --- cell 3 / execute_result ---
@@ -12,12 +12,12 @@ Python: D:\Downloads\反无人机体系\.venv-cuas\python.exe
 5    HermiT 类型互斥负向对照    True   
 
                                             evidence  duration_seconds  
-0  cuas-ontology.ttl=288, cuas-data-valid.ttl=175...          0.031874  
-1  core_classes=8/8; core_links=10/10; unsupporte...          0.000214  
-2                                      Conforms=True          0.176077  
-3  Conforms=False; violations=2; expected_paths=p...          0.119161  
-4  HermiT consistent=True; expected=True; input_t...          0.926725  
-5  HermiT consistent=False; expected=False; input...          0.756524
+0  cuas-ontology.ttl=288, cuas-data-valid.ttl=175...          0.044550  
+1  core_classes=8/8; core_links=10/10; unsupporte...          0.000268  
+2                                      Conforms=True          0.180351  
+3  Conforms=False; violations=2; expected_paths=p...          0.132352  
+4  HermiT consistent=True; expected=True; input_t...          0.972660  
+5  HermiT consistent=False; expected=False; input...          0.817842
 
 --- cell 5 / stream ---
 受控 SHACL 违规（应当且仅应当为 2 项）
@@ -77,11 +77,11 @@ Python: D:\Downloads\反无人机体系\.venv-cuas\python.exe
 
 --- cell 9 / execute_result ---
        query  result_rows    p50_ms     p95_ms
-0  Q1_OT实例计数            8  15.28245  26.231320
-1    Q2_使命场景            5   5.11810   9.264635
-2  Q3_装备能力场景            8   7.40785  11.219670
-3  Q4_能力效果回证            6   8.53870  11.975855
-4    Q5_效果门槛            5   8.60190  15.669865
+0  Q1_OT实例计数            8  14.37770  20.314150
+1    Q2_使命场景            5   4.31225   5.883590
+2  Q3_装备能力场景            8   5.21635   6.461775
+3  Q4_能力效果回证            6   5.31360   6.822605
+4    Q5_效果门槛            5   5.71850   7.654450
 
 --- cell 10 / display_data ---
 <Figure size 900x480 with 1 Axes>
@@ -91,4 +91,4 @@ Python: D:\Downloads\反无人机体系\.venv-cuas\python.exe
 HermiT 正向一致性: True
 HermiT 互斥类型负向对照: True
 SHACL 正向 / 负向对照: True True
-机器可读指标: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\metrics_notebook_01.json
+机器可读指标: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\05_Notebook与数据\验证输出\metrics_notebook_01.json

@@ -1,23 +1,16 @@
 --- cell 1 / stream ---
-共享模型加载完成: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\03_源码\streamlit_app\utils\bayesian_flywheel.py
+共享模型加载完成: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\03_源码\streamlit_app\utils\bayesian_flywheel.py
 
 --- cell 3 / stream ---
 五通道权重和 = 1.00
 
 --- cell 3 / execute_result ---
-             通道                              英文  \
-0          探测覆盖              Detection Coverage   
-1          识别准确         Identification Accuracy   
-2          拦截成功            Interception Success   
-3       OODA 闭环                    OODA Closure   
-4  低虚警合规（1-FAR）  False Alarm Compliance (1-FAR)   
-
-                            Effect 映射   合成真值  工程门槛    权重  
-0           DetectionCoverage >= 0.95  0.972  0.95  0.24  
-1      IdentificationAccuracy >= 0.92  0.948  0.92  0.20  
-2     InterceptionSuccessRate >= 0.85  0.895  0.85  0.24  
-3  P(full-loop latency < 5 s) >= 0.90  0.935  0.90  0.22  
-4          1 - FalseAlarmRate >= 0.98  0.986  0.98  0.10
+             通道                           Effect 映射   合成真值  工程门槛    权重
+0          探测覆盖           DetectionCoverage >= 0.95  0.972  0.95  0.24
+1          识别准确      IdentificationAccuracy >= 0.92  0.948  0.92  0.20
+2          拦截成功     InterceptionSuccessRate >= 0.85  0.895  0.85  0.24
+3       OODA 闭环  P(full-loop latency < 5 s) >= 0.90  0.935  0.90  0.22
+4  低虚警合规（1-FAR）          1 - FalseAlarmRate >= 0.98  0.986  0.98  0.10
 
 --- cell 5 / stream ---
 终态综合后验 = 0.9459
@@ -82,4 +75,4 @@
   "bayesian_fnr_le_0_10": true,
   "paired_delta_ci_above_zero": true
 }
-机器可读指标: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\metrics_notebook_03.json
+机器可读指标: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\05_Notebook与数据\验证输出\metrics_notebook_03.json

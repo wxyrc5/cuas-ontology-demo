@@ -1,7 +1,7 @@
 # C-UAS 技术主线最终验收摘要
 
 - 总结论：**通过**
-- 生成时间：2026-08-11T10:55:22+08:00
+- 生成时间：2026-08-11T17:29:28+08:00
 - 项目根目录：`D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated`
 
 | 检查 | 结果 | 证据 |
@@ -15,7 +15,7 @@
 | 五通道贝叶斯与固定规则公平对照 | 通过 | bayesian_auc=0.967892; fixed_auc=0.868806; delta_ci95=[0.094902, 0.103465] |
 | Streamlit、SPARQL、离线地图与防御包络验收 | 通过 | pages=7/7; templates={'anti_swarm': 6, 'asset_protection': 1, 'kill_chain': 8, 'operator_roster': 3, 'ontology_schema': 10}; envelopes={'PKX': 3, 'BRU': 3, 'MUC': 3}; interactive_50x3={'闭环使命 Pk': '96.9%', '平均失效目标': '48.6/50', '同构资源包': '3 包', '平均行动成本': '19.14'} |
 | 蜂群轨迹连续性与二维/三维同源状态 | 通过 | PKX 20 UAV x 60 frames; max_step=0.2985318415747092 km; max_outward=0.0 km; 2D/3D states=20 |
-| 本地 Streamlit 隔离端口真实启动 | 通过 | port=8510; startup=1.583s; health=200/ok; root=200; cleanup=True |
+| 本地 Streamlit 隔离端口真实启动 | 通过 | port=8510; startup=1.627s; health=200/ok; root=200; cleanup=True |
 | 本体 Effect→Action→Mission 写回原型 | 通过 | decision=ACT-A7454DD33AEE; rules=8; auto=5; human_gate=3; rdf_triples=127; canonical unchanged |
 | Streamlit 唯一主线与部署镜像哈希一致 | 通过 | 30/30 managed files matched |
 | 网页指标快照与 Notebook/验收结果完全一致 | 通过 | notebook_cells=41; pages=7; pk20=0.7655; auc=0.967891796875 |
