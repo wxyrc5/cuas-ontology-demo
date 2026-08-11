@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T10:55:22+08:00",
-  "snapshot_id": "ZX2026-TECH-20260811-62E2F29677EB",
+  "generated_at": "2026-08-11T10:59:28+08:00",
+  "snapshot_id": "ZX2026-TECH-20260811-52CB54E80CF2",
   "status": "PUBLIC_TECHNICAL_BASELINE_VERIFIED_SUBMISSION_ARTIFACTS_EXCLUDED",
   "package_root": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated",
   "git_repository_present": true,
-  "source_tree_sha256": "62E2F29677EB476497D29138B64774303836487B0C696F05A51890740C16635D",
+  "source_tree_sha256": "52CB54E80CF26AA90540F331A48D455BE6ACBAB75DAC9D5763308E560E1A9221",
   "source_groups": {
     "canonical_formal_model": [
       {
@@ -396,9 +396,9 @@
       },
       {
         "path": "07_文档/GitHub远端历史审计与发布策略.md",
-        "bytes": 7060,
-        "modified_at": "2026-08-10T04:56:24+08:00",
-        "sha256": "D927AF2DED066B9AB0546642412B33B6DA35963FB3FF2C04B2F277BC61471973"
+        "bytes": 7758,
+        "modified_at": "2026-08-11T10:58:34+08:00",
+        "sha256": "659FF823C312A374E9A212FABA2262F8207450D943FDA0C4027671B20D92D7BC"
       },
       {
         "path": "07_文档/README.md",
@@ -426,9 +426,9 @@
       },
       {
         "path": "07_文档/项目完成度与证据审计.md",
-        "bytes": 9579,
-        "modified_at": "2026-08-10T05:27:06+08:00",
-        "sha256": "33AB08C329226CDB86CD801E2D0A1465AE5459C1440FCFF77176D9704D1C0670"
+        "bytes": 9724,
+        "modified_at": "2026-08-11T10:58:35+08:00",
+        "sha256": "75253D73EA187E1765D4BAF2A7F116DE75401A0801FCC278579B5675C7F2AE24"
       },
       {
         "path": "README.md",
