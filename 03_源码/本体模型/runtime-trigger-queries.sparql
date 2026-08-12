@@ -1,0 +1,40 @@
+# C-UAS 运行态闭世界触发查询（与 cuas-rules.swrl 设计态语义对应）
+# 运行态只读取已校验、已物化的当前快照；查询命中后仍须通过 Action JSON Schema
+# 与人工授权门。这里不是实时装备接口，也不声称替代 DL 一致性验证。
+
+# R1: 探测覆盖不足
+PREFIX cuas: <http://cuas-ontology.org/cuas#>
+SELECT ?mission ?equipment ?value WHERE {
+  ?mission a cuas:Mission ; cuas:measuredBy ?metric ; cuas:allocates ?capability ; cuas:governs ?scenario .
+  ?metric cuas:metricName "DetectionCoverage" ; cuas:metricValue ?value .
+  ?capability cuas:produces ?metric .
+  ?equipment a cuas:Equipment ; cuas:implements ?capability ; cuas:covers ?scenario .
+  FILTER(?value < 0.90)
+}
+
+# R2: 识别准确率不足
+PREFIX cuas: <http://cuas-ontology.org/cuas#>
+SELECT ?mission ?equipment ?value WHERE {
+  ?mission a cuas:Mission ; cuas:measuredBy ?metric ; cuas:allocates ?capability .
+  ?metric cuas:metricName "IdentificationAccuracy" ; cuas:metricValue ?value .
+  ?capability cuas:capabilityClass "FusionID" .
+  ?equipment a cuas:Equipment ; cuas:implements ?capability .
+  FILTER(?value < 0.85)
+}
+
+# R3: 威胁等级高于使命优先级（当前快照中的可执行近似）
+PREFIX cuas: <http://cuas-ontology.org/cuas#>
+SELECT ?mission ?threat ?priority ?level WHERE {
+  ?mission a cuas:Mission ; cuas:confronts ?threat ; cuas:priority ?priority .
+  ?threat cuas:threatLevel ?level .
+  FILTER(?level > ?priority)
+}
+
+# R4: 故障装备与同能力可用备份
+PREFIX cuas: <http://cuas-ontology.org/cuas#>
+SELECT ?mission ?failed ?backup ?capability WHERE {
+  ?mission a cuas:Mission ; cuas:allocates ?capability .
+  ?failed a cuas:Equipment ; cuas:operationalStatus "Failed" ; cuas:implements ?capability .
+  ?backup a cuas:Equipment ; cuas:operationalStatus "Available" ; cuas:implements ?capability .
+  FILTER(?backup != ?failed)
+}

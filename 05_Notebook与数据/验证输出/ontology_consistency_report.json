@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "executed_at": "2026-08-12T20:27:08+08:00",
+  "all_passed": true,
+  "checks": [
+    {
+      "name": "RDF/Turtle 语法解析",
+      "passed": true,
+      "evidence": "cuas-ontology.ttl=393, cuas-data-valid.ttl=260, cuas-data-test.ttl=2, cuas-shapes.ttl=538",
+      "duration_seconds": 0.03811570000107167
+    },
+    {
+      "name": "8 OT / 10 LT 结构审计",
+      "passed": true,
+      "evidence": "core_classes=8/8; core_links=10/10; unsupported_datatype_ranges=0",
+      "duration_seconds": 0.00024649999977555126
+    },
+    {
+      "name": "3 个扩展类型 / 6 个扩展关系审计",
+      "passed": true,
+      "evidence": "extension_classes=3/3; extension_links=6/6",
+      "duration_seconds": 4.459999763639644e-05
+    },
+    {
+      "name": "SHACL 正向实例验证",
+      "passed": true,
+      "evidence": "Conforms=True",
+      "duration_seconds": 0.21904989999893587
+    },
+    {
+      "name": "SHACL 负向对照",
+      "passed": true,
+      "evidence": "Conforms=False; violations=2; expected_paths=priority,operationalStatus",
+      "duration_seconds": 0.17562809999799356
+    },
+    {
+      "name": "HermiT 正向一致性",
+      "passed": true,
+      "evidence": "HermiT consistent=True; expected=True; input_triples=653",
+      "duration_seconds": 1.1530321999962325
+    },
+    {
+      "name": "HermiT 类型互斥负向对照",
+      "passed": true,
+      "evidence": "HermiT consistent=False; expected=False; input_triples=655",
+      "duration_seconds": 0.9270602999968105
+    }
+  ],
+  "shacl_negative_results": [
+    {
+      "focus_node": "http://cuas-ontology.org/cuas#Eq_RadarUnit_007",
+      "path": "http://cuas-ontology.org/cuas#operationalStatus",
+      "constraint": "http://www.w3.org/ns/shacl#InConstraintComponent",
+      "message": "operationalStatus 必须是 Available / Engaged / Maintenance / Failed 之一"
+    },
+    {
+      "focus_node": "http://cuas-ontology.org/cuas#Mission_G20Summit",
+      "path": "http://cuas-ontology.org/cuas#priority",
+      "constraint": "http://www.w3.org/ns/shacl#MaxInclusiveConstraintComponent",
+      "message": "priority 必须在 [1,5] 范围内，5 为最高优先级"
+    }
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "java": "java version \"20.0.1\" 2023-04-18",
+    "rdflib": "7.6.0",
+    "pyshacl": "0.40.1",
+    "owlready2": "0.51"
+  },
+  "inputs": {
+    "cuas-ontology.ttl": {
+      "path": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\03_源码\\本体模型\\cuas-ontology.ttl",
+      "triples": 393,
+      "sha256": "160acfb670387683249987c18ba197818d4db7481f224b048c506249b8b283b5"
+    },
+    "cuas-data-valid.ttl": {
+      "path": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\03_源码\\本体模型\\cuas-data-valid.ttl",
+      "triples": 260,
+      "sha256": "a4a40391ab2837ffe97ee9cb92be49eae062c08355c9f8122aa1561b56b1ba5c"
+    },
+    "cuas-data-test.ttl": {
+      "path": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\03_源码\\本体模型\\cuas-data-test.ttl",
+      "triples": 2,
+      "sha256": "db3ddfd0fdd6186b184b5a78e7677f8b660a0a10a7d3e9f5d864c09ade17754d"
+    },
+    "cuas-shapes.ttl": {
+      "path": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\03_源码\\本体模型\\cuas-shapes.ttl",
+      "triples": 538,
+      "sha256": "f3804439fe628d92c8ea8da439566faf2cb92c8d00e1d8a7ad3a071e5d794b5a"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "scope": "prototype_contract_not_distributed_field_implementation",
+  "trigger": {
+    "condition": "central_c2_heartbeat_age_s > 2.0 or link_state == disconnected",
+    "evidence_required": ["monotonic_timestamp", "source_id", "last_policy_revision"]
+  },
+  "local_subgraph": [
+    "Mission",
+    "Asset",
+    "Threat",
+    "Equipment",
+    "SpatiotemporalContext",
+    "preauthorized Action templates"
+  ],
+  "allowed_actions": [
+    "ADJUST_SENSOR_SCAN_MODE",
+    "SWITCH_FUSION_MODEL",
+    "QUARANTINE_AND_RERUN_WTA",
+    "RAISE_FUSION_CONFIRMATION"
+  ],
+  "blocked_without_c2": [
+    "AUTHORIZE_EFFECTOR_REINFORCEMENT",
+    "new HPM/HEL/kinetic engagement",
+    "rules-of-engagement revision"
+  ],
+  "reconciliation": [
+    "append-only local event log",
+    "idempotent event_id deduplication",
+    "expected_revision conflict detection",
+    "human review of divergent high-risk decisions"
+  ],
+  "boundary": "定义降级契约和默认拒绝规则；尚未完成分布式节点、网络分区与恢复台架试验"
+}

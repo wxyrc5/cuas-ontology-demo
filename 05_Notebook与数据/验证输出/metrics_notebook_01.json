@@ -1,0 +1,83 @@
+{
+  "schema_version": 2,
+  "scope": "formal_owl2dl_consistency_and_shacl_validation",
+  "not_field_test": true,
+  "formal_owl_consistency_test_completed": true,
+  "swrl_execution_in_scope": false,
+  "executed_at": "2026-08-12T20:27:08+08:00",
+  "validator_report": "05_Notebook与数据\\验证输出\\ontology_consistency_report.json",
+  "validator_report_sha256": "4a4e68c172cbc24a8eeff651249ff6f2a572fb6ffac1f32987b28f946919c938",
+  "environment": {
+    "python": "3.11.15",
+    "java": "java version \"20.0.1\" 2023-04-18",
+    "rdflib": "7.6.0",
+    "pyshacl": "0.40.1",
+    "owlready2": "0.51"
+  },
+  "input_triples": {
+    "cuas-ontology.ttl": 393,
+    "cuas-data-valid.ttl": 260,
+    "cuas-data-test.ttl": 2,
+    "cuas-shapes.ttl": 538
+  },
+  "core_ot_declared": 8,
+  "core_lt_declared": 10,
+  "extension_ot_declared": 3,
+  "extension_lt_declared": 6,
+  "real_core_instance_counts": {
+    "Mission": 1,
+    "Scenario": 5,
+    "TechnicalCapability": 7,
+    "Equipment": 5,
+    "EffectMetric": 5,
+    "Threat": 1,
+    "Asset": 1,
+    "Operator": 1
+  },
+  "combined_tbox_valid_abox_triples": 653,
+  "shacl_negative_violation_count": 2,
+  "sparql_repetitions_per_query": 30,
+  "sparql_queryability": [
+    {
+      "query": "Q1_OT实例计数",
+      "result_rows": 8,
+      "p50_ms": 12.08549999864772,
+      "p95_ms": 19.699544999093632
+    },
+    {
+      "query": "Q2_使命场景",
+      "result_rows": 5,
+      "p50_ms": 5.4324500015354715,
+      "p95_ms": 8.919730002162394
+    },
+    {
+      "query": "Q3_装备能力场景",
+      "result_rows": 10,
+      "p50_ms": 5.648700000165263,
+      "p95_ms": 12.033185000836964
+    },
+    {
+      "query": "Q4_能力效果回证",
+      "result_rows": 8,
+      "p50_ms": 5.942449999565724,
+      "p95_ms": 10.788545001196324
+    },
+    {
+      "query": "Q5_效果门槛",
+      "result_rows": 5,
+      "p50_ms": 8.853250001266133,
+      "p95_ms": 13.116549996630056
+    }
+  ],
+  "checks": {
+    "rdf_turtle_parse_pass": true,
+    "core_8_ot_10_lt_pass": true,
+    "extension_3_ot_6_lt_pass": true,
+    "shacl_positive_conforms": true,
+    "shacl_negative_control_detected_exactly_two": true,
+    "hermit_positive_consistent": true,
+    "hermit_disjointness_negative_control_rejected": true,
+    "all_formal_checks_pass": true
+  },
+  "verdict": "PASS"
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "scope": "synthetic_human_machine_teaming_policy_not_operational_roe",
+  "workload_model": {
+    "description": "透明启发式认知负荷代理，不是生理测量或已验证的人因模型",
+    "weights": {
+      "target_count_over_20": 0.35,
+      "pending_actions_over_5": 0.25,
+      "contested_link": 0.20,
+      "geofence_conflict": 0.20
+    }
+  },
+  "levels": [
+    {
+      "level": "L1",
+      "name_zh": "自动执行",
+      "scope": "非发射型、可逆的传感扫描、融合和故障隔离动作",
+      "response_budget_s": 0.10,
+      "authority": "系统",
+      "default": "allow_when_schema_and_safety_gates_pass"
+    },
+    {
+      "level": "L2",
+      "name_zh": "预案内一键批准",
+      "scope": "已预授权、低附带影响的软处置或批次资源编组",
+      "response_budget_s": 1.50,
+      "authority": "值班操作员",
+      "default": "deny_until_affirmative_approval"
+    },
+    {
+      "level": "L3",
+      "name_zh": "指挥员明确批准",
+      "scope": "HPM、HEL、动能或任何禁射界/民用风险相关动作",
+      "response_budget_s": 3.00,
+      "authority": "指挥员",
+      "default": "deny_until_affirmative_approval"
+    }
+  ],
+  "confidence_gate": 0.95,
+  "principle": "高工作负荷只压缩信息和合并请求，不自动降低高风险动作的授权等级"
+}

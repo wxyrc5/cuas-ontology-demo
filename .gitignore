@@ -1,12 +1,32 @@
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-*.egg-info/
-.venv/
-venv/
-ENV/
+.venv-cuas/
+.runlogs/
+**/__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
 .streamlit/secrets.toml
-*.log
-.DS_Store
+
+# Not part of the public technical baseline.
+00_官方材料/
+02_SCI论文/
+04_可视化/历史版本/
+**/历史版本/
+01_参赛交付物/*.docx
+01_参赛交付物/*.pdf
+01_参赛交付物/*.pptx
+01_参赛交付物/*.mp4
+01_参赛交付物/*.zip
+
+# Generated notebook renderings are reproducible and can be large.
+05_Notebook与数据/验证输出/最新执行/*.html
+
+# Legacy document/video checks and duplicate historical figure exports are not
+# part of the reproducible public technical baseline.
+05_Notebook与数据/验证输出/document_acceptance.json
+05_Notebook与数据/验证输出/presentation_acceptance.json
+05_Notebook与数据/验证输出/video_review_acceptance.json
+05_Notebook与数据/验证输出/figures/fig0*.png
+05_Notebook与数据/验证输出/figures/fig2_*.png
+05_Notebook与数据/验证输出/figures/fig3_*.png
+05_Notebook与数据/验证输出/figures/fig4_2_ooda_latency_scope.png
+06_部署脚本/cuas-shapes-README.md
+06_部署脚本/diagnose.sh

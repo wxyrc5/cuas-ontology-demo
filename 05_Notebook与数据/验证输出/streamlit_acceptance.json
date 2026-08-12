@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-12T20:36:14+08:00",
+  "app_dir": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\03_源码\\streamlit_app",
+  "pages": [
+    {
+      "file": "app.py",
+      "syntax": "passed",
+      "exceptions": [],
+      "titles": 1,
+      "headers": 0,
+      "subheaders": 0,
+      "metrics": 8,
+      "buttons": 0,
+      "sliders": 0,
+      "selectboxes": 0,
+      "plotly_charts": 0,
+      "status": "passed"
+    },
+    {
+      "file": "demo_mode.py",
+      "syntax": "passed",
+      "exceptions": [],
+      "titles": 1,
+      "headers": 0,
+      "subheaders": 4,
+      "metrics": 4,
+      "buttons": 4,
+      "sliders": 0,
+      "selectboxes": 0,
+      "plotly_charts": 0,
+      "status": "passed"
+    },
+    {
+      "file": "pages\\0_🎬_专家演示.py",
+      "syntax": "passed",
+      "exceptions": [],
+      "titles": 1,
+      "headers": 0,
+      "subheaders": 4,
+      "metrics": 4,
+      "buttons": 4,
+      "sliders": 0,
+      "selectboxes": 0,
+      "plotly_charts": 0,
+      "status": "passed"
+    },
+    {
+      "file": "pages\\1_🏠_主页.py",
+      "syntax": "passed",
+      "exceptions": [],
+      "titles": 1,
+      "headers": 1,
+      "subheaders": 4,
+      "metrics": 8,
+      "buttons": 0,
+      "sliders": 0,
+      "selectboxes": 0,
+      "plotly_charts": 0,
+      "status": "passed"
+    },
+    {
+      "file": "pages\\2_🧬_本体浏览.py",
+      "syntax": "passed",
+      "exceptions": [],
+      "titles": 1,
+      "headers": 5,
+      "subheaders": 2,
+      "metrics": 21,
+      "buttons": 0,
+      "sliders": 12,
+      "selectboxes": 3,
+      "plotly_charts": 1,
+      "status": "passed"
+    },
+    {
+      "file": "pages\\3_🔍_SPARQL查询.py",
+      "syntax": "passed",
+      "exceptions": [],
+      "titles": 1,
+      "headers": 2,
+      "subheaders": 0,
+      "metrics": 0,
+      "buttons": 6,
+      "sliders": 0,
+      "selectboxes": 0,
+      "plotly_charts": 0,
+      "status": "passed"
+    },
+    {
+      "file": "pages\\4_📊_贝叶斯实验.py",
+      "syntax": "passed",
+      "exceptions": [],
+      "titles": 1,
+      "headers": 0,
+      "subheaders": 3,
+      "metrics": 9,
+      "buttons": 0,
+      "sliders": 2,
+      "selectboxes": 0,
+      "plotly_charts": 3,
+      "status": "passed"
+    },
+    {
+      "file": "pages\\5_🗺_机场反无.py",
+      "syntax": "passed",
+      "exceptions": [],
+      "titles": 1,
+      "headers": 0,
+      "subheaders": 3,
+      "metrics": 6,
+      "buttons": 5,
+      "sliders": 3,
+      "selectboxes": 3,
+      "plotly_charts": 5,
+      "status": "passed"
+    }
+  ],
+  "airport_assets": {
+    "airport_ids": [
+      "PKX",
+      "BRU",
+      "MUC"
+    ],
+    "daxing_codes": {
+      "iata": "PKX",
+      "icao": "ZBAD"
+    },
+    "offline_maps_present": true,
+    "legacy_pek_absent": true,
+    "non_circular_defense_envelopes": {
+      "PKX": 3,
+      "BRU": 3,
+      "MUC": 3
+    }
+  },
+  "airport_resource_control": {
+    "threat_count": 50,
+    "resource_package_count": 3,
+    "metrics": {
+      "闭环使命 Pk": "96.9%",
+      "平均失效目标": "48.6/50",
+      "同构资源包": "3 包",
+      "平均行动成本": "19.14"
+    },
+    "exceptions": [],
+    "status": "passed"
+  },
+  "trajectory_rendering": {
+    "status": "passed",
+    "airport": "PKX/ZBAD",
+    "threat_count": 20,
+    "frames": 60,
+    "deterministic_same_seed": true,
+    "different_seed_changes_trajectory": true,
+    "three_altitude_waves": true,
+    "max_frame_step_km": 0.2985318415747092,
+    "max_outward_frame_step_km": 0.0,
+    "intercepts_after_envelope_entry_and_in_act": true,
+    "offline_map_embedded": true,
+    "defense_envelopes_2d": 3,
+    "defense_envelopes_3d": 3,
+    "shared_2d_3d_uav_states": 20
+  },
+  "ontology_assets": {
+    "object_types": 8,
+    "link_types": 10,
+    "extension_object_types": 3,
+    "extension_link_types": 6,
+    "positive_abox_instances": 26,
+    "positive_abox_edges": 45,
+    "canonical_graph_triples": 653,
+    "sparql_template_rows": {
+      "anti_swarm": 8,
+      "asset_protection": 1,
+      "kill_chain": 12,
+      "operator_roster": 3,
+      "ontology_schema": 10
+    }
+  },
+  "action_feedback": {
+    "decision_id": "ACT-CE7C636D7E17",
+    "triggered_rules": 8,
+    "auto_applied": 5,
+    "pending_human_authorization": 3,
+    "rdf_triples": 153,
+    "deterministic": true,
+    "caller_state_immutable": true,
+    "canonical_model_unchanged": true,
+    "action_contract_positive": true,
+    "action_contract_negative_rejected": true,
+    "authorization_levels": [
+      "L1",
+      "L2",
+      "L3"
+    ],
+    "not_palantir_foundry_deployment": true,
+    "status": "passed"
+  },
+  "resilience_features": {
+    "airport_target_crs": [
+      "EPSG:32631",
+      "EPSG:32632",
+      "EPSG:32650"
+    ],
+    "semantic_hotplug": {
+      "new_equipment_visible": true,
+      "semantic_statements_added": 16,
+      "shacl_conforms": true,
+      "elapsed_ms_current_host": 330.92399999441113
+    },
+    "authorization_path": [
+      "L1",
+      "L3",
+      "L3"
+    ],
+    "ingress_gate": {
+      "accepted_fixture": "ACCEPT",
+      "forged_fixture": "QUARANTINE"
+    },
+    "wta_constraints": {
+      "capacity": true,
+      "single_assignment": true,
+      "forbidden_pairs": true
+    },
+    "failure_trace_not_identified_causal_effect": true,
+    "synthetic_trace_rows": 20,
+    "status": "passed"
+  },
+  "metric_snapshot": {
+    "ontology_verdict": "PASS",
+    "adaptive_20_pk": 0.7655,
+    "static_20_pk": 0.3007,
+    "capacity_frontier_n": 20,
+    "adaptive_minimum_resource_packages": {
+      "20": 1,
+      "25": 2,
+      "30": 2,
+      "40": 2,
+      "50": 3,
+      "60": 3,
+      "75": 4,
+      "100": 5
+    },
+    "static_minimum_resource_packages": {
+      "20": 2,
+      "25": 4,
+      "30": null,
+      "40": null,
+      "50": null,
+      "60": null,
+      "75": null,
+      "100": null
+    },
+    "bayesian_auc": 0.967891796875,
+    "fixed_rule_auc": 0.8688064296875
+  },
+  "status": "passed"
+}

@@ -1,0 +1,182 @@
+@prefix action: <http://cuas-ontology.org/action#> .
+@prefix cuas: <http://cuas-ontology.org/cuas#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+action:ACT_CE7C636D7E17 a action:DecisionBundle ;
+    action:authorization_mode "per_target" ;
+    action:canonicalModelMutated false ;
+    action:decisionId "ACT-CE7C636D7E17" ;
+    action:fusion_confirmation "TWO_SOURCE_CONFIRMATION" ;
+    action:fusion_model "multi_sensor_high_confidence_v2" ;
+    action:hasAction action:ACT_CE7C636D7E17_R01_DETECTION_COVERAGE_LOW,
+        action:ACT_CE7C636D7E17_R02_IDENTIFICATION_ACCURACY_LOW,
+        action:ACT_CE7C636D7E17_R03_THREAT_LEVEL_RISING,
+        action:ACT_CE7C636D7E17_R04_THREAT_RESOURCE_REALLOCATION,
+        action:ACT_CE7C636D7E17_R05_EQUIPMENT_FAILURE,
+        action:ACT_CE7C636D7E17_R06_OODA_DEADLINE_BREACH,
+        action:ACT_CE7C636D7E17_R07_INTERCEPTION_SUCCESS_LOW,
+        action:ACT_CE7C636D7E17_R08_FALSE_ALARM_HIGH ;
+    action:hasObservation action:ACT_CE7C636D7E17_detection_coverage,
+        action:ACT_CE7C636D7E17_false_alarm_rate,
+        action:ACT_CE7C636D7E17_identification_accuracy,
+        action:ACT_CE7C636D7E17_interception_success_rate,
+        action:ACT_CE7C636D7E17_ooda_closure_time_s ;
+    action:notFieldTest true ;
+    action:pendingHumanAction "AUTHORIZE_BATCH_DECISION_MODE",
+        "AUTHORIZE_EFFECTOR_REINFORCEMENT",
+        "AUTHORIZE_RESOURCE_REALLOCATION" ;
+    action:resource_package_count 1 ;
+    action:scan_mode "HIGH_REFRESH" ;
+    action:targetsMission cuas:Mission_G20Summit ;
+    action:wta_recompute_requested true ;
+    prov:generatedAtTime "2026-08-10T00:00:00+00:00"^^xsd:dateTime .
+
+cuas:Eq_CommandPost_001 cuas:operationalStatus "Available" .
+
+cuas:Eq_FusionNode_001 cuas:operationalStatus "Available" .
+
+cuas:Eq_RFEO_Backup_002 cuas:operationalStatus "Available" .
+
+cuas:Eq_RadarUnit_007 cuas:operationalStatus "Available" .
+
+action:ACT_CE7C636D7E17_R01_DETECTION_COVERAGE_LOW a action:ActionEvent ;
+    action:actionCode "ADJUST_SENSOR_SCAN_MODE" ;
+    action:authorizationLevel "L1" ;
+    action:decisionRationale "可逆传感参数调整，不产生外部效应。"@zh ;
+    action:executionStatus "AUTO_APPLIED" ;
+    action:riskClass "LOW" ;
+    action:ruleId "R01_DETECTION_COVERAGE_LOW" ;
+    action:targetsCapability cuas:Cap_Data_Integration,
+        cuas:Cap_Radar_GaN_AESA ;
+    action:targetsMission cuas:Mission_G20Summit ;
+    rdfs:comment "提高雷达刷新并保持备用传感与数据融合能力分配。"@zh ;
+    prov:wasAssociatedWith cuas:Operator_Commander_01 .
+
+action:ACT_CE7C636D7E17_R02_IDENTIFICATION_ACCURACY_LOW a action:ActionEvent ;
+    action:actionCode "SWITCH_FUSION_MODEL" ;
+    action:authorizationLevel "L1" ;
+    action:decisionRationale "可逆融合模型切换，不产生外部效应。"@zh ;
+    action:executionStatus "AUTO_APPLIED" ;
+    action:riskClass "LOW" ;
+    action:ruleId "R02_IDENTIFICATION_ACCURACY_LOW" ;
+    action:targetsCapability cuas:Cap_Data_Integration,
+        cuas:Cap_Fusion_MultiSensor ;
+    action:targetsMission cuas:Mission_G20Summit ;
+    rdfs:comment "切换到高置信多传感融合并请求高分辨率复核。"@zh ;
+    prov:wasAssociatedWith cuas:Operator_Commander_01 .
+
+action:ACT_CE7C636D7E17_R03_THREAT_LEVEL_RISING a action:ActionEvent ;
+    action:actionCode "RAISE_MISSION_PRIORITY" ;
+    action:authorizationLevel "L1" ;
+    action:decisionRationale "仅调整内部任务排序，不越过效应授权边界。"@zh ;
+    action:executionStatus "AUTO_APPLIED" ;
+    action:riskClass "LOW" ;
+    action:ruleId "R03_THREAT_LEVEL_RISING" ;
+    action:targetsCapability cuas:Cap_C2_Semantic ;
+    action:targetsMission cuas:Mission_G20Summit ;
+    rdfs:comment "将使命优先级提升到当前威胁等级。"@zh ;
+    prov:wasAssociatedWith cuas:Operator_Commander_01 .
+
+action:ACT_CE7C636D7E17_R04_THREAT_RESOURCE_REALLOCATION a action:ActionEvent ;
+    action:actionCode "AUTHORIZE_RESOURCE_REALLOCATION" ;
+    action:authorizationLevel "L2" ;
+    action:decisionRationale "匹配既有预案的资源重分配仍需操作员明确批准。"@zh ;
+    action:executionStatus "PENDING_HUMAN_AUTHORIZATION" ;
+    action:riskClass "MEDIUM" ;
+    action:ruleId "R04_THREAT_RESOURCE_REALLOCATION" ;
+    action:targetsCapability cuas:Cap_C2_Semantic,
+        cuas:Cap_HPM_Group ;
+    action:targetsMission cuas:Mission_G20Summit ;
+    rdfs:comment "请求从低优先级任务调入一个同构资源包；等待人工授权。"@zh ;
+    prov:wasAssociatedWith cuas:Operator_Commander_01 .
+
+action:ACT_CE7C636D7E17_R05_EQUIPMENT_FAILURE a action:ActionEvent ;
+    action:actionCode "QUARANTINE_AND_RERUN_WTA" ;
+    action:authorizationLevel "L1" ;
+    action:decisionRationale "隔离故障装备并重算候选分配，不自动实施效应。"@zh ;
+    action:executionStatus "AUTO_APPLIED" ;
+    action:riskClass "LOW" ;
+    action:ruleId "R05_EQUIPMENT_FAILURE" ;
+    action:targetsEquipment cuas:Eq_EW_HPM_001 ;
+    action:targetsMission cuas:Mission_G20Summit ;
+    rdfs:comment "将故障装备移出能力池并重新计算武器目标分配。"@zh ;
+    prov:wasAssociatedWith cuas:Operator_Commander_01 .
+
+action:ACT_CE7C636D7E17_R06_OODA_DEADLINE_BREACH a action:ActionEvent ;
+    action:actionCode "AUTHORIZE_BATCH_DECISION_MODE" ;
+    action:authorizationLevel "L2" ;
+    action:decisionRationale "批次决策压缩认知负荷，但不取消操作员批准。"@zh ;
+    action:executionStatus "PENDING_HUMAN_AUTHORIZATION" ;
+    action:riskClass "MEDIUM" ;
+    action:ruleId "R06_OODA_DEADLINE_BREACH" ;
+    action:targetsCapability cuas:Cap_C2_Semantic,
+        cuas:Cap_Data_Integration ;
+    action:targetsMission cuas:Mission_G20Summit ;
+    rdfs:comment "请求批量授权与指控通道重编组；等待人工授权。"@zh ;
+    prov:wasAssociatedWith cuas:Operator_Commander_01 .
+
+action:ACT_CE7C636D7E17_R07_INTERCEPTION_SUCCESS_LOW a action:ActionEvent ;
+    action:actionCode "AUTHORIZE_EFFECTOR_REINFORCEMENT" ;
+    action:authorizationLevel "L3" ;
+    action:decisionRationale "涉及效应器增援，默认拒绝并等待指挥员明确批准。"@zh ;
+    action:executionStatus "PENDING_HUMAN_AUTHORIZATION" ;
+    action:riskClass "HIGH" ;
+    action:ruleId "R07_INTERCEPTION_SUCCESS_LOW" ;
+    action:targetsCapability cuas:Cap_EW_Directional,
+        cuas:Cap_HPM_Group ;
+    action:targetsMission cuas:Mission_G20Summit ;
+    rdfs:comment "请求软硬杀伤资源重分配与补充交战；等待人工授权。"@zh ;
+    prov:wasAssociatedWith cuas:Operator_Commander_01 .
+
+action:ACT_CE7C636D7E17_R08_FALSE_ALARM_HIGH a action:ActionEvent ;
+    action:actionCode "RAISE_FUSION_CONFIRMATION" ;
+    action:authorizationLevel "L1" ;
+    action:decisionRationale "提高多源确认门限，属于保守且可逆的运行态动作。"@zh ;
+    action:executionStatus "AUTO_APPLIED" ;
+    action:riskClass "LOW" ;
+    action:ruleId "R08_FALSE_ALARM_HIGH" ;
+    action:targetsCapability cuas:Cap_Data_Integration,
+        cuas:Cap_Fusion_MultiSensor ;
+    action:targetsMission cuas:Mission_G20Summit ;
+    rdfs:comment "将告警确认切换为双源一致性门限。"@zh ;
+    prov:wasAssociatedWith cuas:Operator_Commander_01 .
+
+action:ACT_CE7C636D7E17_detection_coverage a action:EffectObservation ;
+    action:metricKey "detection_coverage" ;
+    action:metricValue 8.8e-01 .
+
+action:ACT_CE7C636D7E17_false_alarm_rate a action:EffectObservation ;
+    action:metricKey "false_alarm_rate" ;
+    action:metricValue 2.5e-02 .
+
+action:ACT_CE7C636D7E17_identification_accuracy a action:EffectObservation ;
+    action:metricKey "identification_accuracy" ;
+    action:metricValue 8.3e-01 .
+
+action:ACT_CE7C636D7E17_interception_success_rate a action:EffectObservation ;
+    action:metricKey "interception_success_rate" ;
+    action:metricValue 8.2e-01 .
+
+action:ACT_CE7C636D7E17_ooda_closure_time_s a action:EffectObservation ;
+    action:metricKey "ooda_closure_time_s" ;
+    action:metricValue 5.4e+00 .
+
+action:DecisionBundle a owl:Class .
+
+cuas:Eq_EW_HPM_001 cuas:operationalStatus "Failed" .
+
+action:ActionEvent a owl:Class ;
+    rdfs:subClassOf prov:Activity .
+
+cuas:Mission_G20Summit cuas:allocates cuas:Cap_C2_Semantic,
+        cuas:Cap_Data_Integration,
+        cuas:Cap_EW_Directional,
+        cuas:Cap_Fusion_MultiSensor,
+        cuas:Cap_HPM_Group,
+        cuas:Cap_RFEO_Backup,
+        cuas:Cap_Radar_GaN_AESA ;
+    cuas:priority 5 .
+

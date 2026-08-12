@@ -1,0 +1,335 @@
+{
+  "schema_version": 2,
+  "scope": "synthetic_five_channel_beta_binomial_flywheel",
+  "not_field_test": true,
+  "random_seeds": {
+    "flywheel": 42,
+    "reproducibility": 20260811,
+    "auc_comparison": 20260810
+  },
+  "weight_sum": 0.9999999999999999,
+  "feedback_cycles_per_run": 200,
+  "monte_carlo_runs": 1000,
+  "convergence_definition": {
+    "composite_threshold": 0.9,
+    "sustained_cycles": 10
+  },
+  "seed42_final_composite": 0.9459405940594059,
+  "seed42_final_ci95": [
+    0.9302413549826672,
+    0.9594039944281526
+  ],
+  "seed42_sustained_convergence_cycle": 44,
+  "convergence_mean_cycles": 23.805,
+  "convergence_std_cycles": 13.202688173247143,
+  "convergence_p95_cycles": 50.0,
+  "non_convergence_rate": 0.0,
+  "final_posterior_mean": 0.9373531683168318,
+  "final_posterior_std": 0.007595688125521349,
+  "effective_truth": 0.94198,
+  "credible_interval_coverage_95": 0.937,
+  "posterior_rmse": 0.008893933298859194,
+  "auc": 0.967891796875,
+  "fixed_rule_auc": 0.8688064296875,
+  "auc_delta": 0.09908536718750005,
+  "paired_auc_delta_ci95": [
+    0.09490194966494389,
+    0.10346523783505612
+  ],
+  "observations_per_channel_for_auc": 30,
+  "auc_cases_total": 16000,
+  "decision_threshold": 0.3743000683128526,
+  "fpr": 0.0965,
+  "fnr": 0.08174999999999999,
+  "fixed_rule_threshold": 0.76,
+  "fixed_rule_fpr": 0.296875,
+  "fixed_rule_fnr": 0.143625,
+  "gray_zone_margin": 0.04,
+  "ontology_conditioned_counterfactual": {
+    "scope": "synthetic_ontology_conditioned_prior_sensitivity",
+    "not_field_test": true,
+    "seed": 20260812,
+    "n_observations_per_channel": 12,
+    "prior_strength": 12.0,
+    "health_sensitivity": 0.7,
+    "shared_successes": {
+      "detection": 12,
+      "identification": 10,
+      "interception": 12,
+      "ooda_closure": 11,
+      "false_alarm_compliance": 12
+    },
+    "scenarios": [
+      {
+        "scenario": "名义状态",
+        "mission_compliance_score": 0.6737433960016945,
+        "channels": [
+          {
+            "channel": "detection",
+            "channel_zh": "探测覆盖",
+            "equipment": "Eq_RadarUnit_007",
+            "capability": "Cap_Radar_GaN_AESA",
+            "health": 0.98,
+            "prior_mean": 0.9613499999999999,
+            "shared_successes": 12,
+            "posterior_compliance_probability": 0.8890286766697741
+          },
+          {
+            "channel": "identification",
+            "channel_zh": "识别准确",
+            "equipment": "Eq_FusionNode_001",
+            "capability": "Cap_Fusion_MultiSensor",
+            "health": 0.97,
+            "prior_mean": 0.9251550000000001,
+            "shared_successes": 10,
+            "posterior_compliance_probability": 0.3022670846052733
+          },
+          {
+            "channel": "interception",
+            "channel_zh": "拦截成功",
+            "equipment": "Eq_EW_HPM_001",
+            "capability": "Cap_EW_Directional",
+            "health": 0.96,
+            "prior_mean": 0.8505,
+            "shared_successes": 12,
+            "posterior_compliance_probability": 0.9073031802060356
+          },
+          {
+            "channel": "ooda_closure",
+            "channel_zh": "OODA 闭环",
+            "equipment": "Eq_CommandPost_001",
+            "capability": "Cap_C2_Semantic",
+            "health": 0.99,
+            "prior_mean": 0.918525,
+            "shared_successes": 11,
+            "posterior_compliance_probability": 0.6909641671395707
+          },
+          {
+            "channel": "false_alarm_compliance",
+            "channel_zh": "低虚警合规（1-FAR）",
+            "equipment": "Eq_FusionNode_001",
+            "capability": "Cap_Data_Integration",
+            "health": 0.97,
+            "prior_mean": 0.974105,
+            "shared_successes": 12,
+            "posterior_compliance_probability": 0.7968152813778073
+          }
+        ],
+        "graph_paths": [
+          "Eq_RadarUnit_007->Cap_Radar_GaN_AESA->EM_DetectionCoverage",
+          "Eq_FusionNode_001->Cap_Fusion_MultiSensor->EM_IdentificationAccuracy",
+          "Eq_EW_HPM_001->Cap_EW_Directional->EM_InterceptionSuccess",
+          "Eq_CommandPost_001->Cap_C2_Semantic->EM_OODAClosureTime",
+          "Eq_FusionNode_001->Cap_Data_Integration->EM_FalseAlarmRate"
+        ]
+      },
+      {
+        "scenario": "主雷达失效",
+        "mission_compliance_score": 0.04148119046323641,
+        "channels": [
+          {
+            "channel": "detection",
+            "channel_zh": "探测覆盖",
+            "equipment": "Eq_RadarUnit_007",
+            "capability": "Cap_Radar_GaN_AESA",
+            "health": 0.05,
+            "prior_mean": 0.32662500000000005,
+            "shared_successes": 12,
+            "posterior_compliance_probability": 8.027284335116786e-06
+          },
+          {
+            "channel": "identification",
+            "channel_zh": "识别准确",
+            "equipment": "Eq_FusionNode_001",
+            "capability": "Cap_Fusion_MultiSensor",
+            "health": 0.97,
+            "prior_mean": 0.9251550000000001,
+            "shared_successes": 10,
+            "posterior_compliance_probability": 0.3022670846052733
+          },
+          {
+            "channel": "interception",
+            "channel_zh": "拦截成功",
+            "equipment": "Eq_EW_HPM_001",
+            "capability": "Cap_EW_Directional",
+            "health": 0.96,
+            "prior_mean": 0.8505,
+            "shared_successes": 12,
+            "posterior_compliance_probability": 0.9073031802060356
+          },
+          {
+            "channel": "ooda_closure",
+            "channel_zh": "OODA 闭环",
+            "equipment": "Eq_CommandPost_001",
+            "capability": "Cap_C2_Semantic",
+            "health": 0.99,
+            "prior_mean": 0.918525,
+            "shared_successes": 11,
+            "posterior_compliance_probability": 0.6909641671395707
+          },
+          {
+            "channel": "false_alarm_compliance",
+            "channel_zh": "低虚警合规（1-FAR）",
+            "equipment": "Eq_FusionNode_001",
+            "capability": "Cap_Data_Integration",
+            "health": 0.97,
+            "prior_mean": 0.974105,
+            "shared_successes": 12,
+            "posterior_compliance_probability": 0.7968152813778073
+          }
+        ],
+        "graph_paths": [
+          "Eq_RadarUnit_007->Cap_Radar_GaN_AESA->EM_DetectionCoverage",
+          "Eq_FusionNode_001->Cap_Fusion_MultiSensor->EM_IdentificationAccuracy",
+          "Eq_EW_HPM_001->Cap_EW_Directional->EM_InterceptionSuccess",
+          "Eq_CommandPost_001->Cap_C2_Semantic->EM_OODAClosureTime",
+          "Eq_FusionNode_001->Cap_Data_Integration->EM_FalseAlarmRate"
+        ]
+      },
+      {
+        "scenario": "本体重构至射频/光电备份",
+        "mission_compliance_score": 0.6384537680834518,
+        "channels": [
+          {
+            "channel": "detection",
+            "channel_zh": "探测覆盖",
+            "equipment": "Eq_RFEO_Backup_002",
+            "capability": "Cap_RFEO_Backup",
+            "health": 0.92,
+            "prior_mean": 0.9204,
+            "shared_successes": 12,
+            "posterior_compliance_probability": 0.7104954888653138
+          },
+          {
+            "channel": "identification",
+            "channel_zh": "识别准确",
+            "equipment": "Eq_FusionNode_001",
+            "capability": "Cap_Fusion_MultiSensor",
+            "health": 0.97,
+            "prior_mean": 0.9251550000000001,
+            "shared_successes": 10,
+            "posterior_compliance_probability": 0.3022670846052733
+          },
+          {
+            "channel": "interception",
+            "channel_zh": "拦截成功",
+            "equipment": "Eq_EW_HPM_001",
+            "capability": "Cap_EW_Directional",
+            "health": 0.96,
+            "prior_mean": 0.8505,
+            "shared_successes": 12,
+            "posterior_compliance_probability": 0.9073031802060356
+          },
+          {
+            "channel": "ooda_closure",
+            "channel_zh": "OODA 闭环",
+            "equipment": "Eq_CommandPost_001",
+            "capability": "Cap_C2_Semantic",
+            "health": 0.99,
+            "prior_mean": 0.918525,
+            "shared_successes": 11,
+            "posterior_compliance_probability": 0.6909641671395707
+          },
+          {
+            "channel": "false_alarm_compliance",
+            "channel_zh": "低虚警合规（1-FAR）",
+            "equipment": "Eq_FusionNode_001",
+            "capability": "Cap_Data_Integration",
+            "health": 0.97,
+            "prior_mean": 0.974105,
+            "shared_successes": 12,
+            "posterior_compliance_probability": 0.7968152813778073
+          }
+        ],
+        "graph_paths": [
+          "Eq_RFEO_Backup_002->Cap_RFEO_Backup->EM_DetectionCoverage",
+          "Eq_FusionNode_001->Cap_Fusion_MultiSensor->EM_IdentificationAccuracy",
+          "Eq_EW_HPM_001->Cap_EW_Directional->EM_InterceptionSuccess",
+          "Eq_CommandPost_001->Cap_C2_Semantic->EM_OODAClosureTime",
+          "Eq_FusionNode_001->Cap_Data_Integration->EM_FalseAlarmRate"
+        ]
+      }
+    ],
+    "checks": {
+      "radar_failure_reduces_score": true,
+      "reconfiguration_recovers_score": true,
+      "paths_derived_from_graph": true
+    }
+  },
+  "channels": [
+    {
+      "通道": "探测覆盖",
+      "指标映射": "DetectionCoverage >= 0.95",
+      "权重": 0.24,
+      "合成真值": 0.972,
+      "工程门槛": 0.95,
+      "成功观测": 198,
+      "总观测": 200,
+      "终态后验均值": 0.9851485148514851,
+      "95%下界": 0.964520412445918,
+      "95%上界": 0.9969113892223069
+    },
+    {
+      "通道": "识别准确",
+      "指标映射": "IdentificationAccuracy >= 0.92",
+      "权重": 0.2,
+      "合成真值": 0.948,
+      "工程门槛": 0.92,
+      "成功观测": 192,
+      "总观测": 200,
+      "终态后验均值": 0.9554455445544554,
+      "95%下界": 0.9230850520073909,
+      "95%上界": 0.9793239894226536
+    },
+    {
+      "通道": "拦截成功",
+      "指标映射": "InterceptionSuccessRate >= 0.85",
+      "权重": 0.24,
+      "合成真值": 0.895,
+      "工程门槛": 0.85,
+      "成功观测": 180,
+      "总观测": 200,
+      "终态后验均值": 0.8960396039603961,
+      "95%下界": 0.85051346645359,
+      "95%上界": 0.9341541421484719
+    },
+    {
+      "通道": "OODA 闭环",
+      "指标映射": "P(full-loop latency < 5 s) >= 0.90",
+      "权重": 0.22,
+      "合成真值": 0.935,
+      "工程门槛": 0.9,
+      "成功观测": 188,
+      "总观测": 200,
+      "终态后验均值": 0.9356435643564357,
+      "95%下界": 0.898036322666571,
+      "95%上界": 0.9651160141027348
+    },
+    {
+      "通道": "低虚警合规（1-FAR）",
+      "指标映射": "1 - FalseAlarmRate >= 0.98",
+      "权重": 0.1,
+      "合成真值": 0.986,
+      "工程门槛": 0.98,
+      "成功观测": 196,
+      "总观测": 200,
+      "终态后验均值": 0.9752475247524752,
+      "95%下界": 0.9498332956998973,
+      "95%上界": 0.9918747052801903
+    }
+  ],
+  "checks": {
+    "weights_sum_to_one": true,
+    "seed42_composite_reaches_0_90": true,
+    "all_runs_converged": true,
+    "coverage_90_to_99_pct": true,
+    "posterior_rmse_le_0_03": true,
+    "bayesian_auc_ge_0_85": true,
+    "bayesian_fpr_le_0_10": true,
+    "bayesian_fnr_le_0_10": true,
+    "paired_delta_ci_above_zero": true,
+    "ontology_prior_failure_reduces_score": true,
+    "ontology_prior_reconfiguration_recovers_score": true,
+    "ontology_paths_derived_from_graph": true
+  }
+}

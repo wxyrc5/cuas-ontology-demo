@@ -1,0 +1,96 @@
+--- cell 1 / stream ---
+项目根目录: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated
+Python: D:\Downloads\反无人机体系\.venv-cuas\python.exe
+
+--- cell 3 / execute_result ---
+                  name  passed  \
+0      RDF/Turtle 语法解析    True   
+1    8 OT / 10 LT 结构审计    True   
+2  3 个扩展类型 / 6 个扩展关系审计    True   
+3         SHACL 正向实例验证    True   
+4           SHACL 负向对照    True   
+5         HermiT 正向一致性    True   
+6      HermiT 类型互斥负向对照    True   
+
+                                            evidence  duration_seconds  
+0  cuas-ontology.ttl=393, cuas-data-valid.ttl=260...          0.038116  
+1  core_classes=8/8; core_links=10/10; unsupporte...          0.000246  
+2         extension_classes=3/3; extension_links=6/6          0.000045  
+3                                      Conforms=True          0.219050  
+4  Conforms=False; violations=2; expected_paths=p...          0.175628  
+5  HermiT consistent=True; expected=True; input_t...          1.153032  
+6  HermiT consistent=False; expected=False; input...          0.927060
+
+--- cell 5 / stream ---
+受控 SHACL 违规（应当且仅应当为 2 项）
+
+--- cell 5 / display_data ---
+          focus_node               path  \
+0   Eq_RadarUnit_007  operationalStatus   
+1  Mission_G20Summit           priority   
+
+                                             message  
+0  operationalStatus 必须是 Available / Engaged / Ma...  
+1                    priority 必须在 [1,5] 范围内，5 为最高优先级
+
+--- cell 5 / stream ---
+运行环境
+
+--- cell 5 / display_data ---
+          组件                                版本
+0     python                           3.11.15
+1       java  java version "20.0.1" 2023-04-18
+2     rdflib                             7.6.0
+3    pyshacl                            0.40.1
+4  owlready2                              0.51
+
+--- cell 5 / stream ---
+输入哈希
+
+--- cell 5 / display_data ---
+                    文件  三元组数  \
+0    cuas-ontology.ttl   393   
+1  cuas-data-valid.ttl   260   
+2   cuas-data-test.ttl     2   
+3      cuas-shapes.ttl   538   
+
+                                              SHA256  
+0  160acfb670387683249987c18ba197818d4db7481f224b...  
+1  a4a40391ab2837ffe97ee9cb92be49eae062c08355c9f8...  
+2  db3ddfd0fdd6186b184b5a78e7677f8b660a0a10a7d3e9...  
+3  f3804439fe628d92c8ea8da439566faf2cb92c8d00e1d8...
+
+--- cell 6 / display_data ---
+<Figure size 1400x480 with 2 Axes>
+
+--- cell 8 / stream ---
+合并图三元组: 653；核心 8/10: 8/8、10/10；扩展 3/6: 3/3、6/6
+
+--- cell 8 / execute_result ---
+                    OT  实例数
+0              Mission    1
+1             Scenario    5
+2  TechnicalCapability    7
+3            Equipment    5
+4         EffectMetric    5
+5               Threat    1
+6                Asset    1
+7             Operator    1
+
+--- cell 9 / execute_result ---
+       query  result_rows    p50_ms     p95_ms
+0  Q1_OT实例计数            8  12.08550  19.699545
+1    Q2_使命场景            5   5.43245   8.919730
+2  Q3_装备能力场景           10   5.64870  12.033185
+3  Q4_能力效果回证            8   5.94245  10.788545
+4    Q5_效果门槛            5   8.85325  13.116550
+
+--- cell 10 / display_data ---
+<Figure size 900x480 with 1 Axes>
+
+--- cell 12 / stream ---
+形式一致性裁决: PASS
+HermiT 正向一致性: True
+HermiT 互斥类型负向对照: True
+SHACL 正向 / 负向对照: True True
+机器可读指标: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\metrics_notebook_01.json

@@ -1,0 +1,394 @@
+{
+  "schema_version": 1,
+  "decision_id": "ACT-CE7C636D7E17",
+  "generated_at_utc": "2026-08-10T00:00:00+00:00",
+  "scope": "local_ontology_action_feedback_prototype",
+  "not_field_test": true,
+  "not_palantir_foundry_deployment": true,
+  "canonical_model_mutated": false,
+  "metrics": {
+    "detection_coverage": 0.88,
+    "false_alarm_rate": 0.025,
+    "identification_accuracy": 0.83,
+    "interception_success_rate": 0.82,
+    "ooda_closure_time_s": 5.4
+  },
+  "context": {
+    "threat_level_previous": 3,
+    "threat_level_current": 5,
+    "failed_equipment_ids": [
+      "Eq_EW_HPM_001"
+    ]
+  },
+  "before_state": {
+    "mission_id": "Mission_G20Summit",
+    "operator_id": "Operator_Commander_01",
+    "revision": 0,
+    "priority": 3,
+    "allocated_capabilities": [
+      "Cap_C2_Semantic",
+      "Cap_Data_Integration",
+      "Cap_EW_Directional",
+      "Cap_Fusion_MultiSensor",
+      "Cap_HPM_Group",
+      "Cap_RFEO_Backup",
+      "Cap_Radar_GaN_AESA"
+    ],
+    "equipment_status": {
+      "Eq_RadarUnit_007": "Available",
+      "Eq_FusionNode_001": "Available",
+      "Eq_CommandPost_001": "Available",
+      "Eq_EW_HPM_001": "Available",
+      "Eq_RFEO_Backup_002": "Available"
+    },
+    "controls": {
+      "scan_mode": "NORMAL",
+      "fusion_model": "baseline_fusion_v1",
+      "fusion_confirmation": "STANDARD",
+      "authorization_mode": "per_target",
+      "resource_package_count": 1,
+      "wta_recompute_requested": false
+    },
+    "pending_human_actions": []
+  },
+  "after_state": {
+    "mission_id": "Mission_G20Summit",
+    "operator_id": "Operator_Commander_01",
+    "revision": 1,
+    "priority": 5,
+    "allocated_capabilities": [
+      "Cap_C2_Semantic",
+      "Cap_Data_Integration",
+      "Cap_EW_Directional",
+      "Cap_Fusion_MultiSensor",
+      "Cap_HPM_Group",
+      "Cap_RFEO_Backup",
+      "Cap_Radar_GaN_AESA"
+    ],
+    "equipment_status": {
+      "Eq_RadarUnit_007": "Available",
+      "Eq_FusionNode_001": "Available",
+      "Eq_CommandPost_001": "Available",
+      "Eq_EW_HPM_001": "Failed",
+      "Eq_RFEO_Backup_002": "Available"
+    },
+    "controls": {
+      "scan_mode": "HIGH_REFRESH",
+      "fusion_model": "multi_sensor_high_confidence_v2",
+      "fusion_confirmation": "TWO_SOURCE_CONFIRMATION",
+      "authorization_mode": "per_target",
+      "resource_package_count": 1,
+      "wta_recompute_requested": true
+    },
+    "pending_human_actions": [
+      "AUTHORIZE_BATCH_DECISION_MODE",
+      "AUTHORIZE_EFFECTOR_REINFORCEMENT",
+      "AUTHORIZE_RESOURCE_REALLOCATION"
+    ]
+  },
+  "rule_evaluations": [
+    {
+      "rule_id": "R01_DETECTION_COVERAGE_LOW",
+      "triggered": true,
+      "observed": 0.88,
+      "threshold": "< 0.90"
+    },
+    {
+      "rule_id": "R02_IDENTIFICATION_ACCURACY_LOW",
+      "triggered": true,
+      "observed": 0.83,
+      "threshold": "< 0.85"
+    },
+    {
+      "rule_id": "R03_THREAT_LEVEL_RISING",
+      "triggered": true,
+      "observed": {
+        "previous": 3,
+        "current": 5
+      },
+      "threshold": "current > previous"
+    },
+    {
+      "rule_id": "R04_THREAT_RESOURCE_REALLOCATION",
+      "triggered": true,
+      "observed": 5,
+      "threshold": "threat level rising"
+    },
+    {
+      "rule_id": "R05_EQUIPMENT_FAILURE",
+      "triggered": true,
+      "observed": [
+        "Eq_EW_HPM_001"
+      ],
+      "threshold": "one or more equipment failures"
+    },
+    {
+      "rule_id": "R06_OODA_DEADLINE_BREACH",
+      "triggered": true,
+      "observed": 5.4,
+      "threshold": ">= 5.0 s"
+    },
+    {
+      "rule_id": "R07_INTERCEPTION_SUCCESS_LOW",
+      "triggered": true,
+      "observed": 0.82,
+      "threshold": "< 0.85"
+    },
+    {
+      "rule_id": "R08_FALSE_ALARM_HIGH",
+      "triggered": true,
+      "observed": 0.025,
+      "threshold": ">= 0.02"
+    }
+  ],
+  "actions": [
+    {
+      "rule_id": "R01_DETECTION_COVERAGE_LOW",
+      "action_code": "ADJUST_SENSOR_SCAN_MODE",
+      "description": "提高雷达刷新并保持备用传感与数据融合能力分配。",
+      "execution_status": "AUTO_APPLIED",
+      "authorization_level": "L1",
+      "risk_class": "LOW",
+      "decision_rationale": "可逆传感参数调整，不产生外部效应。",
+      "target_capabilities": [
+        "Cap_Radar_GaN_AESA",
+        "Cap_Data_Integration"
+      ],
+      "target_equipment": [],
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 0.88,
+        "predicate": "< 0.90",
+        "rule_id": "R01_DETECTION_COVERAGE_LOW"
+      },
+      "side_effects": [
+        "controls.scan_mode=HIGH_REFRESH"
+      ],
+      "validation_function": "after.controls.scan_mode == HIGH_REFRESH",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R01_DETECTION_COVERAGE_LOW",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-CE7C636D7E17-R01_DETECTION_COVERAGE_LOW"
+    },
+    {
+      "rule_id": "R02_IDENTIFICATION_ACCURACY_LOW",
+      "action_code": "SWITCH_FUSION_MODEL",
+      "description": "切换到高置信多传感融合并请求高分辨率复核。",
+      "execution_status": "AUTO_APPLIED",
+      "authorization_level": "L1",
+      "risk_class": "LOW",
+      "decision_rationale": "可逆融合模型切换，不产生外部效应。",
+      "target_capabilities": [
+        "Cap_Fusion_MultiSensor",
+        "Cap_Data_Integration"
+      ],
+      "target_equipment": [],
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 0.83,
+        "predicate": "< 0.85",
+        "rule_id": "R02_IDENTIFICATION_ACCURACY_LOW"
+      },
+      "side_effects": [
+        "controls.fusion_model=multi_sensor_high_confidence_v2"
+      ],
+      "validation_function": "after.controls.fusion_model == multi_sensor_high_confidence_v2",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R02_IDENTIFICATION_ACCURACY_LOW",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-CE7C636D7E17-R02_IDENTIFICATION_ACCURACY_LOW"
+    },
+    {
+      "rule_id": "R03_THREAT_LEVEL_RISING",
+      "action_code": "RAISE_MISSION_PRIORITY",
+      "description": "将使命优先级提升到当前威胁等级。",
+      "execution_status": "AUTO_APPLIED",
+      "authorization_level": "L1",
+      "risk_class": "LOW",
+      "decision_rationale": "仅调整内部任务排序，不越过效应授权边界。",
+      "target_capabilities": [
+        "Cap_C2_Semantic"
+      ],
+      "target_equipment": [],
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": {
+          "previous": 3,
+          "current": 5
+        },
+        "predicate": "current > previous",
+        "rule_id": "R03_THREAT_LEVEL_RISING"
+      },
+      "side_effects": [
+        "priority=max(priority, threat_level_current)"
+      ],
+      "validation_function": "after.priority >= context.threat_level_current",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R03_THREAT_LEVEL_RISING",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-CE7C636D7E17-R03_THREAT_LEVEL_RISING"
+    },
+    {
+      "rule_id": "R04_THREAT_RESOURCE_REALLOCATION",
+      "action_code": "AUTHORIZE_RESOURCE_REALLOCATION",
+      "description": "请求从低优先级任务调入一个同构资源包；等待人工授权。",
+      "execution_status": "PENDING_HUMAN_AUTHORIZATION",
+      "authorization_level": "L2",
+      "risk_class": "MEDIUM",
+      "decision_rationale": "匹配既有预案的资源重分配仍需操作员明确批准。",
+      "target_capabilities": [
+        "Cap_C2_Semantic",
+        "Cap_HPM_Group"
+      ],
+      "target_equipment": [],
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 5,
+        "predicate": "threat level rising",
+        "rule_id": "R04_THREAT_RESOURCE_REALLOCATION"
+      },
+      "side_effects": [
+        "none_before_human_authorization"
+      ],
+      "validation_function": "pending_human_actions contains AUTHORIZE_RESOURCE_REALLOCATION",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R04_THREAT_RESOURCE_REALLOCATION",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-CE7C636D7E17-R04_THREAT_RESOURCE_REALLOCATION"
+    },
+    {
+      "rule_id": "R05_EQUIPMENT_FAILURE",
+      "action_code": "QUARANTINE_AND_RERUN_WTA",
+      "description": "将故障装备移出能力池并重新计算武器目标分配。",
+      "execution_status": "AUTO_APPLIED",
+      "authorization_level": "L1",
+      "risk_class": "LOW",
+      "decision_rationale": "隔离故障装备并重算候选分配，不自动实施效应。",
+      "target_capabilities": [],
+      "target_equipment": [
+        "Eq_EW_HPM_001"
+      ],
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": [
+          "Eq_EW_HPM_001"
+        ],
+        "predicate": "one or more equipment failures",
+        "rule_id": "R05_EQUIPMENT_FAILURE"
+      },
+      "side_effects": [
+        "equipment_status=Failed; controls.wta_recompute_requested=true"
+      ],
+      "validation_function": "failed equipment excluded and WTA recompute requested",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R05_EQUIPMENT_FAILURE",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-CE7C636D7E17-R05_EQUIPMENT_FAILURE"
+    },
+    {
+      "rule_id": "R06_OODA_DEADLINE_BREACH",
+      "action_code": "AUTHORIZE_BATCH_DECISION_MODE",
+      "description": "请求批量授权与指控通道重编组；等待人工授权。",
+      "execution_status": "PENDING_HUMAN_AUTHORIZATION",
+      "authorization_level": "L2",
+      "risk_class": "MEDIUM",
+      "decision_rationale": "批次决策压缩认知负荷，但不取消操作员批准。",
+      "target_capabilities": [
+        "Cap_C2_Semantic",
+        "Cap_Data_Integration"
+      ],
+      "target_equipment": [],
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 5.4,
+        "predicate": ">= 5.0 s",
+        "rule_id": "R06_OODA_DEADLINE_BREACH"
+      },
+      "side_effects": [
+        "none_before_human_authorization"
+      ],
+      "validation_function": "pending_human_actions contains AUTHORIZE_BATCH_DECISION_MODE",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R06_OODA_DEADLINE_BREACH",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-CE7C636D7E17-R06_OODA_DEADLINE_BREACH"
+    },
+    {
+      "rule_id": "R07_INTERCEPTION_SUCCESS_LOW",
+      "action_code": "AUTHORIZE_EFFECTOR_REINFORCEMENT",
+      "description": "请求软硬杀伤资源重分配与补充交战；等待人工授权。",
+      "execution_status": "PENDING_HUMAN_AUTHORIZATION",
+      "authorization_level": "L3",
+      "risk_class": "HIGH",
+      "decision_rationale": "涉及效应器增援，默认拒绝并等待指挥员明确批准。",
+      "target_capabilities": [
+        "Cap_EW_Directional",
+        "Cap_HPM_Group"
+      ],
+      "target_equipment": [],
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 0.82,
+        "predicate": "< 0.85",
+        "rule_id": "R07_INTERCEPTION_SUCCESS_LOW"
+      },
+      "side_effects": [
+        "none_before_human_authorization"
+      ],
+      "validation_function": "pending_human_actions contains AUTHORIZE_EFFECTOR_REINFORCEMENT",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R07_INTERCEPTION_SUCCESS_LOW",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-CE7C636D7E17-R07_INTERCEPTION_SUCCESS_LOW"
+    },
+    {
+      "rule_id": "R08_FALSE_ALARM_HIGH",
+      "action_code": "RAISE_FUSION_CONFIRMATION",
+      "description": "将告警确认切换为双源一致性门限。",
+      "execution_status": "AUTO_APPLIED",
+      "authorization_level": "L1",
+      "risk_class": "LOW",
+      "decision_rationale": "提高多源确认门限，属于保守且可逆的运行态动作。",
+      "target_capabilities": [
+        "Cap_Fusion_MultiSensor",
+        "Cap_Data_Integration"
+      ],
+      "target_equipment": [],
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 0.025,
+        "predicate": ">= 0.02",
+        "rule_id": "R08_FALSE_ALARM_HIGH"
+      },
+      "side_effects": [
+        "controls.fusion_confirmation=TWO_SOURCE_CONFIRMATION"
+      ],
+      "validation_function": "after.controls.fusion_confirmation == TWO_SOURCE_CONFIRMATION",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R08_FALSE_ALARM_HIGH",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-CE7C636D7E17-R08_FALSE_ALARM_HIGH"
+    }
+  ],
+  "summary": {
+    "triggered_rules": 8,
+    "auto_applied": 5,
+    "pending_human_authorization": 3
+  }
+}

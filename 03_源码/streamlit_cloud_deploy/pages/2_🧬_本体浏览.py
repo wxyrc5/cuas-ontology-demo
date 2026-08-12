@@ -1,0 +1,502 @@
+"""Page 2 – Ontology Browser / 本体浏览."""
+from pathlib import Path
+
+import streamlit as st
+import pandas as pd
+import plotly.graph_objects as go
+import networkx as nx
+
+from utils.ontology_loader import (
+    load_ontology,
+    get_object_types,
+    get_link_types,
+    get_edges,
+    count_instances_by_type,
+)
+from utils.ontology_action_engine import (
+    action_result_to_json,
+    action_result_to_turtle,
+    evaluate_action_feedback,
+    load_baseline_operational_state,
+)
+from utils.action_contract import validate_action_bundle
+from utils.authorization_policy import decide_authorization
+from utils.resilience_demo import evaluate_failure_trace, evaluate_semantic_hotplug
+from utils.wta_optimizer import demonstration_wta
+
+
+APP_DIR = Path(__file__).resolve().parents[1]
+MODEL_DIR = APP_DIR.parent / "本体模型"
+
+
+@st.cache_data(show_spinner=False)
+def _hotplug_evidence() -> dict:
+    return evaluate_semantic_hotplug(
+        str(MODEL_DIR / "cuas-ontology.ttl"),
+        str(MODEL_DIR / "cuas-data-valid.ttl"),
+        str(MODEL_DIR / "cuas-shapes.ttl"),
+    )
+
+
+def show() -> None:
+    ontology = load_ontology()
+    stats = ontology["summary_stats"]
+    st.title("🧬 反无人机体系本体浏览")
+    st.markdown(
+        f"""
+        基于国产自主可控的**本体驱动语义互操作架构**构建：
+        - **8 个核心 Object Type + 3 个评审扩展类型**
+        - **10 个核心 Link Type + 6 个评审扩展关系**
+        - **{stats['total_edge_instances']} 条正向 ABox 关系** （Instance-level edges）
+        - **{stats['total_object_instances']} 个正向 ABox 核心实例** （与 HermiT/SHACL 验证同源）
+        """
+    )
+    st.info(
+        "💡 8 OT/10 LT 保持文字稿核心口径；Effect、Signal、SpatiotemporalContext 为不破坏核心叙事的评审扩展。实例仍是工程验证夹具。"
+    )
+
+    # ------------------------------------------------------------------
+    # 8 OT Cards
+    # ------------------------------------------------------------------
+    st.header("🎨 8 个核心 Object Type")
+
+    classes = [
+        ("Mission",              "使命",         "🛡️", "#1F4E79"),
+        ("Scenario",             "场景",         "📍", "#2E7D32"),
+        ("TechnicalCapability",  "技术能力",     "⚙️", "#E65100"),
+        ("Equipment",            "装备",         "🔧", "#6A1B9A"),
+        ("EffectMetric",         "效果指标",     "📊", "#C62828"),
+        ("Threat",               "威胁",         "⚠️", "#B71C1C"),
+        ("Asset",                "资产",         "🏢", "#00695C"),
+        ("Operator",             "操作员",       "👤", "#4E342E"),
+    ]
+
+    cols = st.columns(4)
+    for i, (en, cn, icon, color) in enumerate(classes):
+        with cols[i % 4]:
+            st.markdown(
+                f"""
+                <div style="background:{color}; color:white; padding:18px;
+                            border-radius:10px; text-align:center; margin:5px;
+                            box-shadow:0 4px 8px rgba(0,0,0,0.12);">
+                  <div style="font-size:32px;">{icon}</div>
+                  <div style="font-size:13px; opacity:0.85; margin-top:6px;">{en}</div>
+                  <div style="font-size:20px; font-weight:bold;">{cn}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    st.markdown("")
+
+    with st.expander("评审扩展：Effect / Signal / SpatiotemporalContext", expanded=True):
+        st.dataframe(
+            pd.DataFrame(ontology.get("extension_object_types", [])),
+            width="stretch",
+            hide_index=True,
+        )
+        st.caption("扩展关系：" + "、".join(item["name"] for item in ontology.get("extension_link_types", [])))
+
+    # ------------------------------------------------------------------
+    # Interactive OT selector → instance table
+    # ------------------------------------------------------------------
+    with st.container(border=True):
+        st.subheader("🔍 点击查看 Object Type 实例")
+
+        ot_objs = get_object_types()
+        ot_dict = {ot["id"]: ot for ot in ot_objs}
+        counts = count_instances_by_type()
+
+        ot_choice = st.selectbox(
+            "选择 Object Type",
+            options=[ot["id"] for ot in ot_objs],
+            format_func=lambda k: f"{ot_dict[k]['icon']}  {ot_dict[k]['name_zh']} ({k})  —  {counts[k]} 实例",
+            key="ot_select",
+        )
+
+        if ot_choice:
+            sel = ot_dict[ot_choice]
+            cc1, cc2, cc3, cc4 = st.columns(4)
+            cc1.metric("Object Type", sel["id"])
+            cc2.metric("中文名", sel["name_zh"])
+            cc3.metric("随包样例数", counts[sel["id"]])
+            cc4.metric("属性数", len(sel.get("properties", [])))
+
+            st.markdown(f"**📝 描述**：{sel['description']}")
+            st.markdown("**🔑 属性（Property Type）**:")
+            st.code(" · ".join(sel.get("properties", [])), language="text")
+
+            sample_df = pd.DataFrame(sel.get("sample_instances", []))
+            if not sample_df.empty:
+                st.markdown("**📋 示例实例（前 5 个）**")
+                st.dataframe(sample_df, width="stretch", hide_index=True)
+            else:
+                st.warning("暂无样本实例。")
+
+    st.markdown("---")
+
+    # ------------------------------------------------------------------
+    # Network graph of 10 Link Types
+    # ------------------------------------------------------------------
+    st.header("🔗 10 个核心 Link Type 网络图")
+
+    link_types = get_link_types()
+    edges_df = pd.DataFrame(get_edges())
+
+    left, right = st.columns([3, 1])
+    with left:
+        # Build a multi-graph so we can have multiple edges between the same OTs
+        G = nx.MultiDiGraph()
+        for ot in get_object_types():
+            G.add_node(ot["id"], label=ot["name_zh"], color=ot["color"], icon=ot["icon"])
+        for lt in link_types:
+            # do not add an edge for every instance — just the schema-level edge
+            G.add_edge(lt["from"], lt["to"],
+                       label=lt["name"], label_zh=lt["name_zh"],
+                       lid=lt["id"], weight=1)
+
+        # Use a deterministic layout — Kamada–Kawai for clean visuals
+        pos = nx.spring_layout(G, seed=42, k=2.2, iterations=200)
+
+        edge_traces = []
+        edge_labels = []
+        for lt in link_types:
+            x0, y0 = pos[lt["from"]]
+            x1, y1 = pos[lt["to"]]
+            edge_traces.append(
+                go.Scatter(
+                    x=[x0, x1, None],
+                    y=[y0, y1, None],
+                    line=dict(width=2.0, color="#888"),
+                    hoverinfo="none",
+                    mode="lines",
+                    showlegend=False,
+                )
+            )
+            # Mid-point label
+            mx, my = (x0 + x1) / 2, (y0 + y1) / 2
+            edge_labels.append((mx, my, f"{lt['id']}: {lt['name_zh']}"))
+
+        node_xs, node_ys, node_text, node_colors, node_sizes, node_hover = [], [], [], [], [], []
+        for n in G.nodes():
+            x, y = pos[n]
+            node_xs.append(x)
+            node_ys.append(y)
+            node_text.append(G.nodes[n]["label"])
+            node_colors.append(G.nodes[n]["color"])
+            node_sizes.append(60)
+            node_hover.append(
+                f"<b>{n}</b><br>{G.nodes[n]['label']}<br>"
+                f"随包样例数: {counts.get(n, 0)}"
+            )
+
+        node_trace = go.Scatter(
+            x=node_xs,
+            y=node_ys,
+            mode="markers+text",
+            text=node_text,
+            textposition="top center",
+            hovertext=node_hover,
+            hoverinfo="text",
+            marker=dict(
+                size=node_sizes,
+                color=node_colors,
+                line=dict(width=3, color="white"),
+            ),
+            showlegend=False,
+        )
+
+        layout = go.Layout(
+            title=dict(text="8 OT (节点)  ×  10 LT (有向边)", x=0.5),
+            hovermode="closest",
+            margin=dict(b=20, l=20, r=20, t=50),
+            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+            height=540,
+            plot_bgcolor="#F8F9FB",
+        )
+
+        fig = go.Figure(data=edge_traces + [node_trace], layout=layout)
+        # Edge labels as annotations
+        for mx, my, lbl in edge_labels:
+            fig.add_annotation(
+                x=mx, y=my,
+                text=f"<span style='font-size:10px;color:#444'>{lbl}</span>",
+                showarrow=False,
+                bgcolor="rgba(255,255,255,0.85)",
+                bordercolor="#999",
+                borderwidth=0,
+            )
+
+        st.plotly_chart(fig, width="stretch")
+
+    with right:
+        st.markdown("### 🗒️ Link Type 列表")
+        lt_df = pd.DataFrame([
+            {
+                "ID": str(lt["id"]),
+                "名称": lt["name"],
+                "中文": lt["name_zh"],
+                "From": lt["from"],
+                "To": lt["to"],
+            }
+            for lt in link_types
+        ])
+        st.dataframe(lt_df, width="stretch", hide_index=True, height=540)
+
+    st.markdown("---")
+
+    # ------------------------------------------------------------------
+    # Click-and-explore: pick a Link Type → see all instances
+    # ------------------------------------------------------------------
+    st.header("🎯 按 Link Type 浏览实例")
+
+    link_choice = st.selectbox(
+        "选择 Link Type",
+        options=[lt["id"] for lt in link_types],
+        format_func=lambda x: f"{x} · "
+            + next((lt["name_zh"] for lt in link_types if lt["id"] == x), ""),
+    )
+
+    edges_filt = edges_df[edges_df["link"] == link_choice] if not edges_df.empty else edges_df
+    if edges_filt.empty:
+        st.info("该 Link Type 在样例中没有实例。")
+    else:
+        st.dataframe(edges_filt, width="stretch", hide_index=True)
+
+    st.markdown("---")
+
+    # ------------------------------------------------------------------
+    # Visible semantic value: hot-plug, authorization, failure trace, WTA
+    # ------------------------------------------------------------------
+    st.header("⚡ 本体价值实证：热插拔、授权与复盘")
+    hotplug = _hotplug_evidence()
+    rigid_col, semantic_col = st.columns(2)
+    with rigid_col:
+        st.markdown("#### 刚性集成基线（待项目实测）")
+        st.warning(
+            "需要逐项核对接口枚举、表/消息 Schema、查询、调度白名单与服务回归；"
+            "当前没有证据支持“固定 200 行、2 周、必须重启”等数字，因此不展示虚构耗时。"
+        )
+    with semantic_col:
+        st.markdown("#### 当前语义夹具（本机实测）")
+        hp1, hp2, hp3 = st.columns(3)
+        hp1.metric("新增语义声明", hotplug["semantic_statements_added"])
+        hp2.metric("可执行代码改动", hotplug["executable_code_files_changed"])
+        hp3.metric("当前主机耗时", f"{hotplug['elapsed_ms_current_host']:.0f} ms")
+        if hotplug["new_equipment_visible"] and hotplug["shacl_conforms"]:
+            st.success("同一条能力查询已发现 Eq_DE_Hotplug_002；SHACL 通过，无需修改查询或重启进程。")
+        else:
+            st.error("热插拔实证未通过，请勿用于演示。")
+    st.caption(hotplug["boundary"])
+
+    auth_left, auth_right = st.columns([1, 1])
+    with auth_left:
+        st.markdown("#### 人机共驾授权矩阵")
+        posterior = st.slider("后验置信度", 0.50, 1.00, 0.96, 0.01, key="auth_posterior")
+        auth_effect = st.selectbox(
+            "动作/效应类型",
+            options=["SENSOR", "EW", "NET", "HPM", "HEL", "KINETIC"],
+            key="auth_effect",
+        )
+        auth_targets = st.slider("当前目标数", 1, 50, 20, 1, key="auth_targets")
+        auth_pending = st.slider("待审批 Action", 0, 10, 4, 1, key="auth_pending")
+        auth_conflict = st.checkbox("接近禁射界/空间冲突", key="auth_conflict")
+        action_code = (
+            "ADJUST_SENSOR_SCAN_MODE"
+            if auth_effect == "SENSOR"
+            else "AUTHORIZE_EFFECTOR_REINFORCEMENT"
+            if auth_effect in {"HPM", "HEL", "KINETIC"}
+            else "AUTHORIZE_BATCH_DECISION_MODE"
+        )
+        auth = decide_authorization(
+            action_code=action_code,
+            effect_type=auth_effect,
+            posterior_confidence=posterior,
+            target_count=auth_targets,
+            pending_actions=auth_pending,
+            contested_link=False,
+            geofence_conflict=auth_conflict,
+        )
+        au1, au2, au3 = st.columns(3)
+        au1.metric("授权等级", auth["authorization_level"])
+        au2.metric("认知负荷", f"{auth['workload_index']:.2f}（{auth['workload_band']}）")
+        au3.metric("响应预算", f"{auth['response_budget_s']:.1f} s")
+        st.info(auth["one_sentence_rationale"])
+        st.caption("认知负荷是决策上下文，不作为第六个 Beta-Binomial 成功通道；负荷升高不会降低授权等级。")
+
+    with auth_right:
+        st.markdown("#### 失败数字线程：可逆向查询的因果候选链")
+        failure_health = st.slider("HPM 健康度", 0.0, 1.0, 0.30, 0.05, key="failure_health")
+        failure_occluded = st.checkbox("射界被高层建筑遮挡", value=True, key="failure_occluded")
+        trace = evaluate_failure_trace(failure_health, failure_occluded)
+        st.graphviz_chart(
+            """digraph {
+              rankdir=LR; node [shape=box, style=rounded];
+              Observation_Radar_007 -> Fusion_Node_001 [label="融合"];
+              Fusion_Node_001 -> WTA_HPM_001 [label="决策"];
+              WTA_HPM_001 -> Eq_EW_HPM_001 [label="选择"];
+              WTA_HPM_001 -> Effect_HPM_Failed [label="生成"];
+              Effect_HPM_Failed -> Threat_09 [label="作用"];
+            }""",
+            width="stretch",
+        )
+        if trace["root_causes"]:
+            st.error("规则命中的根因候选：" + "；".join(
+                f"{row['equipment']} 健康度={row['health']:.2f}，遮挡={row['occluded']}"
+                for row in trace["root_causes"]
+            ))
+        else:
+            st.success("当前阈值规则未命中根因候选。")
+        st.info(trace["recommended_action"])
+        st.caption("这是 SPARQL 逆向溯源与显式阈值规则，不冒充已经识别的 SCM 因果效应。")
+
+    with st.expander("WTA 0-1 整数规划与 20 目标约束检查", expanded=False):
+        st.latex(r"\max \sum_{i,j} P_{ij}(t)x_{ij}\quad \mathrm{s.t.}\quad \sum_j x_{ij}\le C_i,\;\sum_i x_{ij}\le 1,\;x_{ij}\in\{0,1\}")
+        wta = demonstration_wta(20)
+        wt1, wt2, wt3 = st.columns(3)
+        wt1.metric("已分配目标", len(wta["assignments"]))
+        wt2.metric("容量约束", "通过" if wta["constraint_checks"]["capacity"] else "失败")
+        wt3.metric("单目标唯一分配", "通过" if wta["constraint_checks"]["single_assignment"] else "失败")
+        st.dataframe(pd.DataFrame(wta["assignments"]), width="stretch", hide_index=True)
+        st.caption(wta["scheduling_mode"] + "；这是可复现算法夹具，不是实装 WTA 性能声明。")
+
+    st.markdown("---")
+
+    # ------------------------------------------------------------------
+    # Manuscript Effect -> Action -> Mission feedback prototype
+    # ------------------------------------------------------------------
+    st.header("🔁 Effect → Action → Mission 写回原型")
+    st.info(
+        "本模块把文字稿中的阈值规则变成确定性 Action 计划：自动动作写入会话状态，"
+        "资源增配与批量授权进入人工审批队列，并可导出带溯源的 RDF。"
+        "每个 Action 均包含前置条件、副作用、Validation Function 与期望版本，并通过 JSON Schema。"
+        "正式 OWL/ABox 文件始终只读；这不是商业平台或真实装备接入。"
+    )
+
+    baseline_state = load_baseline_operational_state()
+    left_controls, right_controls = st.columns(2)
+    with left_controls:
+        detection_coverage = st.slider(
+            "探测覆盖率", 0.50, 1.00, 0.88, 0.01, key="action_detection"
+        )
+        identification_accuracy = st.slider(
+            "识别准确率", 0.50, 1.00, 0.83, 0.01, key="action_identification"
+        )
+        interception_success = st.slider(
+            "拦截成功率", 0.50, 1.00, 0.82, 0.01, key="action_interception"
+        )
+        false_alarm_rate = st.slider(
+            "虚警率", 0.0, 0.10, 0.025, 0.001, format="%.3f", key="action_false_alarm"
+        )
+    with right_controls:
+        ooda_closure_time = st.slider(
+            "OODA 完整闭环（秒）", 1.0, 10.0, 5.4, 0.1, key="action_ooda"
+        )
+        mission_priority = st.slider(
+            "当前使命优先级", 1, 5, 3, 1, key="action_mission_priority"
+        )
+        previous_threat_level = st.slider(
+            "上一周期威胁等级", 1, 5, 3, 1, key="action_threat_previous"
+        )
+        current_threat_level = st.slider(
+            "当前威胁等级", 1, 5, 5, 1, key="action_threat_current"
+        )
+        failed_equipment = st.multiselect(
+            "本周期故障装备",
+            options=sorted(baseline_state["equipment_status"]),
+            default=["Eq_EW_HPM_001"],
+            key="action_failed_equipment",
+        )
+
+    baseline_state["priority"] = mission_priority
+    action_result = evaluate_action_feedback(
+        metrics={
+            "detection_coverage": detection_coverage,
+            "identification_accuracy": identification_accuracy,
+            "ooda_closure_time_s": ooda_closure_time,
+            "interception_success_rate": interception_success,
+            "false_alarm_rate": false_alarm_rate,
+        },
+        context={
+            "threat_level_previous": previous_threat_level,
+            "threat_level_current": current_threat_level,
+            "failed_equipment_ids": failed_equipment,
+        },
+        state=baseline_state,
+    )
+    validate_action_bundle(action_result)
+    st.success("Action JSON Schema：通过（含授权等级、风险级别、前置条件、副作用、Validation Function 与版本约束）")
+    summary = action_result["summary"]
+    ac1, ac2, ac3, ac4 = st.columns(4)
+    ac1.metric("触发规则", summary["triggered_rules"])
+    ac2.metric("自动写回", summary["auto_applied"])
+    ac3.metric("待人工授权", summary["pending_human_authorization"])
+    ac4.metric("决策编号", action_result["decision_id"])
+
+    action_df = pd.DataFrame(
+        [
+            {
+                "规则": item["rule_id"],
+                "Action": item["action_code"],
+                "状态": item["execution_status"],
+                "授权": item["authorization_level"],
+                "风险": item["risk_class"],
+                "归因": item["decision_rationale"],
+                "说明": item["description"],
+            }
+            for item in action_result["actions"]
+        ]
+    )
+    if action_df.empty:
+        st.success("当前输入未触发调整规则，使命状态保持不变。")
+    else:
+        st.dataframe(action_df, width="stretch", hide_index=True)
+
+    before = action_result["before_state"]
+    after = action_result["after_state"]
+    state_diff = pd.DataFrame(
+        [
+            {"状态项": "使命优先级", "写回前": before["priority"], "写回后": after["priority"]},
+            {"状态项": "雷达扫描模式", "写回前": before["controls"]["scan_mode"], "写回后": after["controls"]["scan_mode"]},
+            {"状态项": "融合模型", "写回前": before["controls"]["fusion_model"], "写回后": after["controls"]["fusion_model"]},
+            {"状态项": "告警确认", "写回前": before["controls"]["fusion_confirmation"], "写回后": after["controls"]["fusion_confirmation"]},
+            {"状态项": "WTA 重算", "写回前": before["controls"]["wta_recompute_requested"], "写回后": after["controls"]["wta_recompute_requested"]},
+            {"状态项": "待人工授权", "写回前": "无", "写回后": "、".join(after["pending_human_actions"]) or "无"},
+        ]
+    ).astype(str)
+    st.dataframe(state_diff, width="stretch", hide_index=True)
+
+    action_ttl = action_result_to_turtle(action_result)
+    with st.expander("查看 RDF 写回预览（独立图，不修改正式本体）"):
+        st.code(action_ttl, language="turtle")
+    download_left, download_right = st.columns(2)
+    with download_left:
+        st.download_button(
+            "下载 Action JSON",
+            data=action_result_to_json(action_result),
+            file_name=f"{action_result['decision_id']}.json",
+            mime="application/json",
+        )
+    with download_right:
+        st.download_button(
+            "下载 RDF 写回预览",
+            data=action_ttl,
+            file_name=f"{action_result['decision_id']}.ttl",
+            mime="text/turtle",
+        )
+
+    # ------------------------------------------------------------------
+    # Summary
+    # ------------------------------------------------------------------
+    st.markdown("---")
+    st.subheader("📈 本体规模")
+    sc1, sc2, sc3, sc4 = st.columns(4)
+    sc1.metric("Object Type", stats["total_object_types"])
+    sc2.metric("Link Type", stats["total_link_types"])
+    sc3.metric("随包样例实例", stats["total_object_instances"])
+    sc4.metric("随包样例边", stats["total_edge_instances"])
+
+
+if __name__ == "__main__":
+    show()

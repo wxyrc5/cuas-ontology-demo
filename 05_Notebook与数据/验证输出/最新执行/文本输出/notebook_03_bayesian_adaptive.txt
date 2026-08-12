@@ -1,0 +1,97 @@
+--- cell 1 / stream ---
+共享模型加载完成: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\03_源码\streamlit_app\utils\bayesian_flywheel.py
+
+--- cell 3 / stream ---
+五通道权重和 = 1.00
+
+--- cell 3 / execute_result ---
+             通道                           Effect 映射   合成真值  工程门槛    权重
+0          探测覆盖           DetectionCoverage >= 0.95  0.972  0.95  0.24
+1          识别准确      IdentificationAccuracy >= 0.92  0.948  0.92  0.20
+2          拦截成功     InterceptionSuccessRate >= 0.85  0.895  0.85  0.24
+3       OODA 闭环  P(full-loop latency < 5 s) >= 0.90  0.935  0.90  0.22
+4  低虚警合规（1-FAR）          1 - FalseAlarmRate >= 0.98  0.986  0.98  0.10
+
+--- cell 5 / stream ---
+终态综合后验 = 0.9459
+
+--- cell 5 / stream ---
+
+终态综合 95% CI = [0.9302, 0.9594]
+首次越过 0.90: n=44
+连续 10 次越过 0.90: n=44
+
+--- cell 6 / display_data ---
+<Figure size 1500x850 with 1 Axes>
+
+--- cell 7 / execute_result ---
+             通道                                指标映射    权重   合成真值  工程门槛  成功观测  \
+0          探测覆盖           DetectionCoverage >= 0.95  0.24  0.972  0.95   198   
+1          识别准确      IdentificationAccuracy >= 0.92  0.20  0.948  0.92   192   
+2          拦截成功     InterceptionSuccessRate >= 0.85  0.24  0.895  0.85   180   
+3       OODA 闭环  P(full-loop latency < 5 s) >= 0.90  0.22  0.935  0.90   188   
+4  低虚警合规（1-FAR）          1 - FalseAlarmRate >= 0.98  0.10  0.986  0.98   196   
+
+   总观测    终态后验均值     95%下界     95%上界  
+0  200  0.985149  0.964520  0.996911  
+1  200  0.955446  0.923085  0.979324  
+2  200  0.896040  0.850513  0.934154  
+3  200  0.935644  0.898036  0.965116  
+4  200  0.975248  0.949833  0.991875
+
+--- cell 9 / execute_result ---
+   重复次数     合成真值    收敛均值  收敛P95  未收敛率      终态均值  95%CI覆盖率    后验RMSE
+0  1000  0.94198  23.805   50.0   0.0  0.937353     0.937  0.008894
+
+--- cell 11 / stream ---
+配对种子 ΔAUC 均值 = 0.0992
+配对种子 ΔAUC 95% CI = [0.0949, 0.1035]
+
+--- cell 11 / execute_result ---
+            模型       AUC    平衡阈值       FPR       FNR
+0  五通道 Beta 后验  0.967892  0.3743  0.096500  0.081750
+1        固定硬规则  0.868806  0.7600  0.296875  0.143625
+
+--- cell 12 / display_data ---
+<Figure size 850x650 with 1 Axes>
+
+--- cell 14 / execute_result ---
+   每通道观测数    贝叶斯AUC   固定规则AUC      ΔAUC
+0      10  0.885757  0.806231  0.079526
+1      20  0.943416  0.873938  0.069478
+2      30  0.968632  0.874390  0.094242
+3      50  0.988532  0.909409  0.079124
+4      80  0.995168  0.928151  0.067018
+
+--- cell 15 / display_data ---
+<Figure size 850x500 with 1 Axes>
+
+--- cell 17 / execute_result ---
+             情景  任务合规后验分数  本体路径数
+0          名义状态  0.673743      5
+1         主雷达失效  0.041481      5
+2  本体重构至射频/光电备份  0.638454      5
+
+--- cell 18 / display_data ---
+<Figure size 920x520 with 1 Axes>
+
+--- cell 18 / stream ---
+共享观测: {'detection': 12, 'identification': 10, 'interception': 12, 'ooda_closure': 11, 'false_alarm_compliance': 12}
+反事实检查: {'radar_failure_reduces_score': True, 'reconfiguration_recovers_score': True, 'paths_derived_from_graph': True}
+
+--- cell 20 / stream ---
+{
+  "weights_sum_to_one": true,
+  "seed42_composite_reaches_0_90": true,
+  "all_runs_converged": true,
+  "coverage_90_to_99_pct": true,
+  "posterior_rmse_le_0_03": true,
+  "bayesian_auc_ge_0_85": true,
+  "bayesian_fpr_le_0_10": true,
+  "bayesian_fnr_le_0_10": true,
+  "paired_delta_ci_above_zero": true,
+  "ontology_prior_failure_reduces_score": true,
+  "ontology_prior_reconfiguration_recovers_score": true,
+  "ontology_paths_derived_from_graph": true
+}
+机器可读指标: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\metrics_notebook_03.json

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-08-12T20:24:36+08:00",
+  "status": "passed",
+  "docker_server": "29.6.2",
+  "compose_config": "passed",
+  "image": "cuas/fuseki:5.1.0-cuas-v1",
+  "image_digest": "sha256:abd1b0b16dc27cb230e37228d441dedc3a9a153cf13aae431d29d213c80cc236",
+  "image_size_bytes": 162910031,
+  "verification_host_port": 13033,
+  "container_health": "healthy",
+  "ping_http_status": 200,
+  "loaded_tbox_triples": 393,
+  "cleanup": "isolated verification container removed; pre-existing cuas-fuseki container was not modified",
+  "scope": "Compatibility SPARQL service only. This proves image build, ontology bootstrap, health and queryability; it does not put Fuseki in the runtime decision path or prove scale performance."
+}

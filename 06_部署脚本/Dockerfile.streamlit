@@ -1,0 +1,18 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    STREAMLIT_SERVER_HEADLESS=true \
+    STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
+
+WORKDIR /app
+COPY ["03_源码/streamlit_app/requirements.txt", "/tmp/requirements.txt"]
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+COPY ["03_源码/streamlit_app", "/app"]
+COPY ["03_源码/本体模型", "/本体模型"]
+
+EXPOSE 8501
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=5 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health', timeout=3)" || exit 1
+
+CMD ["streamlit", "run", "app.py", "--server.address=0.0.0.0", "--server.port=8501"]

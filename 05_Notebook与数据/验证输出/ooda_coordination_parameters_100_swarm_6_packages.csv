@@ -1,0 +1,2 @@
+﻿id,phase,name_zh,scaled_low_s,scaled_mode_s,scaled_high_s,scale_factor,notes
+multi_package_coordination,Decide,跨资源包同步、去冲突与指令编组,0.15804820237218406,0.4741446071165521,1.1063374166052884,7.902410118609202,"每增加一个同构资源包增加一次协调负担，并按 max(0, log2(N/20)) 放大；数值为待台架/外场标定的工程假设"

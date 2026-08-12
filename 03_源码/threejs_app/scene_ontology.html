@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>🕸️ C-UAS 本体浏览 · 8 OT + 10 LT 3D</title>
+  <style>
+    :root {
+      --c-bg-0: #02060c;
+      --c-bg-1: #0a1525;
+      --c-accent: #1abc9c;
+      --c-warn: #e74c3c;
+      --c-text: #ecf0f1;
+      --c-text-dim: #bdc3c7;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      overflow: hidden;
+      background: radial-gradient(ellipse at top, var(--c-bg-1) 0%, var(--c-bg-0) 70%);
+      color: var(--c-text);
+      font-family: 'Noto Sans CJK SC', 'Source Han Sans CN', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+    canvas { display: block; }
+
+    .header {
+      position: fixed; top: 16px; left: 16px; z-index: 10;
+      padding: 14px 20px;
+      background: rgba(10, 21, 37, 0.6);
+      backdrop-filter: blur(14px) saturate(180%);
+      -webkit-backdrop-filter: blur(14px) saturate(180%);
+      border: 1px solid rgba(155, 89, 182, 0.4);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+    }
+    .header h1 { margin: 0 0 2px 0; font-size: 16px; color: #bb6bd9; }
+    .header p  { margin: 0; font-size: 11px; color: var(--c-text-dim); }
+
+    .back {
+      position: fixed; top: 16px; right: 16px; z-index: 11;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 16px;
+      font-size: 13px; font-weight: 600; color: var(--c-text);
+      background: rgba(10, 21, 37, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(155, 89, 182, 0.4);
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .back:hover { background: rgba(155, 89, 182, 0.3); transform: translateY(-1px); }
+
+    .legend {
+      position: fixed; bottom: 16px; left: 16px; z-index: 10;
+      padding: 12px 16px;
+      min-width: 240px;
+      background: rgba(10, 21, 37, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(155, 89, 182, 0.4);
+      border-radius: 12px;
+      font-size: 11px; line-height: 1.7;
+      color: var(--c-text-dim);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+    }
+    .legend b { color: var(--c-text); }
+    .legend .dot {
+      display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+      margin-right: 6px; vertical-align: middle;
+      box-shadow: 0 0 6px currentColor;
+    }
+    .legend .row { display: flex; align-items: center; }
+    .legend .sep { border-top: 1px solid rgba(255,255,255,0.08); margin: 5px 0; }
+
+    .hint {
+      position: fixed; bottom: 16px; right: 16px; z-index: 10;
+      padding: 10px 14px;
+      background: rgba(10, 21, 37, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(155, 89, 182, 0.4);
+      border-radius: 10px;
+      font-size: 11px; color: var(--c-text-dim);
+    }
+
+    .detail {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      z-index: 20;
+      min-width: 360px; max-width: 520px;
+      padding: 22px 26px;
+      background: rgba(10, 21, 37, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid #bb6bd9;
+      border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .detail.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: auto;
+    }
+    .detail .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      margin-right: 8px;
+      background: rgba(187, 107, 217, 0.2);
+      border: 1px solid rgba(187, 107, 217, 0.5);
+      color: #bb6bd9;
+    }
+    .detail h3 { margin: 6px 0 8px 0; color: #bb6bd9; font-size: 18px; }
+    .detail p { margin: 6px 0; font-size: 13px; line-height: 1.6; color: var(--c-text); }
+    .detail .row { display: flex; justify-content: space-between; margin: 3px 0; font-size: 12px; }
+    .detail .row span:first-child { color: var(--c-text-dim); }
+    .detail .row span:last-child { color: var(--c-text); font-weight: 600; }
+    .detail .close {
+      position: absolute; top: 8px; right: 12px;
+      cursor: pointer; color: var(--c-text-dim);
+      font-size: 22px; line-height: 1;
+    }
+    .detail .close:hover { color: var(--c-warn); }
+
+    .loader {
+      position: fixed; inset: 0; z-index: 99;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: var(--c-bg-0);
+      transition: opacity 0.6s;
+    }
+    .loader.gone { opacity: 0; pointer-events: none; }
+    .loader .ring {
+      width: 56px; height: 56px;
+      border: 3px solid rgba(187, 107, 217, 0.2);
+      border-top-color: #bb6bd9;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader .txt { margin-top: 14px; color: var(--c-text-dim); font-size: 12px; letter-spacing: 1px; }
+
+    @media (max-width: 720px) {
+      .header { left: 8px; right: 8px; top: 8px; padding: 10px 12px; }
+      .header h1 { font-size: 14px; }
+      .back { top: auto; bottom: 8px; right: 8px; }
+      .legend { display: none; }
+      .hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader">
+    <div class="ring"></div>
+    <div class="txt">加载本体浏览…</div>
+  </div>
+
+  <div id="scene"></div>
+
+  <div class="header">
+    <h1>🕸️ C-UAS 本体浏览 · 8 OT + 10 LT</h1>
+    <p>8 个对象类型 · 10 个链接类型 · 高亮红色为 validates 反馈环</p>
+  </div>
+
+  <a class="back" href="index.html">← 返回主菜单</a>
+
+  <div class="legend">
+    <div class="row"><b>8 个对象类型 (OT)</b></div>
+    <div class="row"><span class="dot" style="color:#1F4E79;background:#1F4E79"></span>Mission 使命</div>
+    <div class="row"><span class="dot" style="color:#2E7D32;background:#2E7D32"></span>Scenario 场景</div>
+    <div class="row"><span class="dot" style="color:#E65100;background:#E65100"></span>TechnicalCapability 能力</div>
+    <div class="row"><span class="dot" style="color:#6A1B9A;background:#6A1B9A"></span>Equipment 装备</div>
+    <div class="row"><span class="dot" style="color:#C62828;background:#C62828"></span>EffectMetric 效果度量</div>
+    <div class="row"><span class="dot" style="color:#B71C1C;background:#B71C1C"></span>Threat 威胁</div>
+    <div class="row"><span class="dot" style="color:#00695C;background:#00695C"></span>Asset 资产</div>
+    <div class="row"><span class="dot" style="color:#4E342E;background:#4E342E"></span>Operator 操作员</div>
+    <div class="sep"></div>
+    <div class="row" style="color:#ff7777"><b>🔴 validates · 反馈环（高亮）</b></div>
+  </div>
+
+  <div class="hint">
+    <b>点击</b> 节点 / 边查看详情 · <b>拖拽</b> 旋转 · <b>滚轮</b> 缩放
+  </div>
+
+  <div class="detail" id="detail">
+    <span class="close" id="detailClose">×</span>
+    <span class="tag" id="detailTag">OT</span>
+    <h3 id="detailTitle">—</h3>
+    <p id="detailDesc">—</p>
+    <div id="detailExtras"></div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { VRButton } from 'three/addons/webxr/VRButton.js';
+    import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+    const ONTOLOGY_OTS = [
+      { name: 'Mission',             name_zh: '使命',     color: 0x1F4E79, count: 24, desc: '作战意图 & 成功判据 · 24 个实例' },
+      { name: 'Scenario',            name_zh: '场景',     color: 0x2E7D32, count: 60, desc: '5 阶段 OODA 作战工作流 · 60 个实例' },
+      { name: 'TechnicalCapability', name_zh: '能力',     color: 0xE65100, count: 64, desc: '6 大类能力谱系 (DEW/CER/SAR...)· 64 个实例' },
+      { name: 'Equipment',           name_zh: '装备',     color: 0x6A1B9A, count: 78, desc: '传感器/效应器/平台 · 78 个实例' },
+      { name: 'EffectMetric',        name_zh: '效果度量', color: 0xC62828, count: 45, desc: 'MOP/MOE/KPP · 45 个实例' },
+      { name: 'Threat',              name_zh: '威胁',     color: 0xB71C1C, count: 32, desc: '敌方目标 & 蜂群 · 32 个实例' },
+      { name: 'Asset',               name_zh: '资产',     color: 0x00695C, count: 18, desc: '被保护对象 · 18 个实例' },
+      { name: 'Operator',            name_zh: '操作员',   color: 0x4E342E, count: 22, desc: '决策 & 执行人员 · 22 个实例' }
+    ];
+    const ONTOLOGY_LTS = [
+      { name: 'governs',    name_zh: '支配', src: 'Mission',        tgt: 'Scenario',             color: 0x2C3E50, desc: '使命支配场景生成' },
+      { name: 'allocates',  name_zh: '分配', src: 'Mission',        tgt: 'Equipment',            color: 0x16A085, desc: '使命分配装备资源' },
+      { name: 'measuredBy', name_zh: '度量', src: 'Mission',        tgt: 'EffectMetric',         color: 0xC62828, desc: '使命被效果度量度量' },
+      { name: 'validates',  name_zh: '反哺', src: 'EffectMetric',   tgt: 'Mission',              color: 0xFF0000, highlight: true, desc: '效果度量反哺使命 —— 反馈闭环' },
+      { name: 'confronts',  name_zh: '对抗', src: 'Mission',        tgt: 'Threat',               color: 0xB71C1C, desc: '使命对抗威胁' },
+      { name: 'protects',   name_zh: '保护', src: 'Mission',        tgt: 'Asset',                color: 0x00695C, desc: '使命保护资产' },
+      { name: 'covers',     name_zh: '涵盖', src: 'Scenario',       tgt: 'TechnicalCapability',  color: 0xFFA500, desc: '场景涵盖所需能力' },
+      { name: 'produces',   name_zh: '产出', src: 'Scenario',       tgt: 'EffectMetric',         color: 0xE67E22, desc: '场景产出度量数据' },
+      { name: 'implements', name_zh: '实现', src: 'Equipment',      tgt: 'TechnicalCapability',  color: 0xE65100, desc: '装备实现能力' },
+      { name: 'operates',   name_zh: '操作', src: 'Operator',       tgt: 'Equipment',            color: 0x4E342E, desc: '操作员操作装备' }
+    ];
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x02060c);
+    scene.fog = new THREE.FogExp2(0x02060c, 0.015);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 500);
+    camera.position.set(10, 8, 14);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    renderer.xr.enabled = true;
+    document.getElementById('scene').appendChild(renderer.domElement);
+
+    const labelRenderer = new CSS2DRenderer();
+    labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    labelRenderer.domElement.style.position = 'absolute';
+    labelRenderer.domElement.style.top = '0';
+    labelRenderer.domElement.style.pointerEvents = 'none';
+    document.getElementById('scene').appendChild(labelRenderer.domElement);
+
+    const vrButton = VRButton.createButton(renderer);
+    vrButton.style.position = 'fixed';
+    vrButton.style.bottom = '16px';
+    vrButton.style.left = '50%';
+    vrButton.style.transform = 'translateX(-50%)';
+    vrButton.style.zIndex = '15';
+    document.body.appendChild(vrButton);
+
+    // 光照
+    scene.add(new THREE.AmbientLight(0x4a6080, 0.6));
+    scene.add(new THREE.HemisphereLight(0x88aaff, 0x223344, 0.6));
+    const dir = new THREE.DirectionalLight(0xffffff, 1.2);
+    dir.position.set(10, 14, 8);
+    scene.add(dir);
+    const p1 = new THREE.PointLight(0xff0000, 1.5, 30); p1.position.set(-6, 4, 0);
+    scene.add(p1);
+    const p2 = new THREE.PointLight(0x1abc9c, 1.2, 30); p2.position.set(6, -4, 0);
+    scene.add(p2);
+
+    // 星空
+    (function () {
+      const g = new THREE.BufferGeometry();
+      const N = 2000, p = new Float32Array(N * 3), c = new Float32Array(N * 3);
+      for (let i = 0; i < N; i++) {
+        const r = 90 + Math.random() * 50;
+        const th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
+        p[i * 3] = r * Math.sin(ph) * Math.cos(th);
+        p[i * 3 + 1] = r * Math.cos(ph);
+        p[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th);
+        const col = new THREE.Color().setHSL(0.7 + Math.random() * 0.1, 0.5, 0.5 + Math.random() * 0.4);
+        c[i * 3] = col.r; c[i * 3 + 1] = col.g; c[i * 3 + 2] = col.b;
+      }
+      g.setAttribute('position', new THREE.BufferAttribute(p, 3));
+      g.setAttribute('color', new THREE.BufferAttribute(c, 3));
+      scene.add(new THREE.Points(g, new THREE.PointsMaterial({ size: 0.3, vertexColors: true, transparent: true, opacity: 0.8, depthWrite: false })));
+    })();
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 4;
+    controls.maxDistance = 30;
+    controls.target.set(0, 0, 0);
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.5;
+
+    function makeLabel(text, color = '#ecf0f1', bg = 'rgba(10,21,37,0.75)', size = '11px') {
+      const div = document.createElement('div');
+      div.textContent = text;
+      div.style.cssText = `
+        padding: 3px 8px;
+        background: ${bg};
+        border: 1px solid ${color}55;
+        border-radius: 6px;
+        color: ${color};
+        font-size: ${size};
+        font-family: 'Noto Sans CJK SC', sans-serif;
+        font-weight: 600;
+        white-space: nowrap;
+        pointer-events: none;
+        text-shadow: 0 0 4px rgba(0,0,0,0.8);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      `;
+      return new CSS2DObject(div);
+    }
+
+    const sceneGroup = new THREE.Group();
+    scene.add(sceneGroup);
+
+    // 中心 hub
+    const hub = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(0.4, 2),
+      new THREE.MeshStandardMaterial({ color: 0xffd700, emissive: 0xffd700, emissiveIntensity: 1.2, metalness: 0.7 })
+    );
+    sceneGroup.add(hub);
+    const hubLbl = makeLabel('本体核心', '#ffd700', 'rgba(40,30,5,0.85)');
+    hubLbl.position.set(0, 0.9, 0);
+    sceneGroup.add(hubLbl);
+
+    // 节点位置 (球面布局, Mission 在中心)
+    const R = 5;
+    const pos = {};
+    ONTOLOGY_OTS.forEach((ot, i) => {
+      if (ot.name === 'Mission') {
+        pos[ot.name] = new THREE.Vector3(0, 0, 0);
+      } else {
+        const phi = Math.acos(-1 + (2 * i) / ONTOLOGY_OTS.length);
+        const theta = Math.sqrt(ONTOLOGY_OTS.length * Math.PI) * phi;
+        pos[ot.name] = new THREE.Vector3(
+          R * Math.cos(theta) * Math.sin(phi),
+          R * Math.sin(theta) * Math.sin(phi),
+          R * Math.cos(phi)
+        );
+      }
+    });
+
+    const nodeMeshes = [];
+    ONTOLOGY_OTS.forEach((ot) => {
+      const isCenter = ot.name === 'Mission';
+      const sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(isCenter ? 1.0 : 0.7, 32, 32),
+        new THREE.MeshStandardMaterial({
+          color: ot.color,
+          emissive: ot.color,
+          emissiveIntensity: 0.5,
+          metalness: 0.5,
+          roughness: 0.25
+        })
+      );
+      sphere.position.copy(pos[ot.name]);
+      sphere.userData = { kind: 'OT', name: ot.name, name_zh: ot.name_zh, count: ot.count, desc: ot.desc };
+      sceneGroup.add(sphere);
+      nodeMeshes.push(sphere);
+
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(isCenter ? 1.3 : 1.0, 0.04, 8, 32),
+        new THREE.MeshBasicMaterial({ color: ot.color, transparent: true, opacity: 0.45 })
+      );
+      ring.position.copy(pos[ot.name]);
+      ring.lookAt(0, 0, 0);
+      sceneGroup.add(ring);
+
+      const lbl = makeLabel(`${ot.name_zh} (${ot.name})`, '#' + new THREE.Color(ot.color).getHexString(), 'rgba(0,0,0,0.7)', '12px');
+      lbl.position.copy(pos[ot.name]);
+      lbl.position.multiplyScalar(1.4);
+      sceneGroup.add(lbl);
+    });
+
+    // 边
+    const edgeMeshes = [];
+    ONTOLOGY_LTS.forEach((lt) => {
+      if (!pos[lt.src] || !pos[lt.tgt]) return;
+      const points = [pos[lt.src], pos[lt.tgt]];
+      const geo = new THREE.BufferGeometry().setFromPoints(points);
+      const isHi = lt.highlight;
+      const mat = new THREE.LineBasicMaterial({
+        color: lt.color,
+        transparent: true,
+        opacity: isHi ? 1.0 : 0.55,
+        linewidth: isHi ? 3 : 1
+      });
+      const line = new THREE.Line(geo, mat);
+      line.userData = { kind: 'LT', name: lt.name, name_zh: lt.name_zh, src: lt.src, tgt: lt.tgt, highlight: isHi, desc: lt.desc };
+      sceneGroup.add(line);
+      edgeMeshes.push(line);
+
+      if (isHi) {
+        const curve = new THREE.LineCurve3(pos[lt.src], pos[lt.tgt]);
+        const tube = new THREE.Mesh(
+          new THREE.TubeGeometry(curve, 1, 0.08, 8, false),
+          new THREE.MeshBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.6 })
+        );
+        sceneGroup.add(tube);
+        const mid = pos[lt.src].clone().add(pos[lt.tgt]).multiplyScalar(0.5);
+        const lbl = makeLabel(`${lt.name_zh} (${lt.name}) · 🔁 反馈环`, '#ff7777', 'rgba(40,5,5,0.85)', '11px');
+        lbl.position.copy(mid);
+        sceneGroup.add(lbl);
+      } else {
+        const mid = pos[lt.src].clone().add(pos[lt.tgt]).multiplyScalar(0.5);
+        const lbl = makeLabel(lt.name_zh, '#' + new THREE.Color(lt.color).getHexString(), 'rgba(0,0,0,0.6)', '10px');
+        lbl.position.copy(mid);
+        sceneGroup.add(lbl);
+      }
+    });
+
+    // 内层装饰球
+    const innerShell = new THREE.Mesh(
+      new THREE.SphereGeometry(0.95, 16, 16),
+      new THREE.MeshBasicMaterial({ color: 0xffd700, wireframe: true, transparent: true, opacity: 0.18 })
+    );
+    sceneGroup.add(innerShell);
+
+    // 外层装饰球（淡紫色）
+    const outerShell = new THREE.Mesh(
+      new THREE.SphereGeometry(6.5, 32, 16),
+      new THREE.MeshBasicMaterial({ color: 0xbb6bd9, wireframe: true, transparent: true, opacity: 0.06 })
+    );
+    sceneGroup.add(outerShell);
+
+    // 详情弹窗
+    const detailEl = document.getElementById('detail');
+    const detailTag = document.getElementById('detailTag');
+    const detailTitle = document.getElementById('detailTitle');
+    const detailDesc = document.getElementById('detailDesc');
+    const detailExtras = document.getElementById('detailExtras');
+    document.getElementById('detailClose').onclick = () => detailEl.classList.remove('show');
+
+    function showNodeDetail(d) {
+      detailTag.textContent = d.kind;
+      detailTitle.textContent = `${d.name_zh} (${d.name})`;
+      detailDesc.textContent = d.desc;
+      if (d.kind === 'OT') {
+        detailExtras.innerHTML = `
+          <div class="row"><span>实例数</span><span>${d.count}</span></div>
+          <div class="row"><span>分类</span><span>Object Type</span></div>
+        `;
+      } else {
+        detailExtras.innerHTML = `
+          <div class="row"><span>起点</span><span>${d.src}</span></div>
+          <div class="row"><span>终点</span><span>${d.tgt}</span></div>
+          <div class="row"><span>反馈环</span><span style="color:${d.highlight ? '#ff7777' : '#aaa'}">${d.highlight ? 'YES 🔁' : '—'}</span></div>
+        `;
+      }
+      detailEl.classList.add('show');
+    }
+
+    // 射线检测
+    const raycaster = new THREE.Raycaster();
+    const mouseNDC = new THREE.Vector2();
+    let isDragging = false;
+    renderer.domElement.addEventListener('pointerdown', () => { isDragging = false; });
+    renderer.domElement.addEventListener('pointermove', () => { isDragging = true; });
+    renderer.domElement.addEventListener('pointerup', (e) => {
+      if (isDragging) return;
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouseNDC.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseNDC.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(mouseNDC, camera);
+      const hits = raycaster.intersectObjects(sceneGroup.children, true);
+      for (const h of hits) {
+        if (h.object.userData?.kind === 'OT' || h.object.userData?.kind === 'LT') {
+          showNodeDetail(h.object.userData);
+          if (h.object.material) {
+            const old = h.object.material.emissiveIntensity;
+            h.object.material.emissiveIntensity = 1.5;
+            setTimeout(() => { h.object.material.emissiveIntensity = old; }, 500);
+          }
+          break;
+        }
+      }
+    });
+
+    // 陀螺仪
+    let gyroEnabled = false;
+    function tryEnableGyro() {
+      if (typeof DeviceOrientationEvent === 'undefined') return;
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        DeviceOrientationEvent.requestPermission().then(s => { if (s === 'granted') gyroEnabled = true; }).catch(() => {});
+      } else { gyroEnabled = true; }
+    }
+    window.addEventListener('touchend', tryEnableGyro, { once: true });
+    window.addEventListener('click', tryEnableGyro, { once: true });
+    const gyro = { beta: 0, gamma: 0 };
+    window.addEventListener('deviceorientation', (e) => {
+      if (!gyroEnabled) return;
+      gyro.beta = e.beta || 0; gyro.gamma = e.gamma || 0;
+    });
+
+    const clock = new THREE.Clock();
+    function animate() {
+      const t = clock.getElapsedTime();
+      controls.update();
+
+      // 节点脉动
+      nodeMeshes.forEach((n, i) => {
+        const s = 1 + 0.06 * Math.sin(t * 1.6 + i * 0.7);
+        n.scale.setScalar(s);
+      });
+
+      // Hub 旋转
+      hub.rotation.y = t * 0.7;
+      hub.rotation.x = t * 0.4;
+
+      // 内壳/外壳旋转
+      innerShell.rotation.y = -t * 0.3;
+      outerShell.rotation.y = t * 0.1;
+      outerShell.rotation.x = t * 0.05;
+
+      // 反馈环高亮脉动
+      edgeMeshes.forEach((e, i) => {
+        if (e.userData.highlight) {
+          e.material.opacity = 0.7 + 0.3 * Math.sin(t * 2.5);
+        }
+      });
+
+      renderer.render(scene, camera);
+      labelRenderer.render(scene, camera);
+    }
+    renderer.setAnimationLoop(animate);
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    setTimeout(() => document.getElementById('loader').classList.add('gone'), 250);
+  </script>
+</body>
+</html>

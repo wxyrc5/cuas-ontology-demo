@@ -1,0 +1,853 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-12T20:37:58+08:00",
+  "snapshot_id": "ZX2026-TECH-20260812-F8B72562B5AC",
+  "status": "PUBLIC_TECHNICAL_BASELINE_VERIFIED",
+  "public_mode": true,
+  "package_root": ".",
+  "git_repository_present": true,
+  "source_tree_sha256": "F8B72562B5AC0F43CF8381B8B0F3C63E46C5963F896BF5037A8843D83C8830E4",
+  "source_groups": {
+    "canonical_formal_model": [
+      {
+        "path": "03_源码/本体模型/cuas-data-test.ttl",
+        "bytes": 761,
+        "modified_at": "2026-08-10T01:57:03+08:00",
+        "sha256": "DB3DDFD0FDD6186B184B5A78E7677F8B660A0A10A7D3E9F5D864C09ADE17754D"
+      },
+      {
+        "path": "03_源码/本体模型/cuas-data-valid.ttl",
+        "bytes": 13440,
+        "modified_at": "2026-08-12T19:30:40+08:00",
+        "sha256": "A4A40391AB2837FFE97EE9CB92BE49EAE062C08355C9F8122AA1561B56B1BA5C"
+      },
+      {
+        "path": "03_源码/本体模型/cuas-ontology.ttl",
+        "bytes": 20288,
+        "modified_at": "2026-08-12T19:30:40+08:00",
+        "sha256": "160ACFB670387683249987C18BA197818D4DB7481F224B048C506249B8B283B5"
+      },
+      {
+        "path": "03_源码/本体模型/cuas-shapes.ttl",
+        "bytes": 20936,
+        "modified_at": "2026-08-12T19:30:40+08:00",
+        "sha256": "F3804439FE628D92C8EA8DA439566FAF2CB92C8D00E1D8A7AD3A071E5D794B5A"
+      }
+    ],
+    "canonical_streamlit_source": [
+      {
+        "path": "03_源码/streamlit_app/.streamlit/config.toml",
+        "bytes": 289,
+        "modified_at": "2026-08-09T22:02:39+08:00",
+        "sha256": "91AC5B2F5CB31F0449415631C0A0462750FEAEE90E646634118B6E8B2FC4F7D2"
+      },
+      {
+        "path": "03_源码/streamlit_app/app.py",
+        "bytes": 7078,
+        "modified_at": "2026-08-12T16:37:12+08:00",
+        "sha256": "71A0FCB5398BB2C9BE992C5EEA5B0EFC142E06FCF304EA4F8C389BCC0B2CC16E"
+      },
+      {
+        "path": "03_源码/streamlit_app/assets/README.md",
+        "bytes": 221,
+        "modified_at": "2026-08-06T23:38:52+08:00",
+        "sha256": "6472FC37934A69983704B1CC4F4A911FA4F0A136B99FB1B780C2989EA86E837D"
+      },
+      {
+        "path": "03_源码/streamlit_app/data/action_contract.schema.json",
+        "bytes": 2863,
+        "modified_at": "2026-08-12T19:35:01+08:00",
+        "sha256": "0AFD5D4983019B7F61DF2BB1189FA98882CAB21CAD9D87652A33FD92395573AE"
+      },
+      {
+        "path": "03_源码/streamlit_app/data/airports.json",
+        "bytes": 8171,
+        "modified_at": "2026-08-12T19:29:58+08:00",
+        "sha256": "EF7898782A4E0200DD1AAA3FB2ABAC75AB1FDFC1C92964770A92AB2176664E1C"
+      },
+      {
+        "path": "03_源码/streamlit_app/data/authorization_policy.json",
+        "bytes": 1371,
+        "modified_at": "2026-08-12T19:28:08+08:00",
+        "sha256": "2AE821E730181CBA4007CB677DC67D912AA5C2E462D4D2A6B9CBAE06346EA3EA"
+      },
+      {
+        "path": "03_源码/streamlit_app/data/bayes_params.json",
+        "bytes": 1320,
+        "modified_at": "2026-08-09T23:41:07+08:00",
+        "sha256": "3E74B6BABD3BA149123DEA07E0C8535D51318DABF2B3E7C3630B40CBCC2EC4DA"
+      },
+      {
+        "path": "03_源码/streamlit_app/data/degraded_mode_contract.json",
+        "bytes": 1053,
+        "modified_at": "2026-08-12T19:28:08+08:00",
+        "sha256": "AABC111054214467190C3DC56D2BF77884712DD6ED20A4FDD16723DB7C4FAC15"
+      },
+      {
+        "path": "03_源码/streamlit_app/data/ontology.json",
+        "bytes": 13830,
+        "modified_at": "2026-08-12T16:30:01+08:00",
+        "sha256": "D9C35D372518864A96915E8A23A10536698A52DF2EAFB63197E99610E46279CD"
+      },
+      {
+        "path": "03_源码/streamlit_app/data/ooda_timing_params.json",
+        "bytes": 7804,
+        "modified_at": "2026-08-10T04:17:30+08:00",
+        "sha256": "57F7A670715E8FD61B2A4B475EE90D19399C10F557FE5B7B81D6FB68B7C2FDDE"
+      },
+      {
+        "path": "03_源码/streamlit_app/data/streaming_semantic_contract.json",
+        "bytes": 2352,
+        "modified_at": "2026-08-12T19:30:40+08:00",
+        "sha256": "5E333650A1E484B8E846426FBE634581DD3FA4C851FEC5238E5B5F4D0D7D1684"
+      },
+      {
+        "path": "03_源码/streamlit_app/data/swarm_resources.json",
+        "bytes": 4490,
+        "modified_at": "2026-08-10T04:17:55+08:00",
+        "sha256": "1DE0BB7A8E9F8B4D11064F5B08443FBD545686551922F87617AFC6F0E72C744F"
+      },
+      {
+        "path": "03_源码/streamlit_app/demo_mode.py",
+        "bytes": 6078,
+        "modified_at": "2026-08-12T19:52:23+08:00",
+        "sha256": "41D1E679F5CF30F8A498A5887C61439A16B7350962B40F8F275F719C3A9A18BC"
+      },
+      {
+        "path": "03_源码/streamlit_app/pages/0_🎬_专家演示.py",
+        "bytes": 103,
+        "modified_at": "2026-08-12T14:18:56+08:00",
+        "sha256": "32A23464C218715493E5D8FDABC0C2F0D3962A04EC3D49E2CD237459258F71D9"
+      },
+      {
+        "path": "03_源码/streamlit_app/pages/1_🏠_主页.py",
+        "bytes": 6370,
+        "modified_at": "2026-08-10T04:25:31+08:00",
+        "sha256": "AD4EE078E81C6DA88730F8568ACB8524D1FED43C31A05C719EF44FCB88AE0E36"
+      },
+      {
+        "path": "03_源码/streamlit_app/pages/2_🧬_本体浏览.py",
+        "bytes": 21768,
+        "modified_at": "2026-08-12T19:36:58+08:00",
+        "sha256": "E0782E4F75ACF861761949FE01A3617B3CAF2F4E812B27F3572FB753F5088497"
+      },
+      {
+        "path": "03_源码/streamlit_app/pages/3_🔍_SPARQL查询.py",
+        "bytes": 9230,
+        "modified_at": "2026-08-10T02:51:36+08:00",
+        "sha256": "A573607BD8D8BF5D414BC84EF11E1824094F0AE7688C842DCDC7836C3449B8A3"
+      },
+      {
+        "path": "03_源码/streamlit_app/pages/4_📊_贝叶斯实验.py",
+        "bytes": 10996,
+        "modified_at": "2026-08-12T16:34:18+08:00",
+        "sha256": "AF4A0480D5447957ADBC798113CE96060DC13020E26DA3F017AC9744D738B4C2"
+      },
+      {
+        "path": "03_源码/streamlit_app/pages/5_🗺_机场反无.py",
+        "bytes": 40253,
+        "modified_at": "2026-08-12T19:37:18+08:00",
+        "sha256": "5D7C0F5EEDC8CE85A2295B3794860689E04C4414A16536234C3292A3E03D0135"
+      },
+      {
+        "path": "03_源码/streamlit_app/README.md",
+        "bytes": 2814,
+        "modified_at": "2026-08-12T19:51:52+08:00",
+        "sha256": "788488F960BE64A470F7AB6DCFE02A2967BF41654EC7615CBA0AD9C171E00757"
+      },
+      {
+        "path": "03_源码/streamlit_app/requirements.txt",
+        "bytes": 234,
+        "modified_at": "2026-08-12T19:55:38+08:00",
+        "sha256": "349292DFE6D02E68DD4A3D51DCC5AACA93A60754F663212F0630C6AEA9517D43"
+      },
+      {
+        "path": "03_源码/streamlit_app/static/maps/BRU.png",
+        "bytes": 3342055,
+        "modified_at": "2026-08-09T22:13:12+08:00",
+        "sha256": "4F3A0110F79B96E7A177C045021F772769625D119AE900F8F6165A3DE6F77D16"
+      },
+      {
+        "path": "03_源码/streamlit_app/static/maps/index.json",
+        "bytes": 683,
+        "modified_at": "2026-08-09T23:04:27+08:00",
+        "sha256": "696204B2AFE362AD56EE12E774B00DBD2F739A49A472E20AA0E5D9149F8800D4"
+      },
+      {
+        "path": "03_源码/streamlit_app/static/maps/MUC.png",
+        "bytes": 2871477,
+        "modified_at": "2026-08-09T22:13:26+08:00",
+        "sha256": "74AA56055AC067BF0547FA481359F1CB764F1EC73A54206EB18874DDC0AFC08C"
+      },
+      {
+        "path": "03_源码/streamlit_app/static/maps/PKX.png",
+        "bytes": 2593352,
+        "modified_at": "2026-08-09T22:12:56+08:00",
+        "sha256": "2B71C6E5F5A040397E64B46705D8ED90904343F15FAC40AFAACC584CD2D60F93"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/__init__.py",
+        "bytes": 718,
+        "modified_at": "2026-08-10T02:27:53+08:00",
+        "sha256": "DFC24B6AFEDF50A5BF0EBFC7BCAC9D0866484124F11E3D4F20DA8CD943336ED0"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/action_contract.py",
+        "bytes": 760,
+        "modified_at": "2026-08-12T16:28:31+08:00",
+        "sha256": "F4584E9958EFF97C87B3736DFDE12A27B8D8F9BE45FEAAE00ACB20640EF04EC2"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/authorization_policy.py",
+        "bytes": 3508,
+        "modified_at": "2026-08-12T19:28:08+08:00",
+        "sha256": "A739486E602243CABD52874F8C117F6D69E9B33009DE047A3DA83FFE680ED96A"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/bayes_engine.py",
+        "bytes": 10757,
+        "modified_at": "2026-08-09T23:39:17+08:00",
+        "sha256": "BAB321EB9B7CA24AF81242181D1805C988A0B9B37B42DA3D84A784B5CBD07221"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/bayesian_flywheel.py",
+        "bytes": 25367,
+        "modified_at": "2026-08-12T16:32:22+08:00",
+        "sha256": "C16F77AF64F36316C12DA242ADDED4C83277FE19B4FDB36CF7CCB71EB35152D1"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/coordinate_normalization.py",
+        "bytes": 2570,
+        "modified_at": "2026-08-12T19:32:38+08:00",
+        "sha256": "BD36D31ABE91F5E33F71292C8E5AFCA765DAE31A770EB86779E3B318A1D6836E"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/current_metrics.py",
+        "bytes": 756,
+        "modified_at": "2026-08-10T02:52:40+08:00",
+        "sha256": "D35EBEE6B94769BD390A4C06113A5228701511EE09086C93682B313FDEBF3983"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/defense_envelope.py",
+        "bytes": 5705,
+        "modified_at": "2026-08-10T02:27:44+08:00",
+        "sha256": "9370273D6EAE840428964862B1F6217A46FE342067026EBFB6D8AA06D10CE378"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/ingress_guard.py",
+        "bytes": 3458,
+        "modified_at": "2026-08-12T19:29:41+08:00",
+        "sha256": "E91ECAEFAEEA6E38B39E5AEEA87A4D9E91687255003E8E65151972F52184872E"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/ontology_action_engine.py",
+        "bytes": 19262,
+        "modified_at": "2026-08-12T19:35:01+08:00",
+        "sha256": "FF1909AA9F41476A6F4BA3A80210F191C2AF7D86AF42813E730D606BA1F645CC"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/ontology_loader.py",
+        "bytes": 3327,
+        "modified_at": "2026-08-10T02:50:13+08:00",
+        "sha256": "2E008C67A1615C04BAD5BB1CF078DC8E5EE543FA16CCC37F2C889B6BFB8E8C21"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/ooda_model.py",
+        "bytes": 12998,
+        "modified_at": "2026-08-10T04:17:32+08:00",
+        "sha256": "CF12E7784422446C6D0C2DD42804A9132BAADC73EC3B82ABEF24848FF7D4E4A5"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/resilience_demo.py",
+        "bytes": 5800,
+        "modified_at": "2026-08-12T19:34:10+08:00",
+        "sha256": "721B8C2CE2C331DA16011941B5801952D977DEF57B500E5CB530431049528AFB"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/semantic_event_log.py",
+        "bytes": 1657,
+        "modified_at": "2026-08-12T19:29:41+08:00",
+        "sha256": "5BF2BD68C8AF3E6D5D124EB5A607677A05E7B3815985D019BED01680B63AA66B"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/sparql_runner.py",
+        "bytes": 6621,
+        "modified_at": "2026-08-10T02:51:06+08:00",
+        "sha256": "CAF8B917390268E3C7A681B0003433E3D73E455218E6A64605DA9802A8FEB335"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/swarm_adjudication.py",
+        "bytes": 28179,
+        "modified_at": "2026-08-10T04:18:34+08:00",
+        "sha256": "1E78A864B65D978C727DD55705F33211149F8DCFDADEF93E7ED359D1D06F1E41"
+      },
+      {
+        "path": "03_源码/streamlit_app/utils/wta_optimizer.py",
+        "bytes": 3540,
+        "modified_at": "2026-08-12T19:29:41+08:00",
+        "sha256": "8FCF355762E80F3B72D0512280B8EC864D67F9BB2E18D5A73A09CC066FEA95B4"
+      }
+    ],
+    "canonical_notebooks": [
+      {
+        "path": "05_Notebook与数据/notebook_01_ontology_validation.ipynb",
+        "bytes": 17710,
+        "modified_at": "2026-08-12T16:39:53+08:00",
+        "sha256": "955F8BD70F8FC86F9C83988765C4012165B425504CFE820462090B257FD8B43C"
+      },
+      {
+        "path": "05_Notebook与数据/notebook_02_ooda_simulation.ipynb",
+        "bytes": 41198,
+        "modified_at": "2026-08-10T04:27:31+08:00",
+        "sha256": "9D3823048AE72334FD702EE3F74241A7DD182D296F3FF6A4FD134073C82745E4"
+      },
+      {
+        "path": "05_Notebook与数据/notebook_03_bayesian_adaptive.ipynb",
+        "bytes": 20964,
+        "modified_at": "2026-08-12T16:33:21+08:00",
+        "sha256": "57645AF865D54A6649F206D82D474789876A1A40E8BDAD14305C3ECAA155B430"
+      },
+      {
+        "path": "05_Notebook与数据/notebook_04_demo_end_to_end.ipynb",
+        "bytes": 28135,
+        "modified_at": "2026-08-10T05:08:26+08:00",
+        "sha256": "FAB2F27EA09782B306DEA7EAF9AD66F37C490DF8249FD6ED9489D7442BD50E10"
+      },
+      {
+        "path": "05_Notebook与数据/README.md",
+        "bytes": 1773,
+        "modified_at": "2026-08-10T05:08:11+08:00",
+        "sha256": "D459EFDAF7F52F7882A8D5D3A3967027ACD00887977CD7CF61DF9195DE5FC369"
+      },
+      {
+        "path": "05_Notebook与数据/verify_hash.ps1",
+        "bytes": 345,
+        "modified_at": "2026-08-12T19:38:58+08:00",
+        "sha256": "FD38CD7AADC608F47B09D62BFF95D0762263CF8717C922074F69106C04C795AE"
+      },
+      {
+        "path": "05_Notebook与数据/verify_hash.sh",
+        "bytes": 319,
+        "modified_at": "2026-08-12T19:38:58+08:00",
+        "sha256": "C99907605BDA0D948E6108870734806156793F561D516EC0C797F94164396D44"
+      },
+      {
+        "path": "05_Notebook与数据/verify_hashes.py",
+        "bytes": 2387,
+        "modified_at": "2026-08-12T19:38:58+08:00",
+        "sha256": "A727E967BC15519060B47AA0F59A1E3CC6D844BF468500DA471C982504FB92D2"
+      }
+    ],
+    "active_reproducibility_tools": [
+      {
+        "path": "06_部署脚本/.env.example",
+        "bytes": 231,
+        "modified_at": "2026-08-06T23:39:50+08:00",
+        "sha256": "98DB184B0A9E31AB6C66036298045E15CF43418EBA029F91712F20659A7C126D"
+      },
+      {
+        "path": "06_部署脚本/docker-compose.yml",
+        "bytes": 3238,
+        "modified_at": "2026-08-12T20:23:04+08:00",
+        "sha256": "3BEBE419982376D5B1103A09DB28324336B61587F3050D68AFD1F4832D0E8B11"
+      },
+      {
+        "path": "06_部署脚本/Dockerfile.fuseki",
+        "bytes": 2835,
+        "modified_at": "2026-08-12T20:24:55+08:00",
+        "sha256": "5E28B6CEB00E2E4AD8C961C508CD521E64A9D9A5349B32E12FEF10DFBAB165E2"
+      },
+      {
+        "path": "06_部署脚本/Dockerfile.streamlit",
+        "bytes": 696,
+        "modified_at": "2026-08-12T19:55:38+08:00",
+        "sha256": "6BF061F10DB74D5DCBD0C85F4EDF2C2E5DD39FF9418F46EDD219D8E354014200"
+      },
+      {
+        "path": "06_部署脚本/environment.yml",
+        "bytes": 125,
+        "modified_at": "2026-08-09T22:16:25+08:00",
+        "sha256": "B0C843B3762B44D02D69FFD2FEE0649F348855E7BFF2B3DA01F98467D78ADDEB"
+      },
+      {
+        "path": "06_部署脚本/export_20_uav_trace.py",
+        "bytes": 3857,
+        "modified_at": "2026-08-12T19:38:17+08:00",
+        "sha256": "58B8E53AB7B0969FD75067F25DF70EA4AA6FB115F78BA3925002BE1F67FC39D9"
+      },
+      {
+        "path": "06_部署脚本/export_current_metrics.py",
+        "bytes": 7570,
+        "modified_at": "2026-08-12T16:37:59+08:00",
+        "sha256": "8B2D9327BFD99A99BCDB938A660E2C41220569633DB323ACC47FB8866698506B"
+      },
+      {
+        "path": "06_部署脚本/fix_notebook_fonts.py",
+        "bytes": 3769,
+        "modified_at": "2026-08-09T23:59:35+08:00",
+        "sha256": "7E6189ED42A34FE24C76F31C5926689A839E898280E877B040059A12B33F0B8F"
+      },
+      {
+        "path": "06_部署脚本/generate_offline_maps.py",
+        "bytes": 3193,
+        "modified_at": "2026-08-09T22:12:23+08:00",
+        "sha256": "181A113AC1F8DC6DA8AAD1C4FF64B20AB361D6B8E2057FDD656AC3DA80113FFA"
+      },
+      {
+        "path": "06_部署脚本/generate_release_manifest.py",
+        "bytes": 25455,
+        "modified_at": "2026-08-12T20:26:42+08:00",
+        "sha256": "E2034E4E33A8A8B221410F79077CE0B81CEACE8C289F0170E992BAA48B0878CC"
+      },
+      {
+        "path": "06_部署脚本/init-fuseki.sh",
+        "bytes": 8859,
+        "modified_at": "2026-08-12T20:23:04+08:00",
+        "sha256": "100D7046C261921B58D8ABFF21273554E4B79D981155083C3328997DEE9180DD"
+      },
+      {
+        "path": "06_部署脚本/README-Fuseki.md",
+        "bytes": 11815,
+        "modified_at": "2026-08-06T23:39:50+08:00",
+        "sha256": "51C67F979BC79518876F631E814A106114CE63EBF0F325E331C7B5C990DCBB7B"
+      },
+      {
+        "path": "06_部署脚本/repair_bayesian_notebook.py",
+        "bytes": 16473,
+        "modified_at": "2026-08-12T16:33:13+08:00",
+        "sha256": "A2BDC695F91300763B8CC41F1AFBE27A0E2EFD48D5B83022996A7CC5D5D85F4F"
+      },
+      {
+        "path": "06_部署脚本/repair_end_to_end_notebook.py",
+        "bytes": 23193,
+        "modified_at": "2026-08-10T05:08:09+08:00",
+        "sha256": "42EAC1FE0535475109B2C93011E954176E16B8AB882F2549304EE702B7EF7345"
+      },
+      {
+        "path": "06_部署脚本/repair_ontology_notebook.py",
+        "bytes": 14003,
+        "modified_at": "2026-08-12T16:39:45+08:00",
+        "sha256": "610E2402A327E8E817114005C623872BE1AC912145CD020AAADC21CE440765CD"
+      },
+      {
+        "path": "06_部署脚本/repair_ooda_notebook.py",
+        "bytes": 33239,
+        "modified_at": "2026-08-10T04:23:43+08:00",
+        "sha256": "71639CD21486FA6D093B55E7774195FCE28589B37056BCBA561C168EE1A734E8"
+      },
+      {
+        "path": "06_部署脚本/requirements-local.txt",
+        "bytes": 457,
+        "modified_at": "2026-08-12T19:29:58+08:00",
+        "sha256": "00622A24C60D305F8604A210FD8B7F86E5E4A0AD3DF4B475FA7B8B1DBD0C72CB"
+      },
+      {
+        "path": "06_部署脚本/run_notebooks.py",
+        "bytes": 8188,
+        "modified_at": "2026-08-10T03:07:14+08:00",
+        "sha256": "02B22D9CC0D2526127B42AAED7556BE1CAF1226B9CA6C0E79F8EE366315E871C"
+      },
+      {
+        "path": "06_部署脚本/shiro.ini",
+        "bytes": 3105,
+        "modified_at": "2026-08-06T23:39:49+08:00",
+        "sha256": "6033CC554529AB01DC6D6BC40DBCD6119DD3AE534A12FA929904BA65BAAE0ED2"
+      },
+      {
+        "path": "06_部署脚本/smoke_test_streamlit.ps1",
+        "bytes": 4394,
+        "modified_at": "2026-08-10T05:24:46+08:00",
+        "sha256": "B08ECE4471D4A4C5F954B90A2BBD388AE71C5D3E8315B004D3A0A4BCB02A05A3"
+      },
+      {
+        "path": "06_部署脚本/sync_streamlit_deploy.ps1",
+        "bytes": 3320,
+        "modified_at": "2026-08-10T03:49:29+08:00",
+        "sha256": "85FCDDFAEBE3FCE428A7712CF07A5A87F1569BFB8DCE7343E8C942CBE2076600"
+      },
+      {
+        "path": "06_部署脚本/validate_final_state.py",
+        "bytes": 20383,
+        "modified_at": "2026-08-12T19:40:40+08:00",
+        "sha256": "60CACDFE91F6D2841E52A8F11E515DA56140CFDB389210E61F1FE15A1ECA5835"
+      },
+      {
+        "path": "06_部署脚本/validate_ontology_consistency.py",
+        "bytes": 14750,
+        "modified_at": "2026-08-12T16:27:02+08:00",
+        "sha256": "17D2E75076184A8269C1E2C5802CF2CB379AF7A76724C0D3FC8D2B2B73866E21"
+      },
+      {
+        "path": "06_部署脚本/verify_streamlit_app.py",
+        "bytes": 27808,
+        "modified_at": "2026-08-12T19:40:40+08:00",
+        "sha256": "8167A9DCFC8111DF9464FD40BC46E26D150B4029880D3A0A44A4AB45035719DA"
+      },
+      {
+        "path": "06_部署脚本/启动Jupyter.ps1",
+        "bytes": 1928,
+        "modified_at": "2026-08-09T22:29:08+08:00",
+        "sha256": "805DF2130DC6E357EDE2662A3BBF8F777CF5C5A30D03262B2AD76B3524DDD89E"
+      },
+      {
+        "path": "06_部署脚本/启动本地项目.ps1",
+        "bytes": 1158,
+        "modified_at": "2026-08-09T22:16:28+08:00",
+        "sha256": "B69579D9F3A22AA4ACEDE43E4CD3213124DA35AC77449A7ECC933857E9E4B80D"
+      },
+      {
+        "path": "06_部署脚本/安装本地环境.ps1",
+        "bytes": 1691,
+        "modified_at": "2026-08-09T22:16:27+08:00",
+        "sha256": "F67B2D6DCF873AD58CE350218CC2907EE1785567875EFF80A1728EAA15088171"
+      },
+      {
+        "path": "06_部署脚本/执行全部Notebook.ps1",
+        "bytes": 1016,
+        "modified_at": "2026-08-09T23:52:58+08:00",
+        "sha256": "00764528B5FDE1D38BD0A6F6D09BFECE1A1C978AA3CD88867D25725ACD6142D2"
+      },
+      {
+        "path": "06_部署脚本/执行技术验收.ps1",
+        "bytes": 2864,
+        "modified_at": "2026-08-12T19:56:19+08:00",
+        "sha256": "843ED391AB9EBF60DC32F979DFFF5F4B41AA3339A9B6407E5CEB77CFBAD3FE5F"
+      }
+    ],
+    "canonical_governance_docs": [
+      {
+        "path": "01_参赛交付物/00_暂停使用_待第7和第8步更新.md",
+        "bytes": 1301,
+        "modified_at": "2026-08-10T03:58:04+08:00",
+        "sha256": "6D5404B3480E8903750BCE32536407FD53653264201EB219F40BBAD4AE0FF46A"
+      },
+      {
+        "path": "01_参赛交付物/README.md",
+        "bytes": 1161,
+        "modified_at": "2026-08-12T17:00:10+08:00",
+        "sha256": "5446B746786DCF453E7440B5034AC40E679337DB4F26706B073EA1E5A3D348E5"
+      },
+      {
+        "path": "07_文档/GitHub远端历史审计与发布策略.md",
+        "bytes": 2545,
+        "modified_at": "2026-08-12T17:10:40+08:00",
+        "sha256": "B9F1CAA68B1D9A75281302F205AF18AA267E40B326C016A7E69F54673D8250BC"
+      },
+      {
+        "path": "07_文档/README.md",
+        "bytes": 808,
+        "modified_at": "2026-08-10T05:27:08+08:00",
+        "sha256": "49504B3B9F87C5466653B82E852AD8EA01513FAD8A3742BCAD1C8700837AD7AA"
+      },
+      {
+        "path": "07_文档/事实口径与答辩边界.md",
+        "bytes": 8470,
+        "modified_at": "2026-08-12T19:51:11+08:00",
+        "sha256": "A5468DC9DD97E0D058D9CD690ED6511C5EC2914955A48F4FEF12A918C0379A5B"
+      },
+      {
+        "path": "07_文档/本地运行说明.md",
+        "bytes": 2032,
+        "modified_at": "2026-08-10T05:25:01+08:00",
+        "sha256": "7011171300A385DC50DB90C72CD8628E4698F1C7C5347F76A96DD05489EAC19D"
+      },
+      {
+        "path": "07_文档/版本治理与融合决策.md",
+        "bytes": 6914,
+        "modified_at": "2026-08-10T05:27:12+08:00",
+        "sha256": "7D210604BB4147393ACF0B257BF08443BFEA68A655643B5BB4F67AB5C04C5EAD"
+      },
+      {
+        "path": "07_文档/第三轮评审意见采纳与实证说明.md",
+        "bytes": 10275,
+        "modified_at": "2026-08-12T20:26:13+08:00",
+        "sha256": "B2B36A9BA7D1DC879526AF34021B51A18631E46F6AEA19BEB618D29B6F7B4A69"
+      },
+      {
+        "path": "07_文档/项目完成度与证据审计.md",
+        "bytes": 4660,
+        "modified_at": "2026-08-12T19:51:11+08:00",
+        "sha256": "C1D265B5EFBE8DBEF09A6AB8EE68EE94174CADDE991A3554168B021ACC95C7F4"
+      },
+      {
+        "path": "PUBLIC_REPOSITORY.md",
+        "bytes": 1976,
+        "modified_at": "2026-08-12T20:20:16+08:00",
+        "sha256": "1C9FACA52FBC740386DA70BA779CACB7EDE518DC19AF1EE5DB48DDB0BCE2CFC4"
+      },
+      {
+        "path": "PUBLIC_TECHNICAL_REPOSITORY",
+        "bytes": 205,
+        "modified_at": "2026-08-11T10:45:22+08:00",
+        "sha256": "331703ACE4DF065DA24C56B3296B5C9F1B62ED244E12ED52A0C77E712C0EBDAD"
+      },
+      {
+        "path": "README.md",
+        "bytes": 10246,
+        "modified_at": "2026-08-12T20:37:45+08:00",
+        "sha256": "0DCE0A715DA7EF132544DB1787B0F88BB702900A80E7F40E2F7611A5C13C2D30"
+      }
+    ],
+    "auxiliary_threejs_source": [
+      {
+        "path": "03_源码/threejs_app/index.html",
+        "bytes": 44281,
+        "modified_at": "2026-08-09T23:06:36+08:00",
+        "sha256": "23658E5CB5FC25B0B8E82BCFF0D99FC854D0A131776FDC9CCD40B3C606163CAC"
+      },
+      {
+        "path": "03_源码/threejs_app/README.md",
+        "bytes": 1381,
+        "modified_at": "2026-08-09T23:46:36+08:00",
+        "sha256": "9E70C7315925AFD71D00101E32457D8D6B3C53E3AD56E3E4BF75B8846924D322"
+      },
+      {
+        "path": "03_源码/threejs_app/scene_airport.html",
+        "bytes": 22440,
+        "modified_at": "2026-08-09T23:06:56+08:00",
+        "sha256": "D010467865032E886396C16353ACA0061C54E06E53381FF94D81B2C3DD70BEF9"
+      },
+      {
+        "path": "03_源码/threejs_app/scene_flywheel.html",
+        "bytes": 19304,
+        "modified_at": "2026-08-06T23:38:57+08:00",
+        "sha256": "02FE02504E017B2E1D5BFF32BA1444528B7AA71962ABC0A0DBC25356B99E6710"
+      },
+      {
+        "path": "03_源码/threejs_app/scene_ontology.html",
+        "bytes": 23155,
+        "modified_at": "2026-08-06T23:38:55+08:00",
+        "sha256": "AA89D230B43CA36BE3BDBBCE480E29332F69357F910E034ECE5E275682A8E519"
+      },
+      {
+        "path": "03_源码/threejs_app/start.sh",
+        "bytes": 2613,
+        "modified_at": "2026-08-06T23:38:56+08:00",
+        "sha256": "20224364C03C2A132FCE6A550E42FD3482C0EFF3138E4F5E8958CC0EDF8770BC"
+      }
+    ]
+  },
+  "source_file_count": 101,
+  "evidence": {
+    "technical_acceptance_all_passed": true,
+    "technical_acceptance_checks": 14,
+    "metric_adjudication_summary": {
+      "pass": 21,
+      "fail": 0,
+      "report_only": 2
+    },
+    "notebook_status": "passed",
+    "notebook_code_cells": 43,
+    "streamlit_status": "passed",
+    "streamlit_pages": 8,
+    "resource_minimum_packages": {
+      "20": 1,
+      "25": 2,
+      "30": 2,
+      "40": 2,
+      "50": 3,
+      "60": 3,
+      "75": 4,
+      "100": 5
+    },
+    "files": [
+      {
+        "path": "03_源码/streamlit_app/data/current_metrics.json",
+        "bytes": 94359,
+        "modified_at": "2026-08-12T20:36:27+08:00",
+        "sha256": "9E14D81964015DB131066C981787D5ECD2D2FE2942D348FE2FF2AA61A591CCE4"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/action_feedback_demo.json",
+        "bytes": 13306,
+        "modified_at": "2026-08-12T20:35:29+08:00",
+        "sha256": "A4E8E63BB261282DE9D118270EF825C669BE1EC6A68CE7380D2CC11F03EF6923"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/action_feedback_writeback.ttl",
+        "bytes": 8768,
+        "modified_at": "2026-08-12T20:35:29+08:00",
+        "sha256": "AED80EDF891458148587FBA2665D67192110CF1D5714133F40BD204EDCCF94D1"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/docker_fuseki_verification.json",
+        "bytes": 752,
+        "modified_at": "2026-08-12T20:26:13+08:00",
+        "sha256": "B2D3BC0F912DEC73613DD2F80DECF62787C7161BF6A698F2A5D2CED09388F941"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/docker_streamlit_verification.json",
+        "bytes": 780,
+        "modified_at": "2026-08-12T20:26:13+08:00",
+        "sha256": "3FD3DD3E3C54AE6C842ABAC7057E7282DA5758981E2CD25DB364D4ADB9CF2F35"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/fig2_5_resource_scaling.png",
+        "bytes": 344382,
+        "modified_at": "2026-08-12T20:35:16+08:00",
+        "sha256": "853E4CC366D2213BF1A046F88389C61A1BBF1060854ACBD8921CB329E31E3A9A"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/live_streamlit_smoke.json",
+        "bytes": 815,
+        "modified_at": "2026-08-12T20:36:32+08:00",
+        "sha256": "634BC84F0C13AE06B3C02FC614CE66F2108A18D8CB3EB55B4ECC769E07089FDC"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/metrics_notebook_01.json",
+        "bytes": 2389,
+        "modified_at": "2026-08-12T20:27:11+08:00",
+        "sha256": "17F904D3591AF72399A6FAF29A56D18DAC6637AA535312A471BB0EA22F9368D8"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/metrics_notebook_02.json",
+        "bytes": 86061,
+        "modified_at": "2026-08-12T20:35:16+08:00",
+        "sha256": "7DB0180BC02E330E799887F6D03B45525418A159BF1FA841974E9120FAEB4D50"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/metrics_notebook_03.json",
+        "bytes": 11899,
+        "modified_at": "2026-08-12T20:35:24+08:00",
+        "sha256": "9D654037385D2A2D97CA40BD1C1635BC84DAD7FB0BFCFC037BC81D5D442D3B55"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/ontology_consistency_report.json",
+        "bytes": 3545,
+        "modified_at": "2026-08-12T20:27:08+08:00",
+        "sha256": "4A4E68C172CBC24A8EEFF651249FF6F2A572FB6FFAC1F32987B28F946919C938"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/ooda_20drone_latency_detail.csv",
+        "bytes": 6387,
+        "modified_at": "2026-08-12T20:35:31+08:00",
+        "sha256": "189EB4C8032DDEEC45FC89B0410A59413E8B765CE7624BE50BB5CD7F255F3735"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/ooda_coordination_parameters_100_swarm_6_packages.csv",
+        "bytes": 379,
+        "modified_at": "2026-08-12T20:27:15+08:00",
+        "sha256": "0520234402A15B035E99A5671D648E46980705551B92AFA3F95C89CD1673DDE3"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/streamlit_acceptance.json",
+        "bytes": 6248,
+        "modified_at": "2026-08-12T20:36:27+08:00",
+        "sha256": "C81CEE310B0AF82F6CCD74F41BE2C44F5796EE709A53842B0E35C87713846B5E"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/swarm_resource_scaling_grid.csv",
+        "bytes": 15224,
+        "modified_at": "2026-08-12T20:35:14+08:00",
+        "sha256": "76D6E3B6F5F3AEA785475F7D0C3806EDDD35DA8544BE37E89C7143810BDBD9FE"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/swarm_resource_scaling_minimum.csv",
+        "bytes": 1424,
+        "modified_at": "2026-08-12T20:35:14+08:00",
+        "sha256": "0018D49562E5E64A78943F4FB26E8D9F3E059A8ADA2CCADDEBF57DE5A3F92055"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/swarm_resource_scaling_thresholds.csv",
+        "bytes": 2455,
+        "modified_at": "2026-08-12T20:35:14+08:00",
+        "sha256": "3464DADC29E08668914438B0192093DE51BF5CF64DE4FE8EC0865B5BEA3157EB"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/technical_acceptance_summary.json",
+        "bytes": 3808,
+        "modified_at": "2026-08-12T20:36:33+08:00",
+        "sha256": "E2C25DC5518462D6DF7BC3AE117E0D74474B52AD5C5CF82BBFCEEFACDF6E913A"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/指标裁决.json",
+        "bytes": 86909,
+        "modified_at": "2026-08-12T20:35:29+08:00",
+        "sha256": "4421BE741CA2F0F0ECB6A7B14825442E7D9E75AA1E8977E73CAE75F7CAEADB37"
+      },
+      {
+        "path": "05_Notebook与数据/验证输出/最新执行/execution_manifest.json",
+        "bytes": 3436,
+        "modified_at": "2026-08-12T20:35:30+08:00",
+        "sha256": "522CB7EFEF9B5856B1404BCD5259D9CB43D064F8CD7BB1BEA81C725EA2BF6276"
+      }
+    ]
+  },
+  "generated_mirrors": [
+    {
+      "path": "03_源码/streamlit_cloud_deploy",
+      "authority": "generated_from_03_源码/streamlit_app",
+      "edit_directly": false,
+      "verification": "43/43 managed files matched in technical acceptance"
+    },
+    {
+      "path": "03_源码/streamlit_app/data/current_metrics.json",
+      "authority": "generated_from_notebook_metrics_and_acceptance",
+      "edit_directly": false
+    }
+  ],
+  "prepared_competition_materials": {
+    "status": "EXCLUDED_FROM_PUBLIC_TECHNICAL_REPOSITORY",
+    "files": []
+  },
+  "frozen_submission_artifacts": {
+    "status": "EXCLUDED_FROM_PUBLIC_TECHNICAL_REPOSITORY",
+    "reason": "DOCX/PDF and other binary artifacts have not been regenerated and visually reviewed against the current Markdown authority.",
+    "warning": "PUBLIC_REPOSITORY.md",
+    "files": []
+  },
+  "pending_admin_materials": {
+    "status": "EXCLUDED_FROM_PUBLIC_TECHNICAL_REPOSITORY",
+    "files": []
+  },
+  "deferred_submission_generators": {
+    "status": "EXCLUDED_FROM_PUBLIC_TECHNICAL_REPOSITORY",
+    "files": []
+  },
+  "official_reference_files": [],
+  "reference_only_roots": [
+    "02_SCI论文",
+    "04_可视化",
+    "C-UAS-Final-Package (outside this package; visual reference only)",
+    "github.com/wxyrc5/cuas-ontology-demo (early remote snapshot only)"
+  ],
+  "history_summary": [
+    {
+      "path": "01_参赛交付物/历史版本",
+      "files": 0,
+      "bytes": 0,
+      "status": "REFERENCE_ONLY_DO_NOT_RUN_OR_SUBMIT"
+    },
+    {
+      "path": "04_可视化/历史版本",
+      "files": 0,
+      "bytes": 0,
+      "status": "REFERENCE_ONLY_DO_NOT_RUN_OR_SUBMIT"
+    },
+    {
+      "path": "05_Notebook与数据/历史版本",
+      "files": 0,
+      "bytes": 0,
+      "status": "REFERENCE_ONLY_DO_NOT_RUN_OR_SUBMIT"
+    },
+    {
+      "path": "06_部署脚本/历史版本",
+      "files": 0,
+      "bytes": 0,
+      "status": "REFERENCE_ONLY_DO_NOT_RUN_OR_SUBMIT"
+    }
+  ],
+  "rules": [
+    "Edit 03_源码/streamlit_app, never edit streamlit_cloud_deploy directly.",
+    "Only four top-level canonical notebooks are executable evidence; history is excluded.",
+    "Use 指标裁决.json for every numeric claim and preserve synthetic/not-field-test wording.",
+    "Treat GitHub main as an early snapshot; use the approved consolidation branch and Pull Request for public review.",
+    "Use Markdown as the sole authority until the user confirms content; only then regenerate and visually review DOCX/PDF.",
+    "Run 执行技术验收.ps1 after every source or metric change; it regenerates this manifest."
+  ],
+  "deferred_scope": [
+    "official application forms with identity, signatures, and seal",
+    "competition presentation deck and final recorded video",
+    "official submission archives"
+  ]
+}
