@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import copy
+import csv
 import hashlib
 import importlib.util
 import json
@@ -292,7 +293,7 @@ def validate_ontology_assets() -> dict:
     graph.parse(model_dir / "cuas-ontology.ttl", format="turtle")
     graph.parse(model_dir / "cuas-data-valid.ttl", format="turtle")
     cuas = Namespace("http://cuas-ontology.org/cuas#")
-    if len(graph) != 620:
+    if len(graph) != 653:
         raise ValueError(f"canonical TBox+ABox triple count changed: {len(graph)}")
     missing_links = [
         name for name in expected_links
@@ -395,6 +396,8 @@ def validate_action_feedback() -> dict:
         or after["controls"]["wta_recompute_requested"] is not True
         or set(after["pending_human_actions"]) != expected_pending_actions
         or len({item["action_id"] for item in first["actions"]}) != 8
+        or {item["authorization_level"] for item in first["actions"]} != {"L1", "L2", "L3"}
+        or {item["risk_class"] for item in first["actions"]} != {"LOW", "MEDIUM", "HIGH"}
     ):
         raise ValueError(f"Action feedback state transition is invalid: {first}")
 
@@ -425,7 +428,101 @@ def validate_action_feedback() -> dict:
         "canonical_model_unchanged": True,
         "action_contract_positive": True,
         "action_contract_negative_rejected": negative_contract_rejected,
+        "authorization_levels": sorted({item["authorization_level"] for item in first["actions"]}),
         "not_palantir_foundry_deployment": True,
+        "status": "passed",
+    }
+
+
+def validate_resilience_features() -> dict:
+    from utils.authorization_policy import decide_authorization
+    from utils.coordinate_normalization import validate_airport_target_crs
+    from utils.ingress_guard import evaluate_ingress_event
+    from utils.resilience_demo import evaluate_failure_trace, evaluate_semantic_hotplug
+    from utils.wta_optimizer import demonstration_wta
+
+    airports = json.loads((APP_DIR / "data" / "airports.json").read_text(encoding="utf-8"))["airports"]
+    crs_rows = [validate_airport_target_crs(airport) for airport in airports]
+    expected_crs = {"EPSG:32650", "EPSG:32631", "EPSG:32632"}
+    if {row["target_crs"] for row in crs_rows} != expected_crs:
+        raise ValueError(f"airport target CRS mismatch: {crs_rows}")
+
+    model_dir = PACKAGE_ROOT / "03_源码" / "本体模型"
+    hotplug = evaluate_semantic_hotplug(
+        str(model_dir / "cuas-ontology.ttl"),
+        str(model_dir / "cuas-data-valid.ttl"),
+        str(model_dir / "cuas-shapes.ttl"),
+    )
+    if not (
+        hotplug["new_equipment_visible"]
+        and hotplug["shacl_conforms"]
+        and hotplug["semantic_statements_added"] == 16
+        and hotplug["executable_code_files_changed"] == 0
+        and hotplug["query_changed"] is False
+        and hotplug["process_restart_required"] is False
+    ):
+        raise ValueError(f"semantic hot-plug failed: {hotplug}")
+
+    l1 = decide_authorization(
+        action_code="ADJUST_SENSOR_SCAN_MODE", effect_type="SENSOR",
+        posterior_confidence=0.97, target_count=3,
+    )
+    l3 = decide_authorization(
+        action_code="AUTHORIZE_EFFECTOR_REINFORCEMENT", effect_type="HPM",
+        posterior_confidence=0.99, target_count=20, pending_actions=8,
+    )
+    conflict = decide_authorization(
+        action_code="AUTHORIZE_BATCH_DECISION_MODE", effect_type="EW",
+        posterior_confidence=0.99, target_count=20, pending_actions=8,
+        geofence_conflict=True,
+    )
+    if (l1["authorization_level"], l3["authorization_level"], conflict["authorization_level"]) != ("L1", "L3", "L3"):
+        raise ValueError("authorization matrix lowered a safety authority")
+
+    accepted_event = {
+        "event_id": "EVT-001", "source_id": "Radar_007",
+        "event_time_utc": "2026-08-12T06:00:00.000Z",
+        "ingest_time_utc": "2026-08-12T06:00:00.120Z",
+        "coordinate_reference_system": "OGC:CRS84",
+        "target_coordinate_reference_system": "EPSG:32651",
+        "position_wkt": "POINT (120.158 30.246)", "position_accuracy_m": 8.0,
+        "velocity_enu_mps": {"east": 18.0, "north": 7.0, "up": 1.0},
+        "source_count": 2, "signal": {"confidence": 0.91}, "observation": {"class": "UAS"},
+    }
+    forged_event = copy.deepcopy(accepted_event)
+    forged_event["event_id"] = "EVT-FORGED"
+    forged_event["source_count"] = 1
+    forged_event["velocity_enu_mps"] = {"east": 600.0, "north": 0.0, "up": 0.0}
+    accepted = evaluate_ingress_event(accepted_event)
+    rejected = evaluate_ingress_event(forged_event)
+    if accepted["status"] != "ACCEPT" or rejected["status"] != "QUARANTINE":
+        raise ValueError("ingress adversarial gate did not separate fixtures")
+
+    wta = demonstration_wta(20)
+    if not all(wta["constraint_checks"].values()) or len(wta["assignments"]) != 20:
+        raise ValueError(f"20-target WTA constraints failed: {wta}")
+    failure = evaluate_failure_trace()
+    if not failure["root_causes"] or failure["not_identified_causal_effect"] is not True:
+        raise ValueError(f"failure trace boundary is invalid: {failure}")
+
+    trace_path = VALIDATION_DIR / "ooda_20drone_latency_detail.csv"
+    with trace_path.open(encoding="utf-8-sig", newline="") as handle:
+        trace_rows = list(csv.DictReader(handle))
+    if len(trace_rows) != 20 or not all("非实装遥测" in row["evidence_scope"] for row in trace_rows):
+        raise ValueError("20-target synthetic trace is missing or mislabeled")
+    return {
+        "airport_target_crs": sorted(expected_crs),
+        "semantic_hotplug": {
+            "new_equipment_visible": True,
+            "semantic_statements_added": 16,
+            "shacl_conforms": True,
+            "elapsed_ms_current_host": hotplug["elapsed_ms_current_host"],
+        },
+        "authorization_path": ["L1", "L3", "L3"],
+        "ingress_gate": {"accepted_fixture": "ACCEPT", "forged_fixture": "QUARANTINE"},
+        "wta_constraints": wta["constraint_checks"],
+        "failure_trace_not_identified_causal_effect": True,
+        "synthetic_trace_rows": len(trace_rows),
         "status": "passed",
     }
 
@@ -511,6 +608,7 @@ def main() -> None:
 
     trajectory_rendering = validate_trajectory_and_rendering()
     action_feedback = validate_action_feedback()
+    resilience_features = validate_resilience_features()
     payload = {
         "schema_version": 1,
         "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
@@ -521,11 +619,13 @@ def main() -> None:
         "trajectory_rendering": trajectory_rendering,
         "ontology_assets": validate_ontology_assets(),
         "action_feedback": action_feedback,
+        "resilience_features": resilience_features,
         "metric_snapshot": validate_metric_snapshot(),
         "status": "passed"
         if all(item["status"] == "passed" for item in results)
         and trajectory_rendering["status"] == "passed"
         and action_feedback["status"] == "passed"
+        and resilience_features["status"] == "passed"
         else "failed",
     }
     VALIDATION_DIR.mkdir(parents=True, exist_ok=True)

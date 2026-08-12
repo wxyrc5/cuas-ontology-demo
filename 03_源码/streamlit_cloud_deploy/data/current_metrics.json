@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-08-12T08:52:08.329061+00:00",
+  "generated_at_utc": "2026-08-12T12:35:29.190647+00:00",
   "scope": "current_reproducible_formal_and_synthetic_results_not_field_test",
   "not_field_test": true,
   "bayesian": {
@@ -1862,9 +1862,9 @@
     "core_lt_declared": 10,
     "extension_ot_declared": 3,
     "extension_lt_declared": 6,
-    "tbox_triples": 378,
-    "valid_abox_triples": 242,
-    "combined_triples": 620,
+    "tbox_triples": 393,
+    "valid_abox_triples": 260,
+    "combined_triples": 653,
     "shacl_negative_violation_count": 2,
     "checks": {
       "rdf_turtle_parse_pass": true,

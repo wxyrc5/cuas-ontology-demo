@@ -1,0 +1,64 @@
+# =============================================================================
+# Dockerfile.fuseki - Apache Jena Fuseki for C-UAS Ontology
+# =============================================================================
+# 用途: 一键部署 cuas-ontology.ttl 到 Apache Jena Fuseki 5.x
+# 基础镜像: stain/jena-fuseki:5.1.0
+#   - 由 Apache Jena PMC 成员 Stian Soiland-Reyes 维护
+#   - 仓库: https://github.com/stain/jena-docker/tree/master/jena-fuseki
+#   - 直接从官方 Apache 下载 apache-jena-fuseki-5.1.0.tar.gz 并校验 SHA512
+#   - 镜像本身不修改任何 Apache 官方内容，是事实上的官方镜像
+#   - 注: apache/jena-fuseki 在 Docker Hub 上未发布，由用户验证后选择 stain/jena-fuseki
+# =============================================================================
+
+# ---------- 基础镜像 ----------
+FROM stain/jena-fuseki:5.1.0
+
+# 镜像元数据
+LABEL maintainer="C-UAS Ontology Project" \
+      version="1.0" \
+      description="Apache Jena Fuseki with C-UAS Ontology preloaded" \
+      org.opencontainers.image.source="https://github.com/stain/jena-docker" \
+      org.opencontainers.image.licenses="Apache-2.0"
+
+# ---------- 切换到 root 以复制文件 ----------
+USER root
+
+# 复制 cuas-ontology.ttl 到镜像中（用于首次启动时自动加载）
+COPY ["03_源码/本体模型/cuas-ontology.ttl", "/opt/cuas-ontology.ttl"]
+
+# 复制自定义 shiro.ini（认证配置）覆盖 stain 默认 shiro.ini
+COPY ["06_部署脚本/shiro.ini", "/jena-fuseki/shiro.ini"]
+
+# 复制自定义 entrypoint 脚本（用于在 Fuseki 启动后自动加载 ontology）
+COPY ["06_部署脚本/init-fuseki.sh", "/usr/local/bin/init-fuseki.sh"]
+RUN chmod 755 /usr/local/bin/init-fuseki.sh
+
+# 修正文件权限（stain 镜像默认以 fuseki 用户运行）
+RUN chown -R fuseki:fuseki /opt/cuas-ontology.ttl ${FUSEKI_HOME}/shiro.ini
+
+# 切换回 fuseki 用户
+USER fuseki
+
+# ---------- 环境变量 ----------
+# Fuseki 安装目录（与基础镜像一致）
+ENV FUSEKI_HOME=/jena-fuseki
+# Fuseki 数据/配置目录（持久化卷挂载点）
+ENV FUSEKI_BASE=/fuseki
+# TDB 存储类型: 留空=tdb1, 设置 TDB=2=tdb2 (Apache Jena 推荐)
+ENV TDB=2
+# 自动创建 /cuas dataset（FUSEKI_DATASET_<key>=<dataset_name>）
+#   entrypoint 会从所有 FUSEKI_DATASET_* 环境变量中创建 dataset
+ENV FUSEKI_DATASET_cuas=cuas
+
+# 暴露 Fuseki 默认端口
+EXPOSE 3030
+
+# ---------- 健康检查 ----------
+# 使用 Fuseki 内置的 $/ping 端点
+HEALTHCHECK --interval=15s --timeout=10s --start-period=30s --retries=5 \
+    CMD ["curl", "-sf", "http://localhost:3030/$/ping"]
+
+# ---------- 启动命令 ----------
+# 使用自定义 entrypoint：先启动 Fuseki，再加载 ontology，最后保持前台运行
+ENTRYPOINT ["/usr/local/bin/init-fuseki.sh"]
+CMD ["/jena-fuseki/fuseki-server"]

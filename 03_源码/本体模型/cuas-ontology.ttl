@@ -337,6 +337,24 @@ cuas:coordinateReferenceSystem a owl:DatatypeProperty ;
     rdfs:domain cuas:SpatiotemporalContext ;
     rdfs:range xsd:anyURI .
 
+cuas:requiresTransformation a owl:DatatypeProperty ;
+    rdfs:domain cuas:SpatiotemporalContext ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "融合前需要坐标转换"@zh ;
+    rdfs:comment "源 CRS 与任务区域目标 CRS 不一致时为 true；运行态转换失败必须阻断融合。"@zh .
+
+cuas:targetCoordinateReferenceSystem a owl:DatatypeProperty ;
+    rdfs:domain cuas:SpatiotemporalContext ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "任务区域目标坐标参考系"@zh ;
+    rdfs:comment "不得全局写死单一 UTM 分区；由任务区域和坐标的适用范围确定。"@zh .
+
+cuas:transformationStatus a owl:DatatypeProperty ;
+    rdfs:domain cuas:SpatiotemporalContext ;
+    rdfs:range xsd:string ;
+    rdfs:label "坐标转换状态"@zh ;
+    rdfs:comment "运行态枚举：IDENTITY / TRANSFORMED / REJECTED。"@zh .
+
 cuas:positionWKT a owl:DatatypeProperty ;
     rdfs:domain cuas:SpatiotemporalContext ;
     rdfs:range xsd:string ;

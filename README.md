@@ -1,5 +1,7 @@
 # 智信—2026 · 选题 7「新概念反无」参赛工作区
 
+> 本仓库是匿名公开技术基线；报名材料、身份信息、Word/PDF/PPT、视频和提交压缩包不在公开范围。完整边界见 `PUBLIC_REPOSITORY.md`。
+
 ## 当前结论
 
 本目录是唯一参赛主线：**整体逻辑沿用“智信2026_新概念反无_完整项目包”，二维/三维机场态势采用 `C-UAS-Final-Package` 的改进思路并已融合回本目录**。旧 GitHub 仓库只保留早期代码快照，不作为当前事实源。
@@ -18,7 +20,9 @@
 | 机场代码 | 北京大兴 PKX/ZBAD；无旧 PEK 标识 | 同上 |
 | 离线地图、轨迹与防御包络 | PKX、BRU、MUC 均随包提供；每机场 3 层非圆二维/三维包络；20 机×60 帧最大逐帧位移 0.298532 km、最大向外跳变 0，二维/三维状态一致 | `streamlit_acceptance.json` |
 | 指标裁决 | 21 项通过、0 项未通过、2 项仅报告 | `05_Notebook与数据/验证输出/指标裁决.md` |
-| 本体 Action 写回 | 压力夹具触发 8 条规则：5 条自动写回、3 条人工授权；独立 RDF 图 129 triples，正式本体不变；Action Schema 正负向校验通过 | `action_feedback_demo.json` 与 `action_feedback_writeback.ttl` |
+| 本体 Action 写回 | 压力夹具触发 8 条规则：5 条自动写回、3 条人工授权；含 L1/L2/L3、风险和一句话归因；独立 RDF 图 153 triples，正式本体不变 | `action_feedback_demo.json` 与 `action_feedback_writeback.ttl` |
+| 韧性与可见价值 | 16 条声明热插拔可见且 SHACL 通过；三机场 CRS 归一化；异常入口隔离；20 目标 WTA 三类约束通过；失败链可逆向追溯 | `streamlit_acceptance.json` 的 `resilience_features` |
+| 20 目标详细流水账 | 20 行、固定种子、从观测到反馈的参数化毫秒事件，逐行标记非实装遥测 | `ooda_20drone_latency_detail.csv` |
 | 技术主线总验收 | 14/14 项通过；包含真实本地启动、轨迹连续性、Action、Notebook 源哈希、指标引用、网页快照、形式模型与部署镜像 | `05_Notebook与数据/验证输出/technical_acceptance_summary.md` |
 | 当前技术快照 | 一键验收后自动生成源文件树 SHA-256、权威/派生/冻结文件清单 | `07_文档/当前技术版本清单.md` |
 
@@ -44,7 +48,7 @@
 要求：Windows PowerShell。所有 Python 操作使用工作区根目录下的隔离环境 `.venv-cuas`。
 
 ```powershell
-cd D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包
+Set-Location 'D:\path\to\cuas-ontology-demo'
 .\06_部署脚本\安装本地环境.ps1
 .\06_部署脚本\启动本地项目.ps1
 ```
@@ -66,6 +70,20 @@ cd D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包
 ```powershell
 .\06_部署脚本\执行技术验收.ps1
 ```
+
+验收完成后自证当前快照哈希：
+
+```powershell
+.\05_Notebook与数据\verify_hash.ps1
+```
+
+Linux/macOS 或 Git Bash 可运行 `05_Notebook与数据/verify_hash.sh`。Docker 备用演示入口：
+
+```powershell
+docker compose -f .\06_部署脚本\docker-compose.yml up --build
+```
+
+Streamlit 默认暴露在 8501，Fuseki 暴露在 3030；若 8501 已占用，可先设置 `$env:STREAMLIT_PORT=18501`。当前 Streamlit 镜像已在隔离端口验证为 healthy 且根页/健康端点 HTTP 200；Fuseki 当前不是运行态主链，也不代表已接入实时总线或装备。
 
 如只需单独执行应用级回归验收：
 

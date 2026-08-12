@@ -6,6 +6,7 @@ $pythonPath = Join-Path $workspaceRoot '.venv-cuas\python.exe'
 $notebookRunner = Join-Path $PSScriptRoot 'run_notebooks.py'
 $appVerifier = Join-Path $PSScriptRoot 'verify_streamlit_app.py'
 $metricExporter = Join-Path $PSScriptRoot 'export_current_metrics.py'
+$traceExporter = Join-Path $PSScriptRoot 'export_20_uav_trace.py'
 $finalAuditor = Join-Path $PSScriptRoot 'validate_final_state.py'
 $deploySync = Join-Path $PSScriptRoot 'sync_streamlit_deploy.ps1'
 $liveSmoke = Join-Path $PSScriptRoot 'smoke_test_streamlit.ps1'
@@ -15,7 +16,7 @@ if (-not (Test-Path -LiteralPath $pythonPath -PathType Leaf)) {
     throw "Local Python environment not found: $pythonPath"
 }
 
-$requiredScripts = @($notebookRunner, $appVerifier, $metricExporter, $finalAuditor, $deploySync, $liveSmoke, $releaseManifest)
+$requiredScripts = @($notebookRunner, $appVerifier, $metricExporter, $traceExporter, $finalAuditor, $deploySync, $liveSmoke, $releaseManifest)
 $missingScripts = $requiredScripts | Where-Object { -not (Test-Path -LiteralPath $_ -PathType Leaf) }
 if ($missingScripts) {
     throw "Required acceptance scripts are missing: $($missingScripts -join ', ')"
@@ -37,18 +38,19 @@ function Invoke-CheckedPython {
 
 Push-Location $packageRoot
 try {
-    Invoke-CheckedPython -ScriptPath $notebookRunner -StepName '1/10 Execute all four notebooks'
-    Invoke-CheckedPython -ScriptPath $metricExporter -StepName '2/10 Export preliminary metric snapshot'
-    Invoke-CheckedPython -ScriptPath $appVerifier -StepName '3/10 Verify Streamlit pages and assets'
-    Invoke-CheckedPython -ScriptPath $metricExporter -StepName '4/10 Export verified metric snapshot'
-    Invoke-CheckedPython -ScriptPath $appVerifier -StepName '5/10 Re-verify pages against current metrics'
-    Invoke-CheckedPython -ScriptPath $metricExporter -StepName '6/10 Lock the re-verified acceptance summary'
-    Write-Host "`n[7/10 Synchronize deployable Streamlit mirror]" -ForegroundColor Cyan
+    Invoke-CheckedPython -ScriptPath $notebookRunner -StepName '1/11 Execute all four notebooks'
+    Invoke-CheckedPython -ScriptPath $traceExporter -StepName '2/11 Export 20-target synthetic event ledger'
+    Invoke-CheckedPython -ScriptPath $metricExporter -StepName '3/11 Export preliminary metric snapshot'
+    Invoke-CheckedPython -ScriptPath $appVerifier -StepName '4/11 Verify Streamlit pages and assets'
+    Invoke-CheckedPython -ScriptPath $metricExporter -StepName '5/11 Export verified metric snapshot'
+    Invoke-CheckedPython -ScriptPath $appVerifier -StepName '6/11 Re-verify pages against current metrics'
+    Invoke-CheckedPython -ScriptPath $metricExporter -StepName '7/11 Lock the re-verified acceptance summary'
+    Write-Host "`n[8/11 Synchronize deployable Streamlit mirror]" -ForegroundColor Cyan
     & $deploySync
-    Write-Host "`n[8/10 Launch isolated live Streamlit smoke test]" -ForegroundColor Cyan
+    Write-Host "`n[9/11 Launch isolated live Streamlit smoke test]" -ForegroundColor Cyan
     & $liveSmoke
-    Invoke-CheckedPython -ScriptPath $finalAuditor -StepName '9/10 Cross-file hash and metric audit'
-    Invoke-CheckedPython -ScriptPath $releaseManifest -StepName '10/10 Generate authoritative release manifest'
+    Invoke-CheckedPython -ScriptPath $finalAuditor -StepName '10/11 Cross-file hash and metric audit'
+    Invoke-CheckedPython -ScriptPath $releaseManifest -StepName '11/11 Generate authoritative release manifest'
 } finally {
     Pop-Location
 }

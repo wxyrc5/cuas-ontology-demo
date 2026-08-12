@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-08-12T20:10:47+08:00",
+  "status": "passed",
+  "docker_server": "29.6.2",
+  "compose_config": "passed",
+  "image": "cuas/streamlit:zx2026",
+  "image_digest": "sha256:58d5c3c312909133a224f495de9b340ce0597f286e161966f42fd408ac0eba71",
+  "image_size_bytes": 303804677,
+  "verification_host_port": 18501,
+  "container_health": "healthy",
+  "root_http_status": 200,
+  "health_http_status": 200,
+  "health_body": "ok",
+  "cleanup": "test container and isolated compose network removed",
+  "port_note": "Default host port remains 8501; set STREAMLIT_PORT when occupied.",
+  "scope": "This record covers Streamlit only; Fuseki compatibility-service evidence is stored separately and Fuseki is not connected to the runtime decision path."
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "decision_id": "ACT-843B114DD264",
+  "decision_id": "ACT-CE7C636D7E17",
   "generated_at_utc": "2026-08-10T00:00:00+00:00",
   "scope": "local_ontology_action_feedback_prototype",
   "not_field_test": true,
@@ -147,6 +147,9 @@
       "action_code": "ADJUST_SENSOR_SCAN_MODE",
       "description": "提高雷达刷新并保持备用传感与数据融合能力分配。",
       "execution_status": "AUTO_APPLIED",
+      "authorization_level": "L1",
+      "risk_class": "LOW",
+      "decision_rationale": "可逆传感参数调整，不产生外部效应。",
       "target_capabilities": [
         "Cap_Radar_GaN_AESA",
         "Cap_Data_Integration"
@@ -167,13 +170,16 @@
         "metric_or_context:R01_DETECTION_COVERAGE_LOW",
         "runtime-trigger-queries.sparql"
       ],
-      "action_id": "ACT-843B114DD264-R01_DETECTION_COVERAGE_LOW"
+      "action_id": "ACT-CE7C636D7E17-R01_DETECTION_COVERAGE_LOW"
     },
     {
       "rule_id": "R02_IDENTIFICATION_ACCURACY_LOW",
       "action_code": "SWITCH_FUSION_MODEL",
       "description": "切换到高置信多传感融合并请求高分辨率复核。",
       "execution_status": "AUTO_APPLIED",
+      "authorization_level": "L1",
+      "risk_class": "LOW",
+      "decision_rationale": "可逆融合模型切换，不产生外部效应。",
       "target_capabilities": [
         "Cap_Fusion_MultiSensor",
         "Cap_Data_Integration"
@@ -194,13 +200,16 @@
         "metric_or_context:R02_IDENTIFICATION_ACCURACY_LOW",
         "runtime-trigger-queries.sparql"
       ],
-      "action_id": "ACT-843B114DD264-R02_IDENTIFICATION_ACCURACY_LOW"
+      "action_id": "ACT-CE7C636D7E17-R02_IDENTIFICATION_ACCURACY_LOW"
     },
     {
       "rule_id": "R03_THREAT_LEVEL_RISING",
       "action_code": "RAISE_MISSION_PRIORITY",
       "description": "将使命优先级提升到当前威胁等级。",
       "execution_status": "AUTO_APPLIED",
+      "authorization_level": "L1",
+      "risk_class": "LOW",
+      "decision_rationale": "仅调整内部任务排序，不越过效应授权边界。",
       "target_capabilities": [
         "Cap_C2_Semantic"
       ],
@@ -223,13 +232,16 @@
         "metric_or_context:R03_THREAT_LEVEL_RISING",
         "runtime-trigger-queries.sparql"
       ],
-      "action_id": "ACT-843B114DD264-R03_THREAT_LEVEL_RISING"
+      "action_id": "ACT-CE7C636D7E17-R03_THREAT_LEVEL_RISING"
     },
     {
       "rule_id": "R04_THREAT_RESOURCE_REALLOCATION",
       "action_code": "AUTHORIZE_RESOURCE_REALLOCATION",
       "description": "请求从低优先级任务调入一个同构资源包；等待人工授权。",
       "execution_status": "PENDING_HUMAN_AUTHORIZATION",
+      "authorization_level": "L2",
+      "risk_class": "MEDIUM",
+      "decision_rationale": "匹配既有预案的资源重分配仍需操作员明确批准。",
       "target_capabilities": [
         "Cap_C2_Semantic",
         "Cap_HPM_Group"
@@ -250,13 +262,16 @@
         "metric_or_context:R04_THREAT_RESOURCE_REALLOCATION",
         "runtime-trigger-queries.sparql"
       ],
-      "action_id": "ACT-843B114DD264-R04_THREAT_RESOURCE_REALLOCATION"
+      "action_id": "ACT-CE7C636D7E17-R04_THREAT_RESOURCE_REALLOCATION"
     },
     {
       "rule_id": "R05_EQUIPMENT_FAILURE",
       "action_code": "QUARANTINE_AND_RERUN_WTA",
       "description": "将故障装备移出能力池并重新计算武器目标分配。",
       "execution_status": "AUTO_APPLIED",
+      "authorization_level": "L1",
+      "risk_class": "LOW",
+      "decision_rationale": "隔离故障装备并重算候选分配，不自动实施效应。",
       "target_capabilities": [],
       "target_equipment": [
         "Eq_EW_HPM_001"
@@ -278,13 +293,16 @@
         "metric_or_context:R05_EQUIPMENT_FAILURE",
         "runtime-trigger-queries.sparql"
       ],
-      "action_id": "ACT-843B114DD264-R05_EQUIPMENT_FAILURE"
+      "action_id": "ACT-CE7C636D7E17-R05_EQUIPMENT_FAILURE"
     },
     {
       "rule_id": "R06_OODA_DEADLINE_BREACH",
       "action_code": "AUTHORIZE_BATCH_DECISION_MODE",
       "description": "请求批量授权与指控通道重编组；等待人工授权。",
       "execution_status": "PENDING_HUMAN_AUTHORIZATION",
+      "authorization_level": "L2",
+      "risk_class": "MEDIUM",
+      "decision_rationale": "批次决策压缩认知负荷，但不取消操作员批准。",
       "target_capabilities": [
         "Cap_C2_Semantic",
         "Cap_Data_Integration"
@@ -305,13 +323,16 @@
         "metric_or_context:R06_OODA_DEADLINE_BREACH",
         "runtime-trigger-queries.sparql"
       ],
-      "action_id": "ACT-843B114DD264-R06_OODA_DEADLINE_BREACH"
+      "action_id": "ACT-CE7C636D7E17-R06_OODA_DEADLINE_BREACH"
     },
     {
       "rule_id": "R07_INTERCEPTION_SUCCESS_LOW",
       "action_code": "AUTHORIZE_EFFECTOR_REINFORCEMENT",
       "description": "请求软硬杀伤资源重分配与补充交战；等待人工授权。",
       "execution_status": "PENDING_HUMAN_AUTHORIZATION",
+      "authorization_level": "L3",
+      "risk_class": "HIGH",
+      "decision_rationale": "涉及效应器增援，默认拒绝并等待指挥员明确批准。",
       "target_capabilities": [
         "Cap_EW_Directional",
         "Cap_HPM_Group"
@@ -332,13 +353,16 @@
         "metric_or_context:R07_INTERCEPTION_SUCCESS_LOW",
         "runtime-trigger-queries.sparql"
       ],
-      "action_id": "ACT-843B114DD264-R07_INTERCEPTION_SUCCESS_LOW"
+      "action_id": "ACT-CE7C636D7E17-R07_INTERCEPTION_SUCCESS_LOW"
     },
     {
       "rule_id": "R08_FALSE_ALARM_HIGH",
       "action_code": "RAISE_FUSION_CONFIRMATION",
       "description": "将告警确认切换为双源一致性门限。",
       "execution_status": "AUTO_APPLIED",
+      "authorization_level": "L1",
+      "risk_class": "LOW",
+      "decision_rationale": "提高多源确认门限，属于保守且可逆的运行态动作。",
       "target_capabilities": [
         "Cap_Fusion_MultiSensor",
         "Cap_Data_Integration"
@@ -359,7 +383,7 @@
         "metric_or_context:R08_FALSE_ALARM_HIGH",
         "runtime-trigger-queries.sparql"
       ],
-      "action_id": "ACT-843B114DD264-R08_FALSE_ALARM_HIGH"
+      "action_id": "ACT-CE7C636D7E17-R08_FALSE_ALARM_HIGH"
     }
   ],
   "summary": {

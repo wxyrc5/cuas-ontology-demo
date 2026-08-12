@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T16:52:39+08:00",
-  "app_dir": "D:\\Downloads\\反无人机体系\\智信2026_新概念反无_完整项目包\\03_源码\\streamlit_app",
+  "generated_at": "2026-08-12T20:36:14+08:00",
+  "app_dir": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\03_源码\\streamlit_app",
   "pages": [
     {
       "file": "app.py",
@@ -64,12 +64,12 @@
       "syntax": "passed",
       "exceptions": [],
       "titles": 1,
-      "headers": 4,
+      "headers": 5,
       "subheaders": 2,
-      "metrics": 12,
+      "metrics": 21,
       "buttons": 0,
-      "sliders": 8,
-      "selectboxes": 2,
+      "sliders": 12,
+      "selectboxes": 3,
       "plotly_charts": 1,
       "status": "passed"
     },
@@ -169,7 +169,7 @@
     "extension_link_types": 6,
     "positive_abox_instances": 26,
     "positive_abox_edges": 45,
-    "canonical_graph_triples": 620,
+    "canonical_graph_triples": 653,
     "sparql_template_rows": {
       "anti_swarm": 8,
       "asset_protection": 1,
@@ -179,17 +179,52 @@
     }
   },
   "action_feedback": {
-    "decision_id": "ACT-843B114DD264",
+    "decision_id": "ACT-CE7C636D7E17",
     "triggered_rules": 8,
     "auto_applied": 5,
     "pending_human_authorization": 3,
-    "rdf_triples": 129,
+    "rdf_triples": 153,
     "deterministic": true,
     "caller_state_immutable": true,
     "canonical_model_unchanged": true,
     "action_contract_positive": true,
     "action_contract_negative_rejected": true,
+    "authorization_levels": [
+      "L1",
+      "L2",
+      "L3"
+    ],
     "not_palantir_foundry_deployment": true,
+    "status": "passed"
+  },
+  "resilience_features": {
+    "airport_target_crs": [
+      "EPSG:32631",
+      "EPSG:32632",
+      "EPSG:32650"
+    ],
+    "semantic_hotplug": {
+      "new_equipment_visible": true,
+      "semantic_statements_added": 16,
+      "shacl_conforms": true,
+      "elapsed_ms_current_host": 330.92399999441113
+    },
+    "authorization_path": [
+      "L1",
+      "L3",
+      "L3"
+    ],
+    "ingress_gate": {
+      "accepted_fixture": "ACCEPT",
+      "forged_fixture": "QUARANTINE"
+    },
+    "wta_constraints": {
+      "capacity": true,
+      "single_assignment": true,
+      "forbidden_pairs": true
+    },
+    "failure_trace_not_identified_causal_effect": true,
+    "synthetic_trace_rows": 20,
     "status": "passed"
   },
   "metric_snapshot": {

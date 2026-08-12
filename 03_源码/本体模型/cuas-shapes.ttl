@@ -551,6 +551,25 @@ cuas:SpatiotemporalContextShape a sh:NodeShape ;
         sh:maxCount 1 ;
     ] ;
     sh:property [
+        sh:path cuas:requiresTransformation ;
+        sh:datatype xsd:boolean ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path cuas:targetCoordinateReferenceSystem ;
+        sh:datatype xsd:anyURI ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path cuas:transformationStatus ;
+        sh:datatype xsd:string ;
+        sh:in ( "IDENTITY" "TRANSFORMED" "REJECTED" ) ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
         sh:path cuas:positionWKT ;
         sh:datatype xsd:string ;
         sh:pattern "^POINT \\(\\-?[0-9]+(\\.[0-9]+)? \\-?[0-9]+(\\.[0-9]+)?\\)$" ;

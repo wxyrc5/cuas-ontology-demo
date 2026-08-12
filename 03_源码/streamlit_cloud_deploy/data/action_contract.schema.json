@@ -20,6 +20,7 @@
       "additionalProperties": false,
       "required": [
         "action_id", "rule_id", "action_code", "description", "execution_status",
+        "authorization_level", "risk_class", "decision_rationale",
         "target_mission", "target_capabilities", "target_equipment", "preconditions",
         "side_effects", "validation_function", "expected_revision", "evidence_refs"
       ],
@@ -36,6 +37,9 @@
         },
         "description": {"type": "string", "minLength": 4},
         "execution_status": {"enum": ["AUTO_APPLIED", "PENDING_HUMAN_AUTHORIZATION"]},
+        "authorization_level": {"enum": ["L1", "L2", "L3"]},
+        "risk_class": {"enum": ["LOW", "MEDIUM", "HIGH"]},
+        "decision_rationale": {"type": "string", "minLength": 8},
         "target_mission": {"type": "string", "minLength": 1},
         "target_capabilities": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
         "target_equipment": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},

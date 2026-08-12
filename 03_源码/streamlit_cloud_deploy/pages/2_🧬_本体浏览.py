@@ -1,4 +1,6 @@
 """Page 2 – Ontology Browser / 本体浏览."""
+from pathlib import Path
+
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -18,6 +20,22 @@ from utils.ontology_action_engine import (
     load_baseline_operational_state,
 )
 from utils.action_contract import validate_action_bundle
+from utils.authorization_policy import decide_authorization
+from utils.resilience_demo import evaluate_failure_trace, evaluate_semantic_hotplug
+from utils.wta_optimizer import demonstration_wta
+
+
+APP_DIR = Path(__file__).resolve().parents[1]
+MODEL_DIR = APP_DIR.parent / "本体模型"
+
+
+@st.cache_data(show_spinner=False)
+def _hotplug_evidence() -> dict:
+    return evaluate_semantic_hotplug(
+        str(MODEL_DIR / "cuas-ontology.ttl"),
+        str(MODEL_DIR / "cuas-data-valid.ttl"),
+        str(MODEL_DIR / "cuas-shapes.ttl"),
+    )
 
 
 def show() -> None:
@@ -249,6 +267,103 @@ def show() -> None:
     st.markdown("---")
 
     # ------------------------------------------------------------------
+    # Visible semantic value: hot-plug, authorization, failure trace, WTA
+    # ------------------------------------------------------------------
+    st.header("⚡ 本体价值实证：热插拔、授权与复盘")
+    hotplug = _hotplug_evidence()
+    rigid_col, semantic_col = st.columns(2)
+    with rigid_col:
+        st.markdown("#### 刚性集成基线（待项目实测）")
+        st.warning(
+            "需要逐项核对接口枚举、表/消息 Schema、查询、调度白名单与服务回归；"
+            "当前没有证据支持“固定 200 行、2 周、必须重启”等数字，因此不展示虚构耗时。"
+        )
+    with semantic_col:
+        st.markdown("#### 当前语义夹具（本机实测）")
+        hp1, hp2, hp3 = st.columns(3)
+        hp1.metric("新增语义声明", hotplug["semantic_statements_added"])
+        hp2.metric("可执行代码改动", hotplug["executable_code_files_changed"])
+        hp3.metric("当前主机耗时", f"{hotplug['elapsed_ms_current_host']:.0f} ms")
+        if hotplug["new_equipment_visible"] and hotplug["shacl_conforms"]:
+            st.success("同一条能力查询已发现 Eq_DE_Hotplug_002；SHACL 通过，无需修改查询或重启进程。")
+        else:
+            st.error("热插拔实证未通过，请勿用于演示。")
+    st.caption(hotplug["boundary"])
+
+    auth_left, auth_right = st.columns([1, 1])
+    with auth_left:
+        st.markdown("#### 人机共驾授权矩阵")
+        posterior = st.slider("后验置信度", 0.50, 1.00, 0.96, 0.01, key="auth_posterior")
+        auth_effect = st.selectbox(
+            "动作/效应类型",
+            options=["SENSOR", "EW", "NET", "HPM", "HEL", "KINETIC"],
+            key="auth_effect",
+        )
+        auth_targets = st.slider("当前目标数", 1, 50, 20, 1, key="auth_targets")
+        auth_pending = st.slider("待审批 Action", 0, 10, 4, 1, key="auth_pending")
+        auth_conflict = st.checkbox("接近禁射界/空间冲突", key="auth_conflict")
+        action_code = (
+            "ADJUST_SENSOR_SCAN_MODE"
+            if auth_effect == "SENSOR"
+            else "AUTHORIZE_EFFECTOR_REINFORCEMENT"
+            if auth_effect in {"HPM", "HEL", "KINETIC"}
+            else "AUTHORIZE_BATCH_DECISION_MODE"
+        )
+        auth = decide_authorization(
+            action_code=action_code,
+            effect_type=auth_effect,
+            posterior_confidence=posterior,
+            target_count=auth_targets,
+            pending_actions=auth_pending,
+            contested_link=False,
+            geofence_conflict=auth_conflict,
+        )
+        au1, au2, au3 = st.columns(3)
+        au1.metric("授权等级", auth["authorization_level"])
+        au2.metric("认知负荷", f"{auth['workload_index']:.2f}（{auth['workload_band']}）")
+        au3.metric("响应预算", f"{auth['response_budget_s']:.1f} s")
+        st.info(auth["one_sentence_rationale"])
+        st.caption("认知负荷是决策上下文，不作为第六个 Beta-Binomial 成功通道；负荷升高不会降低授权等级。")
+
+    with auth_right:
+        st.markdown("#### 失败数字线程：可逆向查询的因果候选链")
+        failure_health = st.slider("HPM 健康度", 0.0, 1.0, 0.30, 0.05, key="failure_health")
+        failure_occluded = st.checkbox("射界被高层建筑遮挡", value=True, key="failure_occluded")
+        trace = evaluate_failure_trace(failure_health, failure_occluded)
+        st.graphviz_chart(
+            """digraph {
+              rankdir=LR; node [shape=box, style=rounded];
+              Observation_Radar_007 -> Fusion_Node_001 [label="融合"];
+              Fusion_Node_001 -> WTA_HPM_001 [label="决策"];
+              WTA_HPM_001 -> Eq_EW_HPM_001 [label="选择"];
+              WTA_HPM_001 -> Effect_HPM_Failed [label="生成"];
+              Effect_HPM_Failed -> Threat_09 [label="作用"];
+            }""",
+            width="stretch",
+        )
+        if trace["root_causes"]:
+            st.error("规则命中的根因候选：" + "；".join(
+                f"{row['equipment']} 健康度={row['health']:.2f}，遮挡={row['occluded']}"
+                for row in trace["root_causes"]
+            ))
+        else:
+            st.success("当前阈值规则未命中根因候选。")
+        st.info(trace["recommended_action"])
+        st.caption("这是 SPARQL 逆向溯源与显式阈值规则，不冒充已经识别的 SCM 因果效应。")
+
+    with st.expander("WTA 0-1 整数规划与 20 目标约束检查", expanded=False):
+        st.latex(r"\max \sum_{i,j} P_{ij}(t)x_{ij}\quad \mathrm{s.t.}\quad \sum_j x_{ij}\le C_i,\;\sum_i x_{ij}\le 1,\;x_{ij}\in\{0,1\}")
+        wta = demonstration_wta(20)
+        wt1, wt2, wt3 = st.columns(3)
+        wt1.metric("已分配目标", len(wta["assignments"]))
+        wt2.metric("容量约束", "通过" if wta["constraint_checks"]["capacity"] else "失败")
+        wt3.metric("单目标唯一分配", "通过" if wta["constraint_checks"]["single_assignment"] else "失败")
+        st.dataframe(pd.DataFrame(wta["assignments"]), width="stretch", hide_index=True)
+        st.caption(wta["scheduling_mode"] + "；这是可复现算法夹具，不是实装 WTA 性能声明。")
+
+    st.markdown("---")
+
+    # ------------------------------------------------------------------
     # Manuscript Effect -> Action -> Mission feedback prototype
     # ------------------------------------------------------------------
     st.header("🔁 Effect → Action → Mission 写回原型")
@@ -311,7 +426,7 @@ def show() -> None:
         state=baseline_state,
     )
     validate_action_bundle(action_result)
-    st.success("Action JSON Schema：通过（含前置条件、副作用、Validation Function 与版本约束）")
+    st.success("Action JSON Schema：通过（含授权等级、风险级别、前置条件、副作用、Validation Function 与版本约束）")
     summary = action_result["summary"]
     ac1, ac2, ac3, ac4 = st.columns(4)
     ac1.metric("触发规则", summary["triggered_rules"])
@@ -325,6 +440,9 @@ def show() -> None:
                 "规则": item["rule_id"],
                 "Action": item["action_code"],
                 "状态": item["execution_status"],
+                "授权": item["authorization_level"],
+                "风险": item["risk_class"],
+                "归因": item["decision_rationale"],
                 "说明": item["description"],
             }
             for item in action_result["actions"]

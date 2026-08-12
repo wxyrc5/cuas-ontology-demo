@@ -1,5 +1,5 @@
 --- cell 1 / stream ---
-共享模型加载完成: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\03_源码\streamlit_app\utils\bayesian_flywheel.py
+共享模型加载完成: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\03_源码\streamlit_app\utils\bayesian_flywheel.py
 
 --- cell 3 / stream ---
 五通道权重和 = 1.00
@@ -14,6 +14,9 @@
 
 --- cell 5 / stream ---
 终态综合后验 = 0.9459
+
+--- cell 5 / stream ---
+
 终态综合 95% CI = [0.9302, 0.9594]
 首次越过 0.90: n=44
 连续 10 次越过 0.90: n=44
@@ -91,4 +94,4 @@
   "ontology_prior_reconfiguration_recovers_score": true,
   "ontology_paths_derived_from_graph": true
 }
-机器可读指标: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\05_Notebook与数据\验证输出\metrics_notebook_03.json
+机器可读指标: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\metrics_notebook_03.json

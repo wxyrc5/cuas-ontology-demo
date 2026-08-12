@@ -1,5 +1,5 @@
 --- cell 1 / stream ---
-项目根目录: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包
+项目根目录: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated
 
 --- cell 3 / execute_result ---
             来源                                                 范围 现场实测  \
@@ -8,7 +8,7 @@
 2  notebook_03      synthetic_five_channel_beta_binomial_flywheel    否   
 
              SHA256  
-0  9a578f80c5c0fff5  
+0  17f904d3591af723  
 1  7db0180bc02e330e  
 2  9d654037385d2a2d
 
@@ -85,15 +85,15 @@
 11  E_Swarm_100  100     0.000000   0.000000         17.688333
 
 --- cell 10 / stream ---
-指标裁决 JSON: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\05_Notebook与数据\验证输出\指标裁决.json
-指标裁决说明: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\05_Notebook与数据\验证输出\指标裁决.md
+指标裁决 JSON: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\指标裁决.json
+指标裁决说明: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\指标裁决.md
 裁决汇总: {'pass': 21, 'fail': 0, 'report_only': 2}
 
 --- cell 12 / stream ---
-Action 决策: ACT-843B114DD264
-RDF 三元组: 129
-JSON: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\05_Notebook与数据\验证输出\action_feedback_demo.json
-TTL: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\05_Notebook与数据\验证输出\action_feedback_writeback.ttl
+Action 决策: ACT-CE7C636D7E17
+RDF 三元组: 153
+JSON: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\action_feedback_demo.json
+TTL: D:\Downloads\反无人机体系\cuas-ontology-demo-consolidated\05_Notebook与数据\验证输出\action_feedback_writeback.ttl
 
 --- cell 12 / execute_result ---
                             rule_id                       action_code  \

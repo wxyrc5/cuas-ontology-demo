@@ -34,6 +34,9 @@ cuas:Signal_RF_RemoteControl_20 a cuas:Signal ;
 
 cuas:STC_Threat_Swarm_20 a cuas:SpatiotemporalContext ;
     cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:requiresTransformation true ;
+    cuas:targetCoordinateReferenceSystem "http://www.opengis.net/def/crs/EPSG/0/32651"^^xsd:anyURI ;
+    cuas:transformationStatus "TRANSFORMED" ;
     cuas:positionWKT "POINT (120.205 30.205)" ;
     cuas:positionAccuracyM "35.0"^^xsd:double ;
     cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime ;
@@ -177,30 +180,45 @@ cuas:Eq_RFEO_Backup_002 a cuas:Equipment ;
 
 cuas:STC_RadarUnit_007 a cuas:SpatiotemporalContext ;
     cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:requiresTransformation true ;
+    cuas:targetCoordinateReferenceSystem "http://www.opengis.net/def/crs/EPSG/0/32651"^^xsd:anyURI ;
+    cuas:transformationStatus "TRANSFORMED" ;
     cuas:positionWKT "POINT (120.155 30.245)" ;
     cuas:positionAccuracyM "8.0"^^xsd:double ;
     cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime .
 
 cuas:STC_FusionNode_001 a cuas:SpatiotemporalContext ;
     cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:requiresTransformation true ;
+    cuas:targetCoordinateReferenceSystem "http://www.opengis.net/def/crs/EPSG/0/32651"^^xsd:anyURI ;
+    cuas:transformationStatus "TRANSFORMED" ;
     cuas:positionWKT "POINT (120.156 30.245)" ;
     cuas:positionAccuracyM "5.0"^^xsd:double ;
     cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime .
 
 cuas:STC_CommandPost_001 a cuas:SpatiotemporalContext ;
     cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:requiresTransformation true ;
+    cuas:targetCoordinateReferenceSystem "http://www.opengis.net/def/crs/EPSG/0/32651"^^xsd:anyURI ;
+    cuas:transformationStatus "TRANSFORMED" ;
     cuas:positionWKT "POINT (120.154 30.244)" ;
     cuas:positionAccuracyM "5.0"^^xsd:double ;
     cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime .
 
 cuas:STC_EW_HPM_001 a cuas:SpatiotemporalContext ;
     cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:requiresTransformation true ;
+    cuas:targetCoordinateReferenceSystem "http://www.opengis.net/def/crs/EPSG/0/32651"^^xsd:anyURI ;
+    cuas:transformationStatus "TRANSFORMED" ;
     cuas:positionWKT "POINT (120.157 30.246)" ;
     cuas:positionAccuracyM "10.0"^^xsd:double ;
     cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime .
 
 cuas:STC_RFEO_Backup_002 a cuas:SpatiotemporalContext ;
     cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:requiresTransformation true ;
+    cuas:targetCoordinateReferenceSystem "http://www.opengis.net/def/crs/EPSG/0/32651"^^xsd:anyURI ;
+    cuas:transformationStatus "TRANSFORMED" ;
     cuas:positionWKT "POINT (120.153 30.247)" ;
     cuas:positionAccuracyM "15.0"^^xsd:double ;
     cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime .

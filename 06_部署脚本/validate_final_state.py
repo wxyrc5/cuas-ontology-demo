@@ -268,7 +268,7 @@ def main() -> int:
         acceptance.get("status") == "passed"
         and len(pages) == 8
         and all(item.get("status") == "passed" and not item.get("exceptions") for item in pages)
-        and acceptance.get("ontology_assets", {}).get("canonical_graph_triples") == 620
+        and acceptance.get("ontology_assets", {}).get("canonical_graph_triples") == 653
         and all(
             count > 0
             for count in acceptance.get("ontology_assets", {}).get("sparql_template_rows", {}).values()

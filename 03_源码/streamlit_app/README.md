@@ -22,7 +22,7 @@
 |---|---|---|
 | `app.py` | 入口、可信指标与已知缺口 | 读取 `data/current_metrics.json` |
 | 主页 | 项目逻辑、验证状态与演示说明 | 不提供未核验团队或在线地址 |
-| 本体浏览 | 8 OT、10 LT、24 个随包样例实例、42 条样例边与 Effect→Action→Mission 写回原型 | Action 只写会话状态与独立 RDF 预览；不是 Foundry/真实装备接入 |
+| 本体浏览 | 8/10 核心 + 3/6 扩展、26 个随包核心实例、45 条样例边，以及热插拔、L1/L2/L3、失败复盘、WTA 与 Action 写回 | Action 只写会话状态与独立 RDF 预览；不是 Foundry/真实装备接入 |
 | SPARQL 查询 | 对随包 RDF 图执行模板或自定义查询 | RDFLib 内存图 |
 | 概率时序融合 | 参数化机制沙盒和即时 ROC | 合成互动结果；不覆盖 Notebook 03 基准 |
 | 机场反无 | PKX、BRU、MUC 的二维/三维同源态势 | 参数化演示；非现场效能 |
@@ -50,4 +50,4 @@
 .\06_部署脚本\sync_streamlit_deploy.ps1
 ```
 
-截至 2026-08-10，七个入口与页面均通过语法和 Streamlit AppTest；Effect→Action→Mission 原型另经确定性决策、人工授权门、RDF 可解析性和正式本体不变性检查；PKX/ZBAD、离线地图和旧 PEK 缺失检查均通过。当前 OWL 2 DL TBox + 正向 ABox 已通过 HermiT 一致性验证，并以互斥类型负向对照验证推理器能拒绝矛盾模型；该结论只覆盖当前版本。正式陈述仍须明确：当前仅有软件原型和合成仿真，没有 Palantir Foundry 部署、机场现场测试或真实专家标注验证。
+截至 2026-08-12，八个入口与页面均通过语法和 Streamlit AppTest；Effect→Action→Mission 原型另经确定性决策、分级授权门、RDF 可解析性和正式本体不变性检查；语义热插拔、三机场 CRS、异常入口隔离、20 目标 WTA 和失败溯源夹具也通过自动验收。当前 OWL 2 DL TBox + 正向 ABox 已通过 HermiT 一致性验证，并以互斥类型负向对照验证推理器能拒绝矛盾模型；该结论只覆盖当前版本。正式陈述仍须明确：当前仅有软件原型和合成仿真，没有 Palantir Foundry 部署、机场现场测试、SCM 因果识别或真实专家标注验证。

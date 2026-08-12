@@ -18,3 +18,15 @@
 
 # Generated notebook renderings are reproducible and can be large.
 05_Notebook与数据/验证输出/最新执行/*.html
+
+# Legacy document/video checks and duplicate historical figure exports are not
+# part of the reproducible public technical baseline.
+05_Notebook与数据/验证输出/document_acceptance.json
+05_Notebook与数据/验证输出/presentation_acceptance.json
+05_Notebook与数据/验证输出/video_review_acceptance.json
+05_Notebook与数据/验证输出/figures/fig0*.png
+05_Notebook与数据/验证输出/figures/fig2_*.png
+05_Notebook与数据/验证输出/figures/fig3_*.png
+05_Notebook与数据/验证输出/figures/fig4_2_ooda_latency_scope.png
+06_部署脚本/cuas-shapes-README.md
+06_部署脚本/diagnose.sh

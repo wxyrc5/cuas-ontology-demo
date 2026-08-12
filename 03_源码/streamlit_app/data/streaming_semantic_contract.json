@@ -8,6 +8,9 @@
     "event_time_utc": "RFC3339 UTC",
     "ingest_time_utc": "RFC3339 UTC",
     "coordinate_reference_system": "URI",
+    "target_coordinate_reference_system": "URI selected for the mission area",
+    "requires_transformation": "boolean derived from source/target CRS",
+    "transformation_status": "IDENTITY | TRANSFORMED | REJECTED",
     "position_wkt": "WKT POINT string",
     "position_accuracy_m": "number >= 0",
     "velocity_enu_mps": "{east,north,up}",
@@ -19,6 +22,9 @@
     "event_id": "SpatiotemporalContext.identifier",
     "event_time_utc": "SpatiotemporalContext.observedAt",
     "coordinate_reference_system": "SpatiotemporalContext.coordinateReferenceSystem",
+    "target_coordinate_reference_system": "SpatiotemporalContext.targetCoordinateReferenceSystem",
+    "requires_transformation": "SpatiotemporalContext.requiresTransformation",
+    "transformation_status": "SpatiotemporalContext.transformationStatus",
     "position_wkt": "SpatiotemporalContext.positionWKT",
     "position_accuracy_m": "SpatiotemporalContext.positionAccuracyM",
     "signal": "Signal",
@@ -26,12 +32,20 @@
   },
   "pipeline": [
     "JSON/Protobuf decode",
-    "schema and timestamp validation",
-    "coordinate and unit normalization",
+    "schema, timestamp, provenance and rate validation",
+    "PROJ/pyproj coordinate and unit normalization to the mission-local CRS; reject on failure",
+    "kinematic anomaly and multi-source corroboration gate",
     "Object/Link materialization",
     "closed-world SPARQL trigger",
     "Action contract validation",
     "human authorization when required",
     "Effect/EffectMetric evidence write-back"
-  ]
+  ],
+  "adversarial_boundary": "SHACL/schema and kinematic gates reject known malformed or contradictory events; they cannot prove every plausible track is genuine",
+  "multi_site_target_crs_examples": {
+    "PKX": "EPSG:32650",
+    "BRU": "EPSG:32631",
+    "MUC": "EPSG:32632",
+    "Hangzhou_fixture": "EPSG:32651"
+  }
 }

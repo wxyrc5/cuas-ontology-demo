@@ -21,6 +21,8 @@ from utils.defense_envelope import (
     validate_envelopes,
 )
 from utils.ooda_model import simulate_ooda_timing
+from utils.coordinate_normalization import validate_airport_target_crs
+from utils.semantic_event_log import build_semantic_event_log
 from utils.swarm_adjudication import (
     evaluate_closed_loop_swarm,
     resource_capacity_rows,
@@ -51,6 +53,7 @@ def simulate(
     """
     rng = np.random.default_rng(seed)
     validate_envelopes(airport_data["defense_envelopes"])
+    crs_normalization = validate_airport_target_crs(airport_data)
 
     selected_effectors = list(dict.fromkeys(effectors))
     ooda_effector = next(
@@ -212,6 +215,7 @@ def simulate(
         "degradation_profile": degradation_profile,
         "authorization_mode": authorization_mode,
         "ooda_effector": ooda_effector,
+        "crs_normalization": crs_normalization,
         "traj": traj,                         # (n_uavs, n_frames, lat/lon/alt_km)
         "eng_frames": eng_frames,             # None means the UAV is not intercepted
         "envelope_entry_frames": entry_frames,
@@ -649,7 +653,7 @@ def show() -> None:
 
     with cp1:
         st.markdown("**🛸 无人机规模**")
-        n_uavs = st.slider("无人机数量", 1, 50, 5, 1, key="n_uavs")
+        n_uavs = st.slider("无人机数量", 1, 50, 20, 1, key="n_uavs")
 
         st.markdown("**⚠️ 威胁等级**")
         threat_level = st.select_slider(
@@ -802,6 +806,12 @@ def show() -> None:
         "20 机单包正式值来自 20,000 次主实验，20–100 机扩容网格来自每格 3,000 次实验；"
         "多包结果采用协调感知时延，全部结果非现场测试。"
     )
+    st.caption(
+        f"坐标门：{sim['crs_normalization']['source_crs']} → "
+        f"{sim['crs_normalization']['target_crs']}，"
+        f"状态={sim['crs_normalization']['transformation_status']}；"
+        "不同机场使用各自任务局部 CRS，转换失败时阻断融合。"
+    )
 
     # ------------------------------------------------------------------
     # Visualisations
@@ -826,6 +836,17 @@ def show() -> None:
         "💡 **操作提示**：拖动 `动画帧` 滑块可视化不同时间点的态势，"
         "三波次采用固定连续曲线；已拦截无人机变为灰色。彩色边界/曲面是按机场方向、"
         "长短轴、垂直高度和方向偏置共同构成机场专属的各向异性防御包络。"
+    )
+
+    st.markdown("### 🧾 语义事件日志")
+    st.dataframe(
+        pd.DataFrame(build_semantic_event_log(sim, airport)),
+        width="stretch",
+        hide_index=True,
+    )
+    st.caption(
+        "自然语言日志与二维/三维态势来自同一仿真快照；离线 Plotly 底图用于无网演示，"
+        "不为视觉效果改用依赖在线瓦片的 st.map/deck.gl。"
     )
 
     # Two side-by-side charts

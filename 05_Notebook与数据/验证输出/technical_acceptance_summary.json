@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T17:05:52+08:00",
-  "package_root": "D:\\Downloads\\反无人机体系\\智信2026_新概念反无_完整项目包",
+  "generated_at": "2026-08-12T20:36:33+08:00",
+  "package_root": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated",
   "all_passed": true,
   "checks": [
     {
@@ -52,17 +52,17 @@
     {
       "name": "本地 Streamlit 隔离端口真实启动",
       "passed": true,
-      "evidence": "port=8510; startup=1.629s; health=200/ok; root=200; cleanup=True"
+      "evidence": "port=8510; startup=1.59s; health=200/ok; root=200; cleanup=True"
     },
     {
       "name": "本体 Effect→Action→Mission 写回原型",
       "passed": true,
-      "evidence": "decision=ACT-843B114DD264; rules=8; auto=5; human_gate=3; rdf_triples=129; canonical unchanged"
+      "evidence": "decision=ACT-CE7C636D7E17; rules=8; auto=5; human_gate=3; rdf_triples=153; canonical unchanged"
     },
     {
       "name": "Streamlit 唯一主线与部署镜像哈希一致",
       "passed": true,
-      "evidence": "34/34 managed files matched"
+      "evidence": "42/42 managed files matched"
     },
     {
       "name": "网页指标快照与 Notebook/验收结果完全一致",

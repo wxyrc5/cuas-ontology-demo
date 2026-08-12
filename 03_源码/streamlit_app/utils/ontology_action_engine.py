@@ -47,6 +47,17 @@ ACTION_DEFINITIONS = {
     "RAISE_FUSION_CONFIRMATION": ("controls.fusion_confirmation=TWO_SOURCE_CONFIRMATION", "after.controls.fusion_confirmation == TWO_SOURCE_CONFIRMATION"),
 }
 
+ACTION_AUTHORIZATION = {
+    "ADJUST_SENSOR_SCAN_MODE": ("L1", "LOW", "可逆传感参数调整，不产生外部效应。"),
+    "SWITCH_FUSION_MODEL": ("L1", "LOW", "可逆融合模型切换，不产生外部效应。"),
+    "RAISE_MISSION_PRIORITY": ("L1", "LOW", "仅调整内部任务排序，不越过效应授权边界。"),
+    "QUARANTINE_AND_RERUN_WTA": ("L1", "LOW", "隔离故障装备并重算候选分配，不自动实施效应。"),
+    "RAISE_FUSION_CONFIRMATION": ("L1", "LOW", "提高多源确认门限，属于保守且可逆的运行态动作。"),
+    "AUTHORIZE_RESOURCE_REALLOCATION": ("L2", "MEDIUM", "匹配既有预案的资源重分配仍需操作员明确批准。"),
+    "AUTHORIZE_BATCH_DECISION_MODE": ("L2", "MEDIUM", "批次决策压缩认知负荷，但不取消操作员批准。"),
+    "AUTHORIZE_EFFECTOR_REINFORCEMENT": ("L3", "HIGH", "涉及效应器增援，默认拒绝并等待指挥员明确批准。"),
+}
+
 
 def _load_browser_ontology(path: Path = DATA_PATH) -> dict[str, Any]:
     if not path.is_file():
@@ -157,12 +168,16 @@ def evaluate_action_feedback(
         )
         if not trigger:
             return
+        authorization_level, risk_class, decision_rationale = ACTION_AUTHORIZATION[action_code]
         actions.append(
             {
                 "rule_id": rule_id,
                 "action_code": action_code,
                 "description": description,
                 "execution_status": execution_status,
+                "authorization_level": authorization_level,
+                "risk_class": risk_class,
+                "decision_rationale": decision_rationale,
                 "target_capabilities": list(target_capabilities),
                 "target_equipment": list(target_equipment),
                 "target_mission": baseline["mission_id"],
@@ -402,6 +417,9 @@ def action_result_to_turtle(result: Mapping[str, Any]) -> str:
         graph.add((event, ACTION.ruleId, Literal(item["rule_id"])))
         graph.add((event, ACTION.actionCode, Literal(item["action_code"])))
         graph.add((event, ACTION.executionStatus, Literal(item["execution_status"])))
+        graph.add((event, ACTION.authorizationLevel, Literal(item["authorization_level"])))
+        graph.add((event, ACTION.riskClass, Literal(item["risk_class"])))
+        graph.add((event, ACTION.decisionRationale, Literal(item["decision_rationale"], lang="zh")))
         graph.add((event, RDFS.comment, Literal(item["description"], lang="zh")))
         graph.add((event, ACTION.targetsMission, mission))
         graph.add((event, PROV.wasAssociatedWith, CUAS[after["operator_id"]]))

@@ -1,0 +1,93 @@
+# =============================================================================
+# docker-compose.yml - Apache Jena Fuseki for C-UAS Ontology
+# =============================================================================
+# 一键启动: docker compose up -d
+# 停止:     docker compose down
+# 重启:     docker compose restart
+# 查看日志: docker compose logs -f
+# =============================================================================
+# v1.1 (2026-08-06) 改进:
+#   - 移除 version: "3.8" 字段 (新版本 Docker Compose 已弃用)
+#   - 添加 .env 文件支持
+# =============================================================================
+
+services:
+  streamlit:
+    build:
+      context: ..
+      dockerfile: 06_部署脚本/Dockerfile.streamlit
+    image: cuas/streamlit:zx2026
+    container_name: cuas-streamlit
+    ports:
+      - "${STREAMLIT_PORT:-8501}:8501"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # Fuseki SPARQL 服务器
+  # ---------------------------------------------------------------------------
+  fuseki:
+    # 自定义 Dockerfile 构建
+    build:
+      context: ..
+      dockerfile: 06_部署脚本/Dockerfile.fuseki
+    # 镜像标签
+    image: cuas/fuseki:5.1.0-cuas-v1
+    container_name: cuas-fuseki
+    hostname: cuas-fuseki
+
+    # 端口映射: 主机 3030 -> 容器 3030
+    ports:
+      - "${FUSEKI_PORT:-3030}:3030"
+
+    # 环境变量
+    # - ADMIN_PASSWORD: admin 用户密码（生产环境务必修改）
+    # - FUSEKI_DATASET_cuas: 启动时自动创建 /cuas dataset
+    # - TDB=2: 使用 TDB2 存储（Apache Jena 推荐）
+    # - JAVA_OPTIONS: JVM 堆内存（按需调整）
+    environment:
+      # ---- 认证 ----
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+      # ---- Dataset 自动创建 ----
+      FUSEKI_DATASET_cuas: cuas
+      TDB: "2"
+      # ---- 路径 ----
+      FUSEKI_HOME: /jena-fuseki
+      FUSEKI_BASE: /fuseki
+      # ---- JVM ----
+      JAVA_OPTIONS: "-Xmx2g -Xms1g -Dfile.encoding=UTF-8"
+
+    # 数据持久化卷（fuseki-data 命名卷保存 TDB2 数据库与 shiro.ini）
+    volumes:
+      - fuseki-data:/fuseki
+
+    # 容器自动重启策略
+    restart: unless-stopped
+
+    # 健康检查（与 Dockerfile 中 HEALTHCHECK 一致；compose 层覆盖优先）
+    healthcheck:
+      # 注意: $$ 在 compose 中转义为字面量 $，最终 curl 访问的是 /$/ping
+      test: ["CMD", "curl", "-sf", "http://localhost:3030/$$/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+    # 日志配置（限制单个日志文件 10MB，最多保留 3 个）
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# -----------------------------------------------------------------------------
+# 命名卷: 持久化 Fuseki 数据库
+# -----------------------------------------------------------------------------
+volumes:
+  fuseki-data:
+    name: cuas-fuseki-data
