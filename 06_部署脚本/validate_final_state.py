@@ -264,7 +264,7 @@ def main() -> int:
         interactive_pk_ratio = -1.0
     acceptance_ok = (
         acceptance.get("status") == "passed"
-        and len(pages) == 7
+        and len(pages) == 8
         and all(item.get("status") == "passed" and not item.get("exceptions") for item in pages)
         and acceptance.get("ontology_assets", {}).get("canonical_graph_triples") == 463
         and all(
@@ -405,7 +405,7 @@ def main() -> int:
         == scaling_minimum
         and same_number(current["bayesian"]["auc"], bayes["auc"])
         and same_number(current["bayesian"]["fixed_rule_auc"], bayes["fixed_rule_auc"])
-        and current["acceptance"]["streamlit_pages_passed"] == 7
+        and current["acceptance"]["streamlit_pages_passed"] == 8
         and current["acceptance"]["notebook_executed_code_cells"]
         == sum(item["executed_code_cells"] for item in notebooks)
     )
@@ -461,8 +461,8 @@ def main() -> int:
             "current_metrics": str(current_path.relative_to(PACKAGE_ROOT)),
         },
         "deferred_scope": [
-            "competition proposal and application forms",
-            "PPT and video",
+            "official application forms with identity, signatures, and seal",
+            "competition presentation deck and final recorded video",
             "official submission archives",
         ],
     }

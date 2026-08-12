@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-08-11T09:26:10.573771+00:00",
+  "generated_at_utc": "2026-08-12T06:27:50.901361+00:00",
   "scope": "current_reproducible_formal_and_synthetic_results_not_field_test",
   "not_field_test": true,
   "bayesian": {
@@ -1667,8 +1667,8 @@
   "acceptance": {
     "notebook_code_cells": 41,
     "notebook_executed_code_cells": 41,
-    "streamlit_pages": 7,
-    "streamlit_pages_passed": 7,
+    "streamlit_pages": 8,
+    "streamlit_pages_passed": 8,
     "offline_maps_present": true,
     "daxing_codes": {
       "iata": "PKX",
