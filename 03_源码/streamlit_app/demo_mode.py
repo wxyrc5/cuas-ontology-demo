@@ -9,7 +9,7 @@ from utils.current_metrics import load_current_metrics
 ACTS = [
     {
         "name": "第一幕 · 看见",
-        "time": "0:45–2:20",
+        "time": "0:20–1:00",
         "path": "pages/5_🗺_机场反无.py",
         "icon": "🗺️",
         "action": "打开 PKX 二维态势，再切换三维；指出非圆防御包络、20 机连续航迹和同源状态。",
@@ -18,30 +18,30 @@ ACTS = [
     },
     {
         "name": "第二幕 · 看懂",
-        "time": "2:20–3:50",
+        "time": "1:00–1:45",
         "path": "pages/2_🧬_本体浏览.py",
         "icon": "🧬",
-        "action": "从 Mission 展开到 Threat、Asset、Capability、Equipment、Operator 与 EffectMetric。",
+        "action": "从 Mission 展开主链，再点出 Effect、Signal 与 SpatiotemporalContext 扩展。",
         "claim": "本体不是静态词典，而是跨设备、跨阶段的任务合同，让每个决策都有语义出处。",
-        "evidence": "8 OT / 10 LT；TBox+ABox 463 triples；HermiT 与 SHACL 正负向验证通过。",
+        "evidence": "8 核心 OT / 10 核心 LT + 3/6 扩展；TBox+ABox 620 triples；HermiT 与 SHACL 正负向验证通过。",
     },
     {
         "name": "第三幕 · 处置",
-        "time": "3:50–6:10",
+        "time": "1:45–3:10",
         "path": "pages/3_🔍_SPARQL查询.py",
         "icon": "🎯",
-        "action": "查询反蜂群任务链，解释批次人工授权、资源约束分配和 20–100 机扩容边界。",
+        "action": "先解释设计态/运行态分离与 Action Schema，再展示完整 OODA、人工授权和 20 机裁决。",
         "claim": "决策不是‘看到就打’，而是在授权、射界、容量和完整 OODA 时限内选择可执行链路。",
         "evidence": "20 机固定资源闭环 Pk=0.7655；HPM P90=3.670 s；100 机点估计达标需 5 包。",
     },
     {
         "name": "第四幕 · 进化",
-        "time": "6:10–7:35",
+        "time": "3:10–3:50",
         "path": "pages/4_📊_贝叶斯实验.py",
         "icon": "📈",
-        "action": "展示五通道后验收敛、ROC 与同预算固定规则对照；说明效果如何写回下一轮任务。",
+        "action": "展示五通道后验、同预算固定规则对照，以及主雷达失效—备份重构反事实。",
         "claim": "系统不是一次性规则表，而是处置一次、积累一次证据、修正一次资源与阈值。",
-        "evidence": "贝叶斯 AUC=0.9679，固定规则=0.8688，配对 ΔAUC=0.0991。",
+        "evidence": "贝叶斯 AUC=0.9679，固定规则=0.8688；反事实路径由当前 RDF 图解析。",
     },
 ]
 
@@ -51,7 +51,8 @@ def main() -> None:
     metrics = load_current_metrics()
     acceptance = metrics["acceptance"]
 
-    st.title("🎬 专家演示模式：8 分钟讲清一个好产品")
+    st.title("🎬 初筛演示模式：4 分 30 秒讲清一个好产品")
+    st.caption("昆仑智镜（KunLun MirAI）")
     st.info(
         "主线只有一句：把异构传感、规则、人工授权和效应器编排成可解释、可复盘、可迭代的反无任务闭环。"
     )
@@ -62,7 +63,7 @@ def main() -> None:
     c3.metric("Notebook", f"{acceptance['notebook_executed_code_cells']}/{acceptance['notebook_code_cells']}")
     c4.metric("页面验收", f"{acceptance['streamlit_pages_passed']}/{acceptance['streamlit_pages']}")
 
-    st.markdown("### 0:00–0:45｜先抛出矛盾")
+    st.markdown("### 0:00–0:20｜先抛出矛盾")
     st.markdown(
         "> 20 架低慢小目标同时逼近重点场所。单点设备可以报警，但谁来把多源观测、交战规则、人工授权和有限效应器在 5 秒内组织成一条能解释、能复盘的处置链？这就是智盾要解决的问题。"
     )
@@ -86,14 +87,14 @@ def main() -> None:
                 st.markdown("**落到证据**")
                 st.write(act["evidence"])
 
-    st.markdown("### 7:35–8:00｜用转化路径收口")
+    st.markdown("### 3:50–4:30｜数字线程与转化路径收口")
     st.success(
         "今天交付的是可运行的任务编排与验证原型。下一步不是重写系统，而是按数据契约接入脱敏传感日志，"
         "在台架上标定竞争链路、人工授权、射界和效应器参数，再进入专家工作坊、红蓝压测与合规场景试点。"
     )
     st.warning(
         "必须主动说明：全部概率、时延和扩容结果均为参数化合成仿真；当前未完成真实装备接口、"
-        "Palantir Foundry 部署、SWRL 规则执行或真实专家/红蓝验证。"
+        "商业平台部署、SWRL 在线执行或真实专家/红蓝验证。"
     )
 
     with st.expander("评委追问时再展开：固定资源为什么到 25 机失效？"):

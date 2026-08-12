@@ -65,6 +65,7 @@ def main() -> None:
             "fnr": bayes["fnr"],
             "observations_per_channel_for_auc": bayes["observations_per_channel_for_auc"],
             "auc_cases_total": bayes["auc_cases_total"],
+            "ontology_conditioned_counterfactual": bayes["ontology_conditioned_counterfactual"],
         },
         "ooda": {
             "scope": "synthetic_full_chain_with_sensor_comms_human_aim_effect_and_bda",
@@ -93,6 +94,8 @@ def main() -> None:
             "verdict": ontology["verdict"],
             "core_ot_declared": ontology["core_ot_declared"],
             "core_lt_declared": ontology["core_lt_declared"],
+            "extension_ot_declared": ontology.get("extension_ot_declared", 3),
+            "extension_lt_declared": ontology.get("extension_lt_declared", 6),
             "tbox_triples": ontology["input_triples"]["cuas-ontology.ttl"],
             "valid_abox_triples": ontology["input_triples"]["cuas-data-valid.ttl"],
             "combined_triples": ontology["combined_tbox_valid_abox_triples"],

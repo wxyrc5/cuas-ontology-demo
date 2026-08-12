@@ -14,7 +14,7 @@ NOTEBOOK_PATH = PACKAGE_ROOT / "05_Notebook与数据" / "notebook_01_ontology_va
 def main() -> None:
     old = nbformat.read(NOTEBOOK_PATH, as_version=4)
     metadata = old.metadata
-    metadata.setdefault("cuas_reproducibility", {})["formal_validation_rebuilt_on"] = "2026-08-10"
+    metadata.setdefault("cuas_reproducibility", {})["formal_validation_rebuilt_on"] = "2026-08-12"
 
     cells = [
         new_markdown_cell(
@@ -22,7 +22,7 @@ def main() -> None:
 
 ## 实验目的与口径
 
-本实验针对技术方案的 **8 类 Object Type（OT）和 10 类 Link Type（LT）**，执行四层可复现验证：
+本实验针对技术方案的 **8 类核心 Object Type（OT）和 10 类核心 Link Type（LT）**，并审计评审新增的 **3 类扩展对象与 6 类扩展关系**，执行四层可复现验证：
 
 1. 标准 Turtle/RDF 语法解析与 8 OT / 10 LT 结构审计；
 2. SHACL 正向实例约束验证；
@@ -167,13 +167,20 @@ core_links = [
     CUAS.covers, CUAS.produces, CUAS.protects, CUAS.confronts,
     CUAS.validates, CUAS.operates,
 ]
+extension_classes = [CUAS.Effect, CUAS.Signal, CUAS.SpatiotemporalContext]
+extension_links = [
+    CUAS.hasSpatiotemporalContext, CUAS.emitsSignal, CUAS.observesSignal,
+    CUAS.causesEffect, CUAS.affectsThreat, CUAS.quantifiedBy,
+]
 core_ot_declared = sum((item, RDF.type, OWL.Class) in ontology_graph for item in core_classes)
 core_lt_declared = sum((item, RDF.type, OWL.ObjectProperty) in ontology_graph for item in core_links)
+extension_ot_declared = sum((item, RDF.type, OWL.Class) in ontology_graph for item in extension_classes)
+extension_lt_declared = sum((item, RDF.type, OWL.ObjectProperty) in ontology_graph for item in extension_links)
 real_core_instances = {
     item.split('#')[-1]: len(set(valid_graph.subjects(RDF.type, item)))
     for item in core_classes
 }
-print(f'合并图三元组: {len(graph)}；8 OT 声明: {core_ot_declared}/8；10 LT 声明: {core_lt_declared}/10')
+print(f'合并图三元组: {len(graph)}；核心 8/10: {core_ot_declared}/8、{core_lt_declared}/10；扩展 3/6: {extension_ot_declared}/3、{extension_lt_declared}/6')
 pd.DataFrame([{'OT': key, '实例数': value} for key, value in real_core_instances.items()])
 """
         ),
@@ -255,6 +262,7 @@ hermit_negative = checks_by_name['HermiT 类型互斥负向对照']['passed']
 shacl_positive = checks_by_name['SHACL 正向实例验证']['passed']
 shacl_negative = checks_by_name['SHACL 负向对照']['passed']
 structure_ok = checks_by_name['8 OT / 10 LT 结构审计']['passed']
+extension_structure_ok = checks_by_name['3 个扩展类型 / 6 个扩展关系审计']['passed']
 
 metrics_payload = {
     'schema_version': 2,
@@ -272,6 +280,8 @@ metrics_payload = {
     },
     'core_ot_declared': int(core_ot_declared),
     'core_lt_declared': int(core_lt_declared),
+    'extension_ot_declared': int(extension_ot_declared),
+    'extension_lt_declared': int(extension_lt_declared),
     'real_core_instance_counts': real_core_instances,
     'combined_tbox_valid_abox_triples': int(len(graph)),
     'shacl_negative_violation_count': int(len(negative_df)),
@@ -280,6 +290,7 @@ metrics_payload = {
     'checks': {
         'rdf_turtle_parse_pass': bool(checks_by_name['RDF/Turtle 语法解析']['passed']),
         'core_8_ot_10_lt_pass': bool(structure_ok and core_ot_declared == 8 and core_lt_declared == 10),
+        'extension_3_ot_6_lt_pass': bool(extension_structure_ok and extension_ot_declared == 3 and extension_lt_declared == 6),
         'shacl_positive_conforms': bool(shacl_positive),
         'shacl_negative_control_detected_exactly_two': bool(shacl_negative and len(negative_df) == 2),
         'hermit_positive_consistent': bool(hermit_positive),
@@ -301,7 +312,7 @@ print('机器可读指标:', metrics_path)
         new_markdown_cell(
             """## 5. 结论与引用边界
 
-- **已验证**：当前 TBox/ABox 的 RDF 语法、8 OT / 10 LT 结构、SHACL 实例约束、HermiT OWL 2 DL 可满足性，以及两类负向对照。
+- **已验证**：当前 TBox/ABox 的 RDF 语法、8 个核心 OT / 10 个核心 LT 与 3/6 扩展结构、SHACL 实例约束、HermiT OWL 2 DL 可满足性，以及两类负向对照。
 - **未包含**：SWRL 执行正确性、真实专家标注一致性、机场现场性能和所有未来数据的自动正确性。
 - 对外引用只读取本次生成的 `metrics_notebook_01.json` 与 `ontology_consistency_report.md`，并保留上述边界。
 """

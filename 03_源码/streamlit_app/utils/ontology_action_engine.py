@@ -36,6 +36,17 @@ REQUIRED_CONTEXT = {
     "failed_equipment_ids",
 }
 
+ACTION_DEFINITIONS = {
+    "ADJUST_SENSOR_SCAN_MODE": ("controls.scan_mode=HIGH_REFRESH", "after.controls.scan_mode == HIGH_REFRESH"),
+    "SWITCH_FUSION_MODEL": ("controls.fusion_model=multi_sensor_high_confidence_v2", "after.controls.fusion_model == multi_sensor_high_confidence_v2"),
+    "RAISE_MISSION_PRIORITY": ("priority=max(priority, threat_level_current)", "after.priority >= context.threat_level_current"),
+    "AUTHORIZE_RESOURCE_REALLOCATION": ("none_before_human_authorization", "pending_human_actions contains AUTHORIZE_RESOURCE_REALLOCATION"),
+    "QUARANTINE_AND_RERUN_WTA": ("equipment_status=Failed; controls.wta_recompute_requested=true", "failed equipment excluded and WTA recompute requested"),
+    "AUTHORIZE_BATCH_DECISION_MODE": ("none_before_human_authorization", "pending_human_actions contains AUTHORIZE_BATCH_DECISION_MODE"),
+    "AUTHORIZE_EFFECTOR_REINFORCEMENT": ("none_before_human_authorization", "pending_human_actions contains AUTHORIZE_EFFECTOR_REINFORCEMENT"),
+    "RAISE_FUSION_CONFIRMATION": ("controls.fusion_confirmation=TWO_SOURCE_CONFIRMATION", "after.controls.fusion_confirmation == TWO_SOURCE_CONFIRMATION"),
+}
+
 
 def _load_browser_ontology(path: Path = DATA_PATH) -> dict[str, Any]:
     if not path.is_file():
@@ -154,6 +165,19 @@ def evaluate_action_feedback(
                 "execution_status": execution_status,
                 "target_capabilities": list(target_capabilities),
                 "target_equipment": list(target_equipment),
+                "target_mission": baseline["mission_id"],
+                "preconditions": {
+                    "observed": observed,
+                    "predicate": threshold,
+                    "rule_id": rule_id,
+                },
+                "side_effects": [ACTION_DEFINITIONS[action_code][0]],
+                "validation_function": ACTION_DEFINITIONS[action_code][1],
+                "expected_revision": int(baseline.get("revision", 0)) + 1,
+                "evidence_refs": [
+                    f"metric_or_context:{rule_id}",
+                    "runtime-trigger-queries.sparql",
+                ],
             }
         )
 

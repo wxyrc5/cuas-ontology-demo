@@ -63,7 +63,20 @@
 --- cell 15 / display_data ---
 <Figure size 850x500 with 1 Axes>
 
---- cell 17 / stream ---
+--- cell 17 / execute_result ---
+             情景  任务合规后验分数  本体路径数
+0          名义状态  0.673743      5
+1         主雷达失效  0.041481      5
+2  本体重构至射频/光电备份  0.638454      5
+
+--- cell 18 / display_data ---
+<Figure size 920x520 with 1 Axes>
+
+--- cell 18 / stream ---
+共享观测: {'detection': 12, 'identification': 10, 'interception': 12, 'ooda_closure': 11, 'false_alarm_compliance': 12}
+反事实检查: {'radar_failure_reduces_score': True, 'reconfiguration_recovers_score': True, 'paths_derived_from_graph': True}
+
+--- cell 20 / stream ---
 {
   "weights_sum_to_one": true,
   "seed42_composite_reaches_0_90": true,
@@ -73,6 +86,9 @@
   "bayesian_auc_ge_0_85": true,
   "bayesian_fpr_le_0_10": true,
   "bayesian_fnr_le_0_10": true,
-  "paired_delta_ci_above_zero": true
+  "paired_delta_ci_above_zero": true,
+  "ontology_prior_failure_reduces_score": true,
+  "ontology_prior_reconfiguration_recovers_score": true,
+  "ontology_paths_derived_from_graph": true
 }
 机器可读指标: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\05_Notebook与数据\验证输出\metrics_notebook_03.json

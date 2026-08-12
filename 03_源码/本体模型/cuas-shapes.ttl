@@ -1,10 +1,10 @@
 ###########################################################################
 # C-UAS Ontology — SHACL Shapes (数据验证约束)
-# 版本 V1.0 (2026-08)
+# 版本 V1.2 (2026-08)
 # 配套研究 《反无人机体系本体模型技术方案》 第 5 章
 #
 # 用途
-#   - 为 8 个核心 Object Type 定义数据验证 Shape
+#   - 为 8 个核心 Object Type 和 3 个评审扩展类型定义数据验证 Shape
 #   - 包含枚举约束、基数约束、数据类型约束、模式约束、范围约束
 #
 # 验证工具
@@ -270,14 +270,22 @@ cuas:EquipmentShape a sh:NodeShape ;
         sh:in ( "Available" "Engaged" "Maintenance" "Failed" ) ;
         sh:message "operationalStatus 必须是 Available / Engaged / Maintenance / Failed 之一"@zh ;
     ] ;
-    # geoPosition 必填坐标字符串
+    # V1.2 使用带 CRS、精度和时间戳的复合时空上下文，替代旧坐标字符串
     sh:property [
-        sh:path cuas:geoPosition ;
-        sh:datatype xsd:string ;
+        sh:path cuas:hasSpatiotemporalContext ;
+        sh:class cuas:SpatiotemporalContext ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
-        sh:pattern "^\\d{2,3}\\.\\d{2,4}[EW]\\s*,\\s*\\d{1,2}\\.\\d{2,4}[NS]$" ;
-        sh:message "geoPosition 必须形如 120.155E, 30.245N"@zh ;
+        sh:message "Equipment 必须关联 1 个带 CRS、精度与时间戳的 SpatiotemporalContext"@zh ;
+    ] ;
+    sh:property [
+        sh:path cuas:healthScore ;
+        sh:datatype xsd:double ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0.0 ;
+        sh:maxInclusive 1.0 ;
+        sh:message "healthScore 必须是 0 到 1 的参数化值"@zh ;
     ] ;
     # implements 至少 1 个 TechnicalCapability
     sh:property [
@@ -475,6 +483,92 @@ cuas:OperatorShape a sh:NodeShape ;
         sh:class cuas:Equipment ;
         sh:minCount 1 ;
         sh:message "operates 至少操作 1 个装备"@zh ;
+    ] .
+
+# ===================================================================
+# 评审扩展 Shape — Effect / Signal / SpatiotemporalContext
+# ===================================================================
+
+cuas:EffectShape a sh:NodeShape ;
+    sh:targetClass cuas:Effect ;
+    sh:name "实际效果形状"@zh ;
+    sh:property [
+        sh:path cuas:effectType ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "ControlledLinkDenial" "NavigationDeception" "HPMDisruption" "KineticCapture" ) ;
+    ] ;
+    sh:property [
+        sh:path cuas:effectOutcome ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "Succeeded" "Failed" "Indeterminate" ) ;
+    ] ;
+    sh:property [
+        sh:path cuas:effectAt ;
+        sh:datatype xsd:dateTime ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path cuas:affectsThreat ;
+        sh:class cuas:Threat ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path cuas:quantifiedBy ;
+        sh:class cuas:EffectMetric ;
+        sh:minCount 1 ;
+    ] .
+
+cuas:SignalShape a sh:NodeShape ;
+    sh:targetClass cuas:Signal ;
+    sh:name "信号对象形状"@zh ;
+    sh:property [
+        sh:path cuas:signalType ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( "RemoteControl" "Navigation" "DataLink" "Alert" ) ;
+    ] ;
+    sh:property [
+        sh:path cuas:centerFrequencyHz ;
+        sh:datatype xsd:double ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0.0 ;
+    ] .
+
+cuas:SpatiotemporalContextShape a sh:NodeShape ;
+    sh:targetClass cuas:SpatiotemporalContext ;
+    sh:name "时空上下文形状"@zh ;
+    sh:property [
+        sh:path cuas:coordinateReferenceSystem ;
+        sh:datatype xsd:anyURI ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path cuas:positionWKT ;
+        sh:datatype xsd:string ;
+        sh:pattern "^POINT \\(\\-?[0-9]+(\\.[0-9]+)? \\-?[0-9]+(\\.[0-9]+)?\\)$" ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path cuas:positionAccuracyM ;
+        sh:datatype xsd:double ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0.0 ;
+    ] ;
+    sh:property [
+        sh:path cuas:observedAt ;
+        sh:datatype xsd:dateTime ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
     ] .
 
 ###########################################################################

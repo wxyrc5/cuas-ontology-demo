@@ -17,22 +17,24 @@ from utils.ontology_action_engine import (
     evaluate_action_feedback,
     load_baseline_operational_state,
 )
+from utils.action_contract import validate_action_bundle
 
 
 def show() -> None:
-    stats = load_ontology()["summary_stats"]
+    ontology = load_ontology()
+    stats = ontology["summary_stats"]
     st.title("🧬 反无人机体系本体浏览")
     st.markdown(
         f"""
-        基于 **Palantir Ontology** 方法论构建：
-        - **8 个 Object Type** （对象类型）
-        - **10 个 Link Type** （关系类型）
+        基于国产自主可控的**本体驱动语义互操作架构**构建：
+        - **8 个核心 Object Type + 3 个评审扩展类型**
+        - **10 个核心 Link Type + 6 个评审扩展关系**
         - **{stats['total_edge_instances']} 条正向 ABox 关系** （Instance-level edges）
         - **{stats['total_object_instances']} 个正向 ABox 核心实例** （与 HermiT/SHACL 验证同源）
         """
     )
     st.info(
-        "💡 本页的 8 OT、10 LT 和实例关系与正式 Turtle 模型一致；实例仍是工程验证夹具，不代表真实部署规模。"
+        "💡 8 OT/10 LT 保持文字稿核心口径；Effect、Signal、SpatiotemporalContext 为不破坏核心叙事的评审扩展。实例仍是工程验证夹具。"
     )
 
     # ------------------------------------------------------------------
@@ -68,6 +70,14 @@ def show() -> None:
             )
 
     st.markdown("")
+
+    with st.expander("评审扩展：Effect / Signal / SpatiotemporalContext", expanded=True):
+        st.dataframe(
+            pd.DataFrame(ontology.get("extension_object_types", [])),
+            width="stretch",
+            hide_index=True,
+        )
+        st.caption("扩展关系：" + "、".join(item["name"] for item in ontology.get("extension_link_types", [])))
 
     # ------------------------------------------------------------------
     # Interactive OT selector → instance table
@@ -245,7 +255,8 @@ def show() -> None:
     st.info(
         "本模块把文字稿中的阈值规则变成确定性 Action 计划：自动动作写入会话状态，"
         "资源增配与批量授权进入人工审批队列，并可导出带溯源的 RDF。"
-        "正式 OWL/ABox 文件始终只读；这不是 Palantir Foundry 或真实装备接入。"
+        "每个 Action 均包含前置条件、副作用、Validation Function 与期望版本，并通过 JSON Schema。"
+        "正式 OWL/ABox 文件始终只读；这不是商业平台或真实装备接入。"
     )
 
     baseline_state = load_baseline_operational_state()
@@ -299,6 +310,8 @@ def show() -> None:
         },
         state=baseline_state,
     )
+    validate_action_bundle(action_result)
+    st.success("Action JSON Schema：通过（含前置条件、副作用、Validation Function 与版本约束）")
     summary = action_result["summary"]
     ac1, ac2, ac3, ac4 = st.columns(4)
     ac1.metric("触发规则", summary["triggered_rules"])

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T14:32:04+08:00",
-  "app_dir": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated\\03_源码\\streamlit_app",
+  "generated_at": "2026-08-12T16:52:39+08:00",
+  "app_dir": "D:\\Downloads\\反无人机体系\\智信2026_新概念反无_完整项目包\\03_源码\\streamlit_app",
   "pages": [
     {
       "file": "app.py",
@@ -93,12 +93,12 @@
       "exceptions": [],
       "titles": 1,
       "headers": 0,
-      "subheaders": 2,
+      "subheaders": 3,
       "metrics": 9,
       "buttons": 0,
       "sliders": 2,
       "selectboxes": 0,
-      "plotly_charts": 2,
+      "plotly_charts": 3,
       "status": "passed"
     },
     {
@@ -165,26 +165,30 @@
   "ontology_assets": {
     "object_types": 8,
     "link_types": 10,
-    "positive_abox_instances": 24,
-    "positive_abox_edges": 42,
-    "canonical_graph_triples": 463,
+    "extension_object_types": 3,
+    "extension_link_types": 6,
+    "positive_abox_instances": 26,
+    "positive_abox_edges": 45,
+    "canonical_graph_triples": 620,
     "sparql_template_rows": {
-      "anti_swarm": 6,
+      "anti_swarm": 8,
       "asset_protection": 1,
-      "kill_chain": 8,
+      "kill_chain": 12,
       "operator_roster": 3,
       "ontology_schema": 10
     }
   },
   "action_feedback": {
-    "decision_id": "ACT-A7454DD33AEE",
+    "decision_id": "ACT-843B114DD264",
     "triggered_rules": 8,
     "auto_applied": 5,
     "pending_human_authorization": 3,
-    "rdf_triples": 127,
+    "rdf_triples": 129,
     "deterministic": true,
     "caller_state_immutable": true,
     "canonical_model_unchanged": true,
+    "action_contract_positive": true,
+    "action_contract_negative_rejected": true,
     "not_palantir_foundry_deployment": true,
     "status": "passed"
   },

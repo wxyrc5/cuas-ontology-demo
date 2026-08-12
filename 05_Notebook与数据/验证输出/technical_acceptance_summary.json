@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T14:33:29+08:00",
-  "package_root": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated",
+  "generated_at": "2026-08-12T17:05:52+08:00",
+  "package_root": "D:\\Downloads\\反无人机体系\\智信2026_新概念反无_完整项目包",
   "all_passed": true,
   "checks": [
     {
       "name": "4 个规范 Notebook 全量执行",
       "passed": true,
-      "evidence": "notebooks=4; code_cells=41/41; errors=0"
+      "evidence": "notebooks=4; code_cells=43/43; errors=0"
     },
     {
       "name": "执行清单与当前 Notebook 源文件哈希一致",
@@ -22,7 +22,7 @@
     {
       "name": "本体形式一致性",
       "passed": true,
-      "evidence": "8 OT / 10 LT; HermiT and SHACL positive/negative controls passed"
+      "evidence": "8 core OT / 10 core LT + 3/6 extensions; HermiT and SHACL controls passed"
     },
     {
       "name": "20 机闭环与容量前沿",
@@ -42,7 +42,7 @@
     {
       "name": "Streamlit、SPARQL、离线地图与防御包络验收",
       "passed": true,
-      "evidence": "pages=8/8; templates={'anti_swarm': 6, 'asset_protection': 1, 'kill_chain': 8, 'operator_roster': 3, 'ontology_schema': 10}; envelopes={'PKX': 3, 'BRU': 3, 'MUC': 3}; interactive_50x3={'闭环使命 Pk': '96.9%', '平均失效目标': '48.6/50', '同构资源包': '3 包', '平均行动成本': '19.14'}"
+      "evidence": "pages=8/8; templates={'anti_swarm': 8, 'asset_protection': 1, 'kill_chain': 12, 'operator_roster': 3, 'ontology_schema': 10}; envelopes={'PKX': 3, 'BRU': 3, 'MUC': 3}; interactive_50x3={'闭环使命 Pk': '96.9%', '平均失效目标': '48.6/50', '同构资源包': '3 包', '平均行动成本': '19.14'}"
     },
     {
       "name": "蜂群轨迹连续性与二维/三维同源状态",
@@ -52,22 +52,22 @@
     {
       "name": "本地 Streamlit 隔离端口真实启动",
       "passed": true,
-      "evidence": "port=8510; startup=3.112s; health=200/ok; root=200; cleanup=True"
+      "evidence": "port=8510; startup=1.629s; health=200/ok; root=200; cleanup=True"
     },
     {
       "name": "本体 Effect→Action→Mission 写回原型",
       "passed": true,
-      "evidence": "decision=ACT-A7454DD33AEE; rules=8; auto=5; human_gate=3; rdf_triples=127; canonical unchanged"
+      "evidence": "decision=ACT-843B114DD264; rules=8; auto=5; human_gate=3; rdf_triples=129; canonical unchanged"
     },
     {
       "name": "Streamlit 唯一主线与部署镜像哈希一致",
       "passed": true,
-      "evidence": "31/31 managed files matched"
+      "evidence": "34/34 managed files matched"
     },
     {
       "name": "网页指标快照与 Notebook/验收结果完全一致",
       "passed": true,
-      "evidence": "notebook_cells=41; pages=8; pk20=0.7655; auc=0.967891796875"
+      "evidence": "notebook_cells=43; pages=8; pk20=0.7655; auc=0.967891796875"
     },
     {
       "name": "形式模型、OODA、蜂群资源与机场参数文件齐备",

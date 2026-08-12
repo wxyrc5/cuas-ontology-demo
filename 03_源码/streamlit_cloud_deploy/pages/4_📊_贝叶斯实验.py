@@ -1,6 +1,7 @@
 """Page 4 – five-channel Bayesian feedback flywheel."""
 from __future__ import annotations
 
+from pathlib import Path
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
@@ -9,9 +10,12 @@ from utils.bayesian_flywheel import (
     CHANNELS,
     COMPOSITE_THRESHOLD,
     evaluate_fixed_rule_baseline,
+    evaluate_ontology_conditioned_counterfactual,
     flywheel_channel_rows,
     simulate_flywheel,
 )
+
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
 COLORS = {
@@ -47,6 +51,14 @@ def _run_models(
         seed=20260810,
     )
     return flywheel, comparison
+
+
+@st.cache_data(show_spinner=False)
+def _run_counterfactual():
+    return evaluate_ontology_conditioned_counterfactual(
+        PROJECT_ROOT / "03_源码" / "本体模型" / "cuas-ontology.ttl",
+        PROJECT_ROOT / "03_源码" / "本体模型" / "cuas-data-valid.ttl",
+    )
 
 
 def _flywheel_figure(result) -> go.Figure:
@@ -256,6 +268,38 @@ def show() -> None:
         f"{comparison.fixed_rule_fpr:.1%} / {comparison.fixed_rule_fnr:.1%}",
     )
     st.plotly_chart(_roc_figure(comparison), width="stretch")
+
+    st.subheader("本体拓扑条件化先验：故障—重构反事实")
+    counterfactual = _run_counterfactual()
+    cf_table = pd.DataFrame(
+        {
+            "情景": item["scenario"],
+            "任务合规后验分数": item["mission_compliance_score"],
+            "本体路径数": len(item["graph_paths"]),
+        }
+        for item in counterfactual["scenarios"]
+    )
+    cf_fig = go.Figure(
+        go.Bar(
+            x=cf_table["情景"],
+            y=cf_table["任务合规后验分数"],
+            marker_color=["#2E7D32", "#C62828", "#1565C0"],
+            text=[f"{value:.3f}" for value in cf_table["任务合规后验分数"]],
+            textposition="outside",
+        )
+    )
+    cf_fig.update_layout(
+        yaxis_title="任务合规后验分数",
+        yaxis=dict(range=[0, 0.75]),
+        height=390,
+        plot_bgcolor="#FAFBFD",
+    )
+    st.plotly_chart(cf_fig, width="stretch")
+    st.caption(
+        "三种情景共享相同的五通道观测；主雷达健康度由 0.98 降至 0.05 后先验下降，"
+        "本体沿 Equipment→Capability→EffectMetric 找到射频/光电备份并恢复分数。"
+        "这是敏感性演示，不是物理拦截概率。"
+    )
 
     with st.expander("比较口径与可审计边界", expanded=True):
         st.markdown(

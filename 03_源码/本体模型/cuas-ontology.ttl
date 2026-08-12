@@ -1,6 +1,6 @@
 ###########################################################################
 # C-UAS Ontology: 反无人机体系本体模型
-# 版本: V1.1 (2026-08)
+# 版本: V1.2 (2026-08)
 # 配套研究: 《反无人机体系本体模型技术方案》 第 4 章
 #
 # 用途:
@@ -8,7 +8,8 @@
 #     TechnicalCapability, Equipment, EffectMetric, Threat, Asset, Operator)
 #   - 描述 10 个核心 Link Type (governs, allocates, measuredBy,
 #     implements, covers, produces, protects, confronts, validates, operates)
-#   - 4 类规则以独立、可审计的 cuas-rules.swrl 文件维护
+#   - 以 Effect、Signal、SpatiotemporalContext 三个扩展类型和 6 个扩展关系补齐效果、信号与时空语义
+#   - 设计态规则以 cuas-rules.swrl 维护；运行态使用物化查询、Action Contract 与确定性规则引擎
 #
 # 验证工具:
 #   - Owlready2 0.51 内置 HermiT（实际执行记录见验证输出）
@@ -24,11 +25,13 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
 # Ontology 头声明
 <http://cuas-ontology.org/cuas> a owl:Ontology ;
     rdfs:label "C-UAS Ontology"@en , "反无人机体系本体"@zh ;
-    rdfs:comment "反无人机作战体系本体模型：8 个核心 Object Type、10 个核心 Link Type；规则与 OWL 2 DL 模型分离维护。"@zh ;
-    owl:versionInfo "1.1" .
+    rdfs:comment "反无人机作战体系本体模型：8 个核心 Object Type、10 个核心 Link Type，加 3 个评审扩展类型与 6 个扩展关系；设计态推理和运行态规则执行分离。"@zh ;
+    owl:versionInfo "1.2" .
 
 ###########################################################################
 # 第 1 部分: 8 个核心 Object Type
@@ -64,7 +67,9 @@ cuas:hasTimestamp a owl:DatatypeProperty ;
 cuas:hasGeoLocation a owl:DatatypeProperty ;
     rdfs:domain cuas:DomainEntity ;
     rdfs:range xsd:string ;
-    rdfs:label "地理位置"@zh .
+    rdfs:label "旧版地理位置字符串"@zh ;
+    owl:deprecated true ;
+    rdfs:comment "兼容旧实例；新数据应使用 hasSpatiotemporalContext 指向带 CRS、精度和时间戳的复合对象。"@zh .
 
 
 
@@ -189,9 +194,17 @@ cuas:operationalStatus a owl:DatatypeProperty ;
     rdfs:range xsd:string ;
     rdfs:comment "枚举：Available / Engaged / Maintenance / Failed" .
 
+cuas:healthScore a owl:DatatypeProperty ;
+    rdfs:domain cuas:Equipment ;
+    rdfs:range xsd:double ;
+    rdfs:label "健康度"@zh ;
+    rdfs:comment "0 到 1 的参数化装备健康度，用于本体条件先验敏感性分析；非现场实测。"@zh .
+
 cuas:geoPosition a owl:DatatypeProperty ;
     rdfs:domain cuas:Equipment ;
-    rdfs:range xsd:string .
+    rdfs:range xsd:string ;
+    owl:deprecated true ;
+    rdfs:comment "兼容旧版坐标字符串；V1.2 起改用 SpatiotemporalContext。"@zh .
 
 # === Object Type 5: EffectMetric (效果指标) ===
 
@@ -279,6 +292,76 @@ cuas:clearanceLevel a owl:DatatypeProperty ;
     rdfs:domain cuas:Operator ;
     rdfs:range xsd:string .
 
+###########################################################################
+# 评审扩展类型：不改变技术方案的 8 个核心业务对象
+###########################################################################
+
+cuas:Effect a owl:Class ;
+    rdfs:subClassOf cuas:DomainEntity, sosa:Actuation ;
+    rdfs:label "实际效果"@zh , "Effect"@en ;
+    rdfs:comment "Act 阶段产生的物理或行为效果；与数值度量 EffectMetric 明确区分。"@zh .
+
+cuas:effectType a owl:DatatypeProperty ;
+    rdfs:domain cuas:Effect ;
+    rdfs:range xsd:string ;
+    rdfs:comment "ControlledLinkDenial / NavigationDeception / HPMDisruption / KineticCapture 等受控类型。"@zh .
+
+cuas:effectOutcome a owl:DatatypeProperty ;
+    rdfs:domain cuas:Effect ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Succeeded / Failed / Indeterminate。"@zh .
+
+cuas:effectAt a owl:DatatypeProperty ;
+    rdfs:domain cuas:Effect ;
+    rdfs:range xsd:dateTime .
+
+cuas:Signal a owl:Class ;
+    rdfs:subClassOf cuas:DomainEntity, sosa:ObservableProperty ;
+    rdfs:label "信号/通信对象"@zh , "Signal"@en ;
+    rdfs:comment "被传感器观测或被效应器作用的遥控、导航、数传或告警链路语义对象。"@zh .
+
+cuas:signalType a owl:DatatypeProperty ;
+    rdfs:domain cuas:Signal ;
+    rdfs:range xsd:string .
+
+cuas:centerFrequencyHz a owl:DatatypeProperty ;
+    rdfs:domain cuas:Signal ;
+    rdfs:range xsd:double .
+
+cuas:SpatiotemporalContext a owl:Class ;
+    rdfs:subClassOf cuas:DomainEntity, sosa:Observation ;
+    rdfs:label "时空上下文"@zh , "SpatiotemporalContext"@en ;
+    rdfs:comment "将坐标参考系、WKT 位置、精度、时间戳和速度矢量封装为复合对象。"@zh .
+
+cuas:coordinateReferenceSystem a owl:DatatypeProperty ;
+    rdfs:domain cuas:SpatiotemporalContext ;
+    rdfs:range xsd:anyURI .
+
+cuas:positionWKT a owl:DatatypeProperty ;
+    rdfs:domain cuas:SpatiotemporalContext ;
+    rdfs:range xsd:string ;
+    rdfs:comment "OWL 2/HermiT 可判定层使用 xsd:string；运行态 GeoSPARQL 适配器可映射为 geo:asWKT/geo:wktLiteral。"@zh .
+
+cuas:positionAccuracyM a owl:DatatypeProperty ;
+    rdfs:domain cuas:SpatiotemporalContext ;
+    rdfs:range xsd:double .
+
+cuas:observedAt a owl:DatatypeProperty ;
+    rdfs:domain cuas:SpatiotemporalContext ;
+    rdfs:range xsd:dateTime .
+
+cuas:velocityEastMps a owl:DatatypeProperty ;
+    rdfs:domain cuas:SpatiotemporalContext ;
+    rdfs:range xsd:double .
+
+cuas:velocityNorthMps a owl:DatatypeProperty ;
+    rdfs:domain cuas:SpatiotemporalContext ;
+    rdfs:range xsd:double .
+
+cuas:velocityUpMps a owl:DatatypeProperty ;
+    rdfs:domain cuas:SpatiotemporalContext ;
+    rdfs:range xsd:double .
+
 # 8 个核心对象类型语义互斥。该公理使错误的跨类型复用可被 DL 推理器检出。
 [] a owl:AllDisjointClasses ;
     owl:members (
@@ -363,6 +446,37 @@ cuas:operates a owl:ObjectProperty ;
     rdfs:range cuas:Equipment ;
     rdfs:label "操作"@zh , "operates"@en ;
     rdfs:comment "操作员操作装备，MANY→MANY"@zh .
+
+# === 6 个评审扩展关系 ===
+cuas:hasSpatiotemporalContext a owl:ObjectProperty ;
+    rdfs:domain cuas:DomainEntity ;
+    rdfs:range cuas:SpatiotemporalContext ;
+    rdfs:label "具有时空上下文"@zh .
+
+cuas:emitsSignal a owl:ObjectProperty ;
+    rdfs:domain cuas:Threat ;
+    rdfs:range cuas:Signal ;
+    rdfs:label "发射信号"@zh .
+
+cuas:observesSignal a owl:ObjectProperty ;
+    rdfs:domain cuas:Equipment ;
+    rdfs:range cuas:Signal ;
+    rdfs:label "观测信号"@zh .
+
+cuas:causesEffect a owl:ObjectProperty ;
+    rdfs:domain cuas:Equipment ;
+    rdfs:range cuas:Effect ;
+    rdfs:label "产生实际效果"@zh .
+
+cuas:affectsThreat a owl:ObjectProperty ;
+    rdfs:domain cuas:Effect ;
+    rdfs:range cuas:Threat ;
+    rdfs:label "作用于威胁"@zh .
+
+cuas:quantifiedBy a owl:ObjectProperty ;
+    rdfs:domain cuas:Effect ;
+    rdfs:range cuas:EffectMetric ;
+    rdfs:label "由指标量化"@zh .
 
 
 

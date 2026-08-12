@@ -1,7 +1,7 @@
 # C-UAS 本体一致性验证报告
 
 - 总结论：**通过**
-- 执行时间：2026-08-11T17:17:39+08:00
+- 执行时间：2026-08-12T16:43:42+08:00
 - Python：3.11.15
 - Java：java version "20.0.1" 2023-04-18
 - Owlready2 / HermiT：0.51 / bundled
@@ -10,12 +10,13 @@
 
 | 检查 | 结果 | 实际证据 | 用时（秒） |
 |---|---:|---|---:|
-| RDF/Turtle 语法解析 | 通过 | cuas-ontology.ttl=288, cuas-data-valid.ttl=175, cuas-data-test.ttl=2, cuas-shapes.ttl=419 | 0.045 |
+| RDF/Turtle 语法解析 | 通过 | cuas-ontology.ttl=378, cuas-data-valid.ttl=242, cuas-data-test.ttl=2, cuas-shapes.ttl=516 | 0.051 |
 | 8 OT / 10 LT 结构审计 | 通过 | core_classes=8/8; core_links=10/10; unsupported_datatype_ranges=0 | 0.000 |
-| SHACL 正向实例验证 | 通过 | Conforms=True | 0.180 |
-| SHACL 负向对照 | 通过 | Conforms=False; violations=2; expected_paths=priority,operationalStatus | 0.132 |
-| HermiT 正向一致性 | 通过 | HermiT consistent=True; expected=True; input_triples=463 | 0.973 |
-| HermiT 类型互斥负向对照 | 通过 | HermiT consistent=False; expected=False; input_triples=465 | 0.818 |
+| 3 个扩展类型 / 6 个扩展关系审计 | 通过 | extension_classes=3/3; extension_links=6/6 | 0.000 |
+| SHACL 正向实例验证 | 通过 | Conforms=True | 0.429 |
+| SHACL 负向对照 | 通过 | Conforms=False; violations=2; expected_paths=priority,operationalStatus | 0.405 |
+| HermiT 正向一致性 | 通过 | HermiT consistent=True; expected=True; input_triples=620 | 1.415 |
+| HermiT 类型互斥负向对照 | 通过 | HermiT consistent=False; expected=False; input_triples=622 | 1.507 |
 
 ## SHACL 负向对照（期望且仅期望 2 项）
 
@@ -34,7 +35,7 @@
 
 | 文件 | 三元组数 | SHA-256 |
 |---|---:|---|
-| `cuas-ontology.ttl` | 288 | `25c71137474a1da19aad3657717e8004c22c2b137dc5230559930733749fe839` |
-| `cuas-data-valid.ttl` | 175 | `1f1cffeb04e4ef9577d0aaebf92ae1eaaf5bc10802c464a575fa028108638f7f` |
+| `cuas-ontology.ttl` | 378 | `3cddd6f37d5d9e70c9bf623482453b72e12c3ddc996351be2d9ccefd9a55d875` |
+| `cuas-data-valid.ttl` | 242 | `5a2a1e37328a1e8e748cb059c1ff8c365e13ef09d5baaaae3b86fa032b577f5c` |
 | `cuas-data-test.ttl` | 2 | `db3ddfd0fdd6186b184b5a78e7677f8b660a0a10a7d3e9f5d864c09ade17754d` |
-| `cuas-shapes.ttl` | 419 | `e6ed57dcbb41416c22f61e582c181d9692455e3f40c62bc496b8109dbf4c0a1c` |
+| `cuas-shapes.ttl` | 516 | `8d4933fdd44820b676753f0afb4b056aa6a2c5bc991db657b1c1f00ba1351cd0` |

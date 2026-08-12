@@ -8,9 +8,9 @@
 2  notebook_03      synthetic_five_channel_beta_binomial_flywheel    否   
 
              SHA256  
-0  5bc8a55e0f8f8d03  
+0  9a578f80c5c0fff5  
 1  7db0180bc02e330e  
-2  5c79b0e5e998f8b4
+2  9d654037385d2a2d
 
 --- cell 5 / execute_result ---
                                    指标      value         unit           工程门槛  \
@@ -90,8 +90,8 @@
 裁决汇总: {'pass': 21, 'fail': 0, 'report_only': 2}
 
 --- cell 12 / stream ---
-Action 决策: ACT-A7454DD33AEE
-RDF 三元组: 127
+Action 决策: ACT-843B114DD264
+RDF 三元组: 129
 JSON: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\05_Notebook与数据\验证输出\action_feedback_demo.json
 TTL: D:\Downloads\反无人机体系\智信2026_新概念反无_完整项目包\05_Notebook与数据\验证输出\action_feedback_writeback.ttl
 

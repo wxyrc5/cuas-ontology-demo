@@ -1,4 +1,4 @@
-"""Generate the authoritative technical snapshot and freeze stale deliverables."""
+"""Generate the authoritative technical snapshot and classify competition materials."""
 from __future__ import annotations
 
 import hashlib
@@ -13,7 +13,6 @@ PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 DOCS_DIR = PACKAGE_ROOT / "07_文档"
 OUTPUT_JSON = DOCS_DIR / "当前技术版本清单.json"
 OUTPUT_MARKDOWN = DOCS_DIR / "当前技术版本清单.md"
-PUBLIC_MODE = (PACKAGE_ROOT / "PUBLIC_TECHNICAL_REPOSITORY").is_file()
 
 
 def sha256(path: Path) -> str:
@@ -142,6 +141,8 @@ def main() -> None:
         "fix_notebook_fonts.py",
         "generate_offline_maps.py",
         "generate_release_manifest.py",
+        "build_competition_proposal.py",
+        "build_competition_proposal_expert.py",
         "repair_bayesian_notebook.py",
         "repair_end_to_end_notebook.py",
         "repair_ontology_notebook.py",
@@ -164,13 +165,8 @@ def main() -> None:
         DOCS_DIR / "本地运行说明.md",
         DOCS_DIR / "README.md",
         PACKAGE_ROOT / "01_参赛交付物" / "README.md",
-        PACKAGE_ROOT / "01_参赛交付物" / "00_暂停使用_待第7和第8步更新.md",
+        PACKAGE_ROOT / "01_参赛交付物" / "00_第7和第8步恢复状态.md",
     ]
-    public_controls = [
-        PACKAGE_ROOT / "PUBLIC_TECHNICAL_REPOSITORY",
-        PACKAGE_ROOT / "PUBLIC_REPOSITORY.md",
-        PACKAGE_ROOT / ".gitignore",
-    ] if PUBLIC_MODE else []
     auxiliary_3d = list(files_under(PACKAGE_ROOT / "03_源码" / "threejs_app"))
 
     source_groups = {
@@ -181,8 +177,6 @@ def main() -> None:
         "canonical_governance_docs": records(canonical_docs),
         "auxiliary_threejs_source": records(auxiliary_3d),
     }
-    if PUBLIC_MODE:
-        source_groups["public_repository_controls"] = records(public_controls)
     tree_hash = source_tree_digest(source_groups)
     generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
     snapshot_id = f"ZX2026-TECH-{generated_at[:10].replace('-', '')}-{tree_hash[:12]}"
@@ -208,32 +202,62 @@ def main() -> None:
     ]
 
     deliverable_dir = PACKAGE_ROOT / "01_参赛交付物"
-    warning_files = {
+    governance_files = {
         "README.md",
-        "00_暂停使用_待第7和第8步更新.md",
+        "00_第7和第8步恢复状态.md",
     }
-    frozen_top_level = [] if PUBLIC_MODE else [
-        path
-        for path in sorted(deliverable_dir.iterdir(), key=lambda item: item.name.lower())
-        if path.is_file() and path.name not in warning_files
-    ]
+    prepared_names = {
+        "项目方案_智信2026_新概念反无.md",
+        "演示视频脚本_4分30秒.md",
+        "演示视频字幕_4分30秒.srt",
+        "演示视频录制检查清单.md",
+        "现场演示操作手册.md",
+        "答辩要点与高频问答.md",
+        "评审证据索引.md",
+        "提交前审计报告.md",
+    }
+    frozen_names = {
+        "项目方案_智信2026_新概念反无.docx",
+        "项目方案_智信2026_新概念反无.pdf",
+        "项目汇报_智信2026_新概念反无.pptx",
+        "演示视频_8分钟_无旁白审片版_非最终提交.mp4",
+        "演示视频脚本_8分钟.md",
+        "演示视频字幕_8分钟.srt",
+        "提交前_匿名技术包_创意类_科目7新概念反无.zip",
+        "提交前_匿名技术包_创意类_科目7新概念反无.zip.sha256.json",
+    }
+    pending_admin_names = {
+        "报名信息采集与提交清单.md",
+        "匿名技术包_提交前说明.md",
+    }
+    top_level_files = {
+        path.name: path
+        for path in deliverable_dir.iterdir()
+        if path.is_file() and path.name not in governance_files
+    }
+    classified_names = prepared_names | frozen_names | pending_admin_names
+    unclassified = set(top_level_files) - classified_names
+    missing = classified_names - set(top_level_files)
+    if unclassified or missing:
+        raise ValueError(
+            f"Competition material inventory mismatch: unclassified={sorted(unclassified)}, missing={sorted(missing)}"
+        )
+    prepared_records = records(top_level_files[name] for name in prepared_names)
+    frozen_top_level = [top_level_files[name] for name in frozen_names]
     frozen_records = records(frozen_top_level)
-    required_frozen_extensions = {".docx", ".pdf", ".pptx", ".mp4", ".zip"}
+    pending_admin_records = records(top_level_files[name] for name in pending_admin_names)
+    required_frozen_extensions = {".pptx", ".mp4", ".zip"}
     actual_frozen_extensions = {Path(item["path"]).suffix.lower() for item in frozen_records}
-    if not PUBLIC_MODE and not required_frozen_extensions.issubset(actual_frozen_extensions):
+    if not required_frozen_extensions.issubset(actual_frozen_extensions):
         raise ValueError("Frozen deliverable inventory is unexpectedly incomplete")
 
     deferred_generator_names = [
         "构建匿名技术包.ps1",
         "build_competition_deck.mjs",
-        "build_competition_proposal.py",
         "build_review_video_deck.mjs",
         "export_review_video.ps1",
-        "render_docx_workspace.py",
     ]
-    deferred_generators = [] if PUBLIC_MODE else records(
-        script_dir / name for name in deferred_generator_names
-    )
+    deferred_generators = records(script_dir / name for name in deferred_generator_names)
 
     official_files = records(files_under(PACKAGE_ROOT / "00_官方材料"))
     history_roots = [
@@ -258,11 +282,7 @@ def main() -> None:
         "schema_version": 1,
         "generated_at": generated_at,
         "snapshot_id": snapshot_id,
-        "status": (
-            "PUBLIC_TECHNICAL_BASELINE_VERIFIED_SUBMISSION_ARTIFACTS_EXCLUDED"
-            if PUBLIC_MODE
-            else "TECHNICAL_BASELINE_VERIFIED_SUBMISSION_ARTIFACTS_FROZEN"
-        ),
+        "status": "TECHNICAL_BASELINE_VERIFIED_COMPETITION_MATERIALS_PARTIAL",
         "package_root": str(PACKAGE_ROOT),
         "git_repository_present": (PACKAGE_ROOT / ".git").is_dir()
         or (PACKAGE_ROOT.parent / ".git").is_dir(),
@@ -287,10 +307,7 @@ def main() -> None:
                 "path": "03_源码/streamlit_cloud_deploy",
                 "authority": "generated_from_03_源码/streamlit_app",
                 "edit_directly": False,
-                "verification": (
-                    f"{len(canonical_app)}/{len(canonical_app)} canonical files "
-                    "covered by deployment-mirror verification"
-                ),
+                "verification": "31/31 managed files matched in technical acceptance",
             },
             {
                 "path": relative(generated_app_snapshot),
@@ -298,25 +315,25 @@ def main() -> None:
                 "edit_directly": False,
             },
         ],
+        "prepared_competition_materials": {
+            "status": "CURRENT_MARKDOWN_DRAFT_AWAITING_USER_CONFIRMATION",
+            "files": prepared_records,
+        },
         "frozen_submission_artifacts": {
-            "status": (
-                "EXCLUDED_FROM_PUBLIC_TECHNICAL_REPOSITORY"
-                if PUBLIC_MODE else "FROZEN_DO_NOT_SUBMIT"
-            ),
+            "status": "FROZEN_DO_NOT_SUBMIT",
             "reason": (
-                "Submission artifacts are intentionally excluded from the public technical repository."
-                if PUBLIC_MODE else
-                "User deferred steps 7 and 8; these artifacts predate the current formal "
-                "ontology, Bayesian, full-loop OODA and resource-scaling evidence."
+                "DOCX/PDF and other binary artifacts have not been regenerated and visually "
+                "reviewed against the current Markdown authority."
             ),
-            "warning": "01_参赛交付物/00_暂停使用_待第7和第8步更新.md",
+            "warning": "01_参赛交付物/00_第7和第8步恢复状态.md",
             "files": frozen_records,
         },
+        "pending_admin_materials": {
+            "status": "REQUIRES_CONFIRMED_TEAM_AND_SUBMISSION_DATA",
+            "files": pending_admin_records,
+        },
         "deferred_submission_generators": {
-            "status": (
-                "EXCLUDED_FROM_PUBLIC_TECHNICAL_REPOSITORY"
-                if PUBLIC_MODE else "DO_NOT_RUN_UNTIL_STEPS_7_AND_8_RESUME"
-            ),
+            "status": "DO_NOT_RUN_UNTIL_PPT_VIDEO_AND_ARCHIVE_REBUILD",
             "files": deferred_generators,
         },
         "official_reference_files": official_files,
@@ -331,8 +348,8 @@ def main() -> None:
             "Edit 03_源码/streamlit_app, never edit streamlit_cloud_deploy directly.",
             "Only four top-level canonical notebooks are executable evidence; history is excluded.",
             "Use 指标裁决.json for every numeric claim and preserve synthetic/not-field-test wording.",
-            "Treat GitHub main as an early snapshot; preserve its history and publish only through an approved consolidation branch and PR.",
-            "Do not submit any current file in 01_参赛交付物 until steps 7 and 8 resume.",
+            "Treat GitHub main as an early snapshot; use the approved consolidation branch and Pull Request for public review.",
+            "Use Markdown as the sole authority until the user confirms content; only then regenerate and visually review DOCX/PDF.",
             "Run 执行技术验收.ps1 after every source or metric change; it regenerates this manifest.",
         ],
         "deferred_scope": technical["deferred_scope"],
@@ -358,7 +375,7 @@ def main() -> None:
         f"- 指标裁决：**{evidence['metric_adjudication_summary']['pass']} PASS / {evidence['metric_adjudication_summary']['fail']} FAIL / {evidence['metric_adjudication_summary']['report_only']} REPORT_ONLY**；",
         f"- Notebook：**{evidence['notebook_code_cells']}/{evidence['notebook_code_cells']}** 代码单元；Streamlit：**{evidence['streamlit_pages']}/{evidence['streamlit_pages']}** 页面；",
         "- 协调感知点估计 Pk≥0.75 最少包数：20/25/30/40/50/60/75/100 机分别为 **1/2/2/2/3/3/4/5**；",
-        f"- Git 仓库存在：**{report['git_repository_present']}**。以本快照编号、源文件树哈希和 Git 提交共同识别版本。",
+        f"- Git 仓库存在：**{report['git_repository_present']}**。在建立 Git 基线前，以本快照编号和源文件树哈希识别版本。",
         "",
         "## 权威源文件",
         "",
@@ -373,17 +390,28 @@ def main() -> None:
         "",
         "完整路径、字节数、修改时间和 SHA-256 见同名 JSON。",
         "",
-        "## 交付物边界",
+        "## 已整理、待用户确认的 Markdown 主线材料",
         "",
-        (
-            "> DOCX/PDF/PPTX/视频/ZIP 与第 7、8 步生成器均已从公开技术仓库排除。"
-            if PUBLIC_MODE else
-            "> `01_参赛交付物` 顶层旧成品均为 **FROZEN / DO NOT SUBMIT**。它们含旧指标和旧验证结论；第 7、8 步恢复前不得提交或发送评委。"
-        ),
+        "> 以下 Markdown/SRT 材料已按“好产品、好创意、好团队、快速迭代转化”的专家评审叙事整理；当前仍待参赛者逐项确认。",
         "",
         "| 文件 | 大小 MiB | SHA-256 前 12 位 |",
         "|---|---:|---|",
     ]
+    for item in prepared_records:
+        markdown.append(
+            f"| `{item['path']}` | {item['bytes'] / (1024 * 1024):.2f} | `{item['sha256'][:12]}` |"
+        )
+    markdown.extend(
+        [
+            "",
+            "## 仍冻结、不得提交",
+            "",
+            "> DOCX/PDF、旧 PPT、无旁白审片视频和旧 ZIP 尚未按当前 Markdown 权威源完成最终生成与视觉复核，继续保持 **FROZEN / DO NOT SUBMIT**。",
+            "",
+            "| 文件 | 大小 MiB | SHA-256 前 12 位 |",
+            "|---|---:|---|",
+        ]
+    )
     for item in frozen_records:
         markdown.append(
             f"| `{item['path']}` | {item['bytes'] / (1024 * 1024):.2f} | `{item['sha256'][:12]}` |"
@@ -396,8 +424,8 @@ def main() -> None:
             "- `streamlit_cloud_deploy` 是派生镜像，不得手工修改；",
             "- `历史版本`、旧实验、旧生成器不得运行或引用；",
             "- `C-UAS-Final-Package` 仅保留二维/三维修复参考身份；",
-            "- GitHub 仓库是早期远程快照，不能反向覆盖当前本地技术主线；",
-            "- 当前 DOCX/PDF/PPTX/视频/ZIP 均未随本轮技术结果重建。",
+            "- GitHub `main` 是早期远程快照，不能反向覆盖当前本地技术主线；整合分支和 PR 用于公开审查；",
+            "- 当前只有 Markdown/SRT 主线可供内容评审；DOCX/PDF、PPT、MP4 和 ZIP 均不得提交。",
             "",
             "## 更新方式",
             "",
@@ -414,6 +442,7 @@ def main() -> None:
 
     print(f"SNAPSHOT_ID={snapshot_id}")
     print(f"SOURCE_FILES={report['source_file_count']}")
+    print(f"PREPARED_COMPETITION_FILES={len(prepared_records)}")
     print(f"FROZEN_SUBMISSION_FILES={len(frozen_records)}")
     print(f"JSON_MANIFEST={OUTPUT_JSON}")
     print(f"MARKDOWN_MANIFEST={OUTPUT_MARKDOWN}")

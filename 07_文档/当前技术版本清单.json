@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T17:29:28+08:00",
-  "snapshot_id": "ZX2026-TECH-20260811-724208FF6FD5",
-  "status": "PUBLIC_TECHNICAL_BASELINE_VERIFIED_SUBMISSION_ARTIFACTS_EXCLUDED",
-  "package_root": "D:\\Downloads\\反无人机体系\\cuas-ontology-demo-consolidated",
-  "git_repository_present": true,
-  "source_tree_sha256": "724208FF6FD5408DDE0747FA029907048566914F14988DE7D9B100080F9A3BB9",
+  "generated_at": "2026-08-12T17:11:24+08:00",
+  "snapshot_id": "ZX2026-TECH-20260812-5777F1AE070B",
+  "status": "TECHNICAL_BASELINE_VERIFIED_COMPETITION_MATERIALS_PARTIAL",
+  "package_root": "D:\\Downloads\\反无人机体系\\智信2026_新概念反无_完整项目包",
+  "git_repository_present": false,
+  "source_tree_sha256": "5777F1AE070BED2D51F7EF41EF3E45969DE4D92E66E8190656034D7EF7BACFC9",
   "source_groups": {
     "canonical_formal_model": [
       {
@@ -16,21 +16,21 @@
       },
       {
         "path": "03_源码/本体模型/cuas-data-valid.ttl",
-        "bytes": 8566,
-        "modified_at": "2026-08-10T01:55:57+08:00",
-        "sha256": "1F1CFFEB04E4EF9577D0AAEBF92AE1EAAF5BC10802C464A575FA028108638F7F"
+        "bytes": 12324,
+        "modified_at": "2026-08-12T16:26:17+08:00",
+        "sha256": "5A2A1E37328A1E8E748CB059C1FF8C365E13EF09D5BAAAAE3B86FA032B577F5C"
       },
       {
         "path": "03_源码/本体模型/cuas-ontology.ttl",
-        "bytes": 14931,
-        "modified_at": "2026-08-10T01:55:54+08:00",
-        "sha256": "25C71137474A1DA19AAD3657717E8004C22C2B137DC5230559930733749FE839"
+        "bytes": 19438,
+        "modified_at": "2026-08-12T16:26:17+08:00",
+        "sha256": "3CDDD6F37D5D9E70C9BF623482453B72E12C3DDC996351BE2D9CCEFD9A55D875"
       },
       {
         "path": "03_源码/本体模型/cuas-shapes.ttl",
-        "bytes": 17603,
-        "modified_at": "2026-08-10T01:55:56+08:00",
-        "sha256": "E6ED57DCBB41416C22F61E582C181D9692455E3F40C62BC496B8109DBF4C0A1C"
+        "bytes": 20413,
+        "modified_at": "2026-08-12T16:26:17+08:00",
+        "sha256": "8D4933FDD44820B676753F0AFB4B056AA6A2C5BC991DB657B1C1F00BA1351CD0"
       }
     ],
     "canonical_streamlit_source": [
@@ -42,15 +42,21 @@
       },
       {
         "path": "03_源码/streamlit_app/app.py",
-        "bytes": 4013,
-        "modified_at": "2026-08-10T02:53:49+08:00",
-        "sha256": "8AB6194414046F9DB15D0D98B62DEF46293EE1AD44602D58DFB2723B72691168"
+        "bytes": 7078,
+        "modified_at": "2026-08-12T16:37:12+08:00",
+        "sha256": "71A0FCB5398BB2C9BE992C5EEA5B0EFC142E06FCF304EA4F8C389BCC0B2CC16E"
       },
       {
         "path": "03_源码/streamlit_app/assets/README.md",
         "bytes": 221,
         "modified_at": "2026-08-06T23:38:52+08:00",
         "sha256": "6472FC37934A69983704B1CC4F4A911FA4F0A136B99FB1B780C2989EA86E837D"
+      },
+      {
+        "path": "03_源码/streamlit_app/data/action_contract.schema.json",
+        "bytes": 2610,
+        "modified_at": "2026-08-12T16:28:31+08:00",
+        "sha256": "7FBD0AC3F0E129D79F59CDAD8C30B540C61C7E52C498C527E599E4F49EEE2FD9"
       },
       {
         "path": "03_源码/streamlit_app/data/airports.json",
@@ -66,15 +72,21 @@
       },
       {
         "path": "03_源码/streamlit_app/data/ontology.json",
-        "bytes": 12137,
-        "modified_at": "2026-08-10T02:49:20+08:00",
-        "sha256": "EEA5155BD7AC143BCB0E320E8D807CD02612DAF3C127BF92B70B106DB11F6F49"
+        "bytes": 13830,
+        "modified_at": "2026-08-12T16:30:01+08:00",
+        "sha256": "D9C35D372518864A96915E8A23A10536698A52DF2EAFB63197E99610E46279CD"
       },
       {
         "path": "03_源码/streamlit_app/data/ooda_timing_params.json",
         "bytes": 7804,
         "modified_at": "2026-08-10T04:17:30+08:00",
         "sha256": "57F7A670715E8FD61B2A4B475EE90D19399C10F557FE5B7B81D6FB68B7C2FDDE"
+      },
+      {
+        "path": "03_源码/streamlit_app/data/streaming_semantic_contract.json",
+        "bytes": 1430,
+        "modified_at": "2026-08-12T16:28:31+08:00",
+        "sha256": "5E3025B4FACDE034648AB7F057081A4F340C5A2C2235D9FC929D07A56A82B16C"
       },
       {
         "path": "03_源码/streamlit_app/data/swarm_resources.json",
@@ -84,9 +96,15 @@
       },
       {
         "path": "03_源码/streamlit_app/demo_mode.py",
-        "bytes": 3337,
-        "modified_at": "2026-08-10T04:38:06+08:00",
-        "sha256": "F2F2BE6463DE05A398B7B09E30C4D212CDB613C0047AF67C727875BD6A860761"
+        "bytes": 5999,
+        "modified_at": "2026-08-12T16:37:12+08:00",
+        "sha256": "EB5BCE73DE1906815BCD868A736D7BD5D124D4C54FDA7840B0F612B2DED0324B"
+      },
+      {
+        "path": "03_源码/streamlit_app/pages/0_🎬_专家演示.py",
+        "bytes": 103,
+        "modified_at": "2026-08-12T14:18:56+08:00",
+        "sha256": "32A23464C218715493E5D8FDABC0C2F0D3962A04EC3D49E2CD237459258F71D9"
       },
       {
         "path": "03_源码/streamlit_app/pages/1_🏠_主页.py",
@@ -96,9 +114,9 @@
       },
       {
         "path": "03_源码/streamlit_app/pages/2_🧬_本体浏览.py",
-        "bytes": 14888,
-        "modified_at": "2026-08-10T05:09:03+08:00",
-        "sha256": "B7B1AB71DC5548A50AA8BCA857B4906878FDE4A5DF9B27605A556C8B10D1F9E6"
+        "bytes": 15694,
+        "modified_at": "2026-08-12T16:30:41+08:00",
+        "sha256": "88F3E4E2D8680BE7AB009FF94A53064FBB115E66397E91DA4A87EB784870AE48"
       },
       {
         "path": "03_源码/streamlit_app/pages/3_🔍_SPARQL查询.py",
@@ -108,9 +126,9 @@
       },
       {
         "path": "03_源码/streamlit_app/pages/4_📊_贝叶斯实验.py",
-        "bytes": 9361,
-        "modified_at": "2026-08-10T02:55:04+08:00",
-        "sha256": "5CD4B2F084CA3D203B5AE177A27FAC5E442043D9873583666B633263B367EC27"
+        "bytes": 10996,
+        "modified_at": "2026-08-12T16:34:18+08:00",
+        "sha256": "AF4A0480D5447957ADBC798113CE96060DC13020E26DA3F017AC9744D738B4C2"
       },
       {
         "path": "03_源码/streamlit_app/pages/5_🗺_机场反无.py",
@@ -126,9 +144,9 @@
       },
       {
         "path": "03_源码/streamlit_app/requirements.txt",
-        "bytes": 171,
-        "modified_at": "2026-08-06T23:38:51+08:00",
-        "sha256": "21689692C1A4F4A24DA9D45B64D1046E63FE3F706BF85C6B7C75AB093DFD7294"
+        "bytes": 190,
+        "modified_at": "2026-08-12T16:28:31+08:00",
+        "sha256": "AB641F9EC7C3475D82D659602DC0E6D5ADF377753FCF8C369F549CD17B057BA7"
       },
       {
         "path": "03_源码/streamlit_app/static/maps/BRU.png",
@@ -161,6 +179,12 @@
         "sha256": "DFC24B6AFEDF50A5BF0EBFC7BCAC9D0866484124F11E3D4F20DA8CD943336ED0"
       },
       {
+        "path": "03_源码/streamlit_app/utils/action_contract.py",
+        "bytes": 760,
+        "modified_at": "2026-08-12T16:28:31+08:00",
+        "sha256": "F4584E9958EFF97C87B3736DFDE12A27B8D8F9BE45FEAAE00ACB20640EF04EC2"
+      },
+      {
         "path": "03_源码/streamlit_app/utils/bayes_engine.py",
         "bytes": 10757,
         "modified_at": "2026-08-09T23:39:17+08:00",
@@ -168,9 +192,9 @@
       },
       {
         "path": "03_源码/streamlit_app/utils/bayesian_flywheel.py",
-        "bytes": 19273,
-        "modified_at": "2026-08-10T02:07:12+08:00",
-        "sha256": "1DD54D97DB346ECDA8A2E7C8F137D1CD132F128DA1CB0F6B89CE33107BCA478E"
+        "bytes": 25367,
+        "modified_at": "2026-08-12T16:32:22+08:00",
+        "sha256": "C16F77AF64F36316C12DA242ADDED4C83277FE19B4FDB36CF7CCB71EB35152D1"
       },
       {
         "path": "03_源码/streamlit_app/utils/current_metrics.py",
@@ -186,9 +210,9 @@
       },
       {
         "path": "03_源码/streamlit_app/utils/ontology_action_engine.py",
-        "bytes": 16013,
-        "modified_at": "2026-08-10T05:06:42+08:00",
-        "sha256": "56427A7D4F4FDA40A1795E0088796F840F11548FB328E9AE0AC997510EC47AF0"
+        "bytes": 17788,
+        "modified_at": "2026-08-12T16:28:31+08:00",
+        "sha256": "B605B097EBF7128368C5F60EA86E0F31B518352005B070EB53F709760C929E22"
       },
       {
         "path": "03_源码/streamlit_app/utils/ontology_loader.py",
@@ -218,9 +242,9 @@
     "canonical_notebooks": [
       {
         "path": "05_Notebook与数据/notebook_01_ontology_validation.ipynb",
-        "bytes": 16641,
-        "modified_at": "2026-08-10T02:42:20+08:00",
-        "sha256": "97D00804BF7A888EDFD75FBE952B432098728BA03E8B6F43CE131AD9AC38A792"
+        "bytes": 17710,
+        "modified_at": "2026-08-12T16:39:53+08:00",
+        "sha256": "955F8BD70F8FC86F9C83988765C4012165B425504CFE820462090B257FD8B43C"
       },
       {
         "path": "05_Notebook与数据/notebook_02_ooda_simulation.ipynb",
@@ -230,9 +254,9 @@
       },
       {
         "path": "05_Notebook与数据/notebook_03_bayesian_adaptive.ipynb",
-        "bytes": 17851,
-        "modified_at": "2026-08-11T17:17:31+08:00",
-        "sha256": "24A3611800DD155546AD884622D0101BAB17BC42C992E8518C270265286B14DD"
+        "bytes": 20964,
+        "modified_at": "2026-08-12T16:33:21+08:00",
+        "sha256": "57645AF865D54A6649F206D82D474789876A1A40E8BDAD14305C3ECAA155B430"
       },
       {
         "path": "05_Notebook与数据/notebook_04_demo_end_to_end.ipynb",
@@ -255,6 +279,18 @@
         "sha256": "98DB184B0A9E31AB6C66036298045E15CF43418EBA029F91712F20659A7C126D"
       },
       {
+        "path": "06_部署脚本/build_competition_proposal.py",
+        "bytes": 33513,
+        "modified_at": "2026-08-12T14:09:48+08:00",
+        "sha256": "295C260D9826C9CDB379E34EE86F529D0FC13BD387A4893C6E56805BD9F8112C"
+      },
+      {
+        "path": "06_部署脚本/build_competition_proposal_expert.py",
+        "bytes": 25786,
+        "modified_at": "2026-08-12T16:42:33+08:00",
+        "sha256": "028B7907F4FD0E9565A028BA76E412DB1BD67B429B48F37664DD55FB68DE2B76"
+      },
+      {
         "path": "06_部署脚本/environment.yml",
         "bytes": 125,
         "modified_at": "2026-08-09T22:16:25+08:00",
@@ -262,9 +298,9 @@
       },
       {
         "path": "06_部署脚本/export_current_metrics.py",
-        "bytes": 7315,
-        "modified_at": "2026-08-10T04:25:42+08:00",
-        "sha256": "E4552993FF74BDB1C56DDA25AAB7D0C2C1981E24E00EE0E0B1B5E25B07D7C171"
+        "bytes": 7570,
+        "modified_at": "2026-08-12T16:37:59+08:00",
+        "sha256": "8B2D9327BFD99A99BCDB938A660E2C41220569633DB323ACC47FB8866698506B"
       },
       {
         "path": "06_部署脚本/fix_notebook_fonts.py",
@@ -280,15 +316,15 @@
       },
       {
         "path": "06_部署脚本/generate_release_manifest.py",
-        "bytes": 18322,
-        "modified_at": "2026-08-11T10:45:29+08:00",
-        "sha256": "1FE1D4E5D346FF056F11AC6C8A4B795A7682F1A94C32BF7DF0BACBFFEB9705E7"
+        "bytes": 19781,
+        "modified_at": "2026-08-12T17:05:40+08:00",
+        "sha256": "8F77CF3DE0DC23EA14F35148B291DC66AD051473562D6871274018356026E0AE"
       },
       {
         "path": "06_部署脚本/repair_bayesian_notebook.py",
-        "bytes": 14001,
-        "modified_at": "2026-08-11T17:17:23+08:00",
-        "sha256": "FBAB570542E3AB133AF7E4CA8273EE4B5B21517510A75138E489A619A37CD000"
+        "bytes": 16473,
+        "modified_at": "2026-08-12T16:33:13+08:00",
+        "sha256": "A2BDC695F91300763B8CC41F1AFBE27A0E2EFD48D5B83022996A7CC5D5D85F4F"
       },
       {
         "path": "06_部署脚本/repair_end_to_end_notebook.py",
@@ -298,9 +334,9 @@
       },
       {
         "path": "06_部署脚本/repair_ontology_notebook.py",
-        "bytes": 13044,
-        "modified_at": "2026-08-10T02:42:12+08:00",
-        "sha256": "A7B8D7CE914FECAE09D822100F7A5F058446890304530F67C88A10DDE8E827A3"
+        "bytes": 14003,
+        "modified_at": "2026-08-12T16:39:45+08:00",
+        "sha256": "610E2402A327E8E817114005C623872BE1AC912145CD020AAADC21CE440765CD"
       },
       {
         "path": "06_部署脚本/repair_ooda_notebook.py",
@@ -310,9 +346,9 @@
       },
       {
         "path": "06_部署脚本/requirements-local.txt",
-        "bytes": 424,
-        "modified_at": "2026-08-10T01:58:37+08:00",
-        "sha256": "A649B40A7FAAF3A3400AF858CB15786CF2B24B249B64497D26FD182792851679"
+        "bytes": 443,
+        "modified_at": "2026-08-12T16:28:31+08:00",
+        "sha256": "FF87264120EAAF1EA222C2C6329FB2FB736390B5CD58BD1DCF83400E40D94FD9"
       },
       {
         "path": "06_部署脚本/run_notebooks.py",
@@ -334,21 +370,21 @@
       },
       {
         "path": "06_部署脚本/validate_final_state.py",
-        "bytes": 20203,
-        "modified_at": "2026-08-10T05:24:49+08:00",
-        "sha256": "B9DCF5FDF7596B4E51A8730857E71D22B8ABB204A8C86F40FB5940812DD76D07"
+        "bytes": 20383,
+        "modified_at": "2026-08-12T16:40:30+08:00",
+        "sha256": "E43A1E364F03DADDB291C08126D267525EC28A8ED11CD33B5EC3E923CE3FB9FD"
       },
       {
         "path": "06_部署脚本/validate_ontology_consistency.py",
-        "bytes": 13728,
-        "modified_at": "2026-08-10T02:43:09+08:00",
-        "sha256": "458440127BCE5DF89214F6920C014A02FBD7B7A77BF1083ADB82DA774C647FA2"
+        "bytes": 14750,
+        "modified_at": "2026-08-12T16:27:02+08:00",
+        "sha256": "17D2E75076184A8269C1E2C5802CF2CB379AF7A76724C0D3FC8D2B2B73866E21"
       },
       {
         "path": "06_部署脚本/verify_streamlit_app.py",
-        "bytes": 21821,
-        "modified_at": "2026-08-10T05:20:40+08:00",
-        "sha256": "2595C644EF73FC08977A2054BCCDAFAD3DE1D1404E39FDD874E7D6D328F25704"
+        "bytes": 22788,
+        "modified_at": "2026-08-12T16:30:09+08:00",
+        "sha256": "0B1EA0566B95204615519F267CE7407082E8BB3974B8C3D099D69B465D5AB57E"
       },
       {
         "path": "06_部署脚本/启动Jupyter.ps1",
@@ -383,22 +419,22 @@
     ],
     "canonical_governance_docs": [
       {
-        "path": "01_参赛交付物/00_暂停使用_待第7和第8步更新.md",
-        "bytes": 1301,
-        "modified_at": "2026-08-10T03:58:04+08:00",
-        "sha256": "6D5404B3480E8903750BCE32536407FD53653264201EB219F40BBAD4AE0FF46A"
+        "path": "01_参赛交付物/00_第7和第8步恢复状态.md",
+        "bytes": 1074,
+        "modified_at": "2026-08-12T17:01:53+08:00",
+        "sha256": "E29E47FA6C226AF509F7D39D122ECF15A41FC9AEDE4737CB39397448E3360419"
       },
       {
         "path": "01_参赛交付物/README.md",
-        "bytes": 1688,
-        "modified_at": "2026-08-10T03:58:05+08:00",
-        "sha256": "E44BCA0490EACCED4CD100DE7FD356A1A9A1B4446D8D0A9263D91438BF128B10"
+        "bytes": 1161,
+        "modified_at": "2026-08-12T17:00:10+08:00",
+        "sha256": "5446B746786DCF453E7440B5034AC40E679337DB4F26706B073EA1E5A3D348E5"
       },
       {
         "path": "07_文档/GitHub远端历史审计与发布策略.md",
-        "bytes": 7758,
-        "modified_at": "2026-08-11T10:58:34+08:00",
-        "sha256": "659FF823C312A374E9A212FABA2262F8207450D943FDA0C4027671B20D92D7BC"
+        "bytes": 2545,
+        "modified_at": "2026-08-12T17:10:40+08:00",
+        "sha256": "B9F1CAA68B1D9A75281302F205AF18AA267E40B326C016A7E69F54673D8250BC"
       },
       {
         "path": "07_文档/README.md",
@@ -408,9 +444,9 @@
       },
       {
         "path": "07_文档/事实口径与答辩边界.md",
-        "bytes": 6546,
-        "modified_at": "2026-08-10T05:27:14+08:00",
-        "sha256": "AB96E1B6F9E4F9541DA684D06ECD408EBC7605507FB5D3936D31618668A28322"
+        "bytes": 6681,
+        "modified_at": "2026-08-12T17:01:53+08:00",
+        "sha256": "D275C1E42BE77FF869AD17345EDCA7817C94A8A6BD459C0B6E95538390AC0C58"
       },
       {
         "path": "07_文档/本地运行说明.md",
@@ -426,15 +462,15 @@
       },
       {
         "path": "07_文档/项目完成度与证据审计.md",
-        "bytes": 9724,
-        "modified_at": "2026-08-11T10:58:35+08:00",
-        "sha256": "75253D73EA187E1765D4BAF2A7F116DE75401A0801FCC278579B5675C7F2AE24"
+        "bytes": 4649,
+        "modified_at": "2026-08-12T17:01:53+08:00",
+        "sha256": "C24EFEF2BE5DC63AB33821531911F46C783F38BCA54F049D9D8336515C4A4563"
       },
       {
         "path": "README.md",
-        "bytes": 8691,
-        "modified_at": "2026-08-11T10:45:27+08:00",
-        "sha256": "CA38557DABF23C45D1F4477DBAF0CE8F17E5A296111A531F430BE0C85D80F945"
+        "bytes": 9110,
+        "modified_at": "2026-08-12T17:11:03+08:00",
+        "sha256": "77A0E6EAA166A0BF67E344E78CD3CD5BA871401AC82B546A88626CCDDD7D3BE9"
       }
     ],
     "auxiliary_threejs_source": [
@@ -474,29 +510,9 @@
         "modified_at": "2026-08-06T23:38:56+08:00",
         "sha256": "20224364C03C2A132FCE6A550E42FD3482C0EFF3138E4F5E8958CC0EDF8770BC"
       }
-    ],
-    "public_repository_controls": [
-      {
-        "path": ".gitignore",
-        "bytes": 462,
-        "modified_at": "2026-08-11T10:45:24+08:00",
-        "sha256": "93431EBFB7DEAA27D5BAD6742313EE1669D24FB79DC741DCEC2C9BF7AA1292CC"
-      },
-      {
-        "path": "PUBLIC_REPOSITORY.md",
-        "bytes": 1823,
-        "modified_at": "2026-08-11T10:45:25+08:00",
-        "sha256": "AFA72A5919B44C14EFC96504788329BD81559B5EC9B7DA8F04502659A34B7A35"
-      },
-      {
-        "path": "PUBLIC_TECHNICAL_REPOSITORY",
-        "bytes": 205,
-        "modified_at": "2026-08-11T10:45:22+08:00",
-        "sha256": "331703ACE4DF065DA24C56B3296B5C9F1B62ED244E12ED52A0C77E712C0EBDAD"
-      }
     ]
   },
-  "source_file_count": 79,
+  "source_file_count": 82,
   "evidence": {
     "technical_acceptance_all_passed": true,
     "technical_acceptance_checks": 14,
@@ -506,9 +522,9 @@
       "report_only": 2
     },
     "notebook_status": "passed",
-    "notebook_code_cells": 41,
+    "notebook_code_cells": 43,
     "streamlit_status": "passed",
-    "streamlit_pages": 7,
+    "streamlit_pages": 8,
     "resource_minimum_packages": {
       "20": 1,
       "25": 2,
@@ -522,105 +538,105 @@
     "files": [
       {
         "path": "03_源码/streamlit_app/data/current_metrics.json",
-        "bytes": 85752,
-        "modified_at": "2026-08-11T17:26:50+08:00",
-        "sha256": "A2ACA6DF8C28D2729ECB7FC3F51A3308EABC3DC287E386635057E2BF8E8DD34A"
+        "bytes": 94359,
+        "modified_at": "2026-08-12T16:52:49+08:00",
+        "sha256": "85B0261FC811C6DF3A8A39C11599AC03FC91F77D73416DB500E7ADE1E24032F6"
       },
       {
         "path": "05_Notebook与数据/验证输出/action_feedback_demo.json",
-        "bytes": 7478,
-        "modified_at": "2026-08-11T17:26:10+08:00",
-        "sha256": "BCEC24ECA1934D3235CAF6D14B4213F9029C5222D4497E0BDE3123FFBE2A5A7A"
+        "bytes": 12028,
+        "modified_at": "2026-08-12T16:52:08+08:00",
+        "sha256": "717B82B7386CAD80D8051A484E22A03C41221D8DD2B8B50C68362166883E73D5"
       },
       {
         "path": "05_Notebook与数据/验证输出/action_feedback_writeback.ttl",
-        "bytes": 7323,
-        "modified_at": "2026-08-11T17:26:10+08:00",
-        "sha256": "1925EDCCB3639FF259FC842035DB8F2162B96180557CC53162DB41E1692DE4E4"
+        "bytes": 7418,
+        "modified_at": "2026-08-12T16:52:08+08:00",
+        "sha256": "B7E3B2E65915C4D4AD25F49C9DBED84BFF4D520C82AA94EED78C68E52F7DB24D"
       },
       {
         "path": "05_Notebook与数据/验证输出/fig2_5_resource_scaling.png",
         "bytes": 344382,
-        "modified_at": "2026-08-11T17:25:57+08:00",
+        "modified_at": "2026-08-12T16:51:53+08:00",
         "sha256": "853E4CC366D2213BF1A046F88389C61A1BBF1060854ACBD8921CB329E31E3A9A"
       },
       {
         "path": "05_Notebook与数据/验证输出/live_streamlit_smoke.json",
-        "bytes": 816,
-        "modified_at": "2026-08-11T17:29:28+08:00",
-        "sha256": "E21EDADC22A8B176DF97FA17CD20B028652668839DECBC68260C63F4F177B7CB"
+        "bytes": 838,
+        "modified_at": "2026-08-12T16:53:12+08:00",
+        "sha256": "23EF4E1B920AB21AA37A8AED00E76176483DE02C706FC8554EEB37DC4CFE6915"
       },
       {
         "path": "05_Notebook与数据/验证输出/metrics_notebook_01.json",
-        "bytes": 2284,
-        "modified_at": "2026-08-11T17:17:42+08:00",
-        "sha256": "5BC8A55E0F8F8D039C95721478CEC1C0E338148253891C4D3A9C2D98D80ABDC9"
+        "bytes": 2387,
+        "modified_at": "2026-08-12T16:43:46+08:00",
+        "sha256": "9A578F80C5C0FFF514FC201C43495952A018F07757B44D03F5EFC9911FE282CE"
       },
       {
         "path": "05_Notebook与数据/验证输出/metrics_notebook_02.json",
         "bytes": 86061,
-        "modified_at": "2026-08-11T17:25:58+08:00",
+        "modified_at": "2026-08-12T16:51:54+08:00",
         "sha256": "7DB0180BC02E330E799887F6D03B45525418A159BF1FA841974E9120FAEB4D50"
       },
       {
         "path": "05_Notebook与数据/验证输出/metrics_notebook_03.json",
-        "bytes": 3662,
-        "modified_at": "2026-08-11T17:26:06+08:00",
-        "sha256": "5C79B0E5E998F8B4BC6713A93A66D0853F46D9D83F04F957957647B70A676F1A"
+        "bytes": 11899,
+        "modified_at": "2026-08-12T16:52:04+08:00",
+        "sha256": "9D654037385D2A2D97CA40BD1C1635BC84DAD7FB0BFCFC037BC81D5D442D3B55"
       },
       {
         "path": "05_Notebook与数据/验证输出/ontology_consistency_report.json",
-        "bytes": 3373,
-        "modified_at": "2026-08-11T17:17:40+08:00",
-        "sha256": "A29166AF78E17B8E5F1A2670770AA3B83840529571CFCCD8CCEC935F2A911ADE"
+        "bytes": 3586,
+        "modified_at": "2026-08-12T16:43:42+08:00",
+        "sha256": "8BA41166C6ACDD2DD392AE2F39E8B5450EC94A2F242D6A3F6DF23C51A2AFDA3A"
       },
       {
         "path": "05_Notebook与数据/验证输出/ooda_coordination_parameters_100_swarm_6_packages.csv",
         "bytes": 379,
-        "modified_at": "2026-08-11T17:17:46+08:00",
+        "modified_at": "2026-08-12T16:43:51+08:00",
         "sha256": "0520234402A15B035E99A5671D648E46980705551B92AFA3F95C89CD1673DDE3"
       },
       {
         "path": "05_Notebook与数据/验证输出/streamlit_acceptance.json",
-        "bytes": 4957,
-        "modified_at": "2026-08-11T17:26:50+08:00",
-        "sha256": "F184F88259CD7B6A89A4B17F8F28D67487C88505F377BA300E1C05A57B7580A3"
+        "bytes": 5432,
+        "modified_at": "2026-08-12T16:52:49+08:00",
+        "sha256": "F8010C63D48E93B8CEFF2BC7F7A7F73CD5829E5B87E3010579E4F3010AAF5529"
       },
       {
         "path": "05_Notebook与数据/验证输出/swarm_resource_scaling_grid.csv",
         "bytes": 15224,
-        "modified_at": "2026-08-11T17:25:55+08:00",
+        "modified_at": "2026-08-12T16:51:51+08:00",
         "sha256": "76D6E3B6F5F3AEA785475F7D0C3806EDDD35DA8544BE37E89C7143810BDBD9FE"
       },
       {
         "path": "05_Notebook与数据/验证输出/swarm_resource_scaling_minimum.csv",
         "bytes": 1424,
-        "modified_at": "2026-08-11T17:25:55+08:00",
+        "modified_at": "2026-08-12T16:51:51+08:00",
         "sha256": "0018D49562E5E64A78943F4FB26E8D9F3E059A8ADA2CCADDEBF57DE5A3F92055"
       },
       {
         "path": "05_Notebook与数据/验证输出/swarm_resource_scaling_thresholds.csv",
         "bytes": 2455,
-        "modified_at": "2026-08-11T17:25:55+08:00",
+        "modified_at": "2026-08-12T16:51:51+08:00",
         "sha256": "3464DADC29E08668914438B0192093DE51BF5CF64DE4FE8EC0865B5BEA3157EB"
       },
       {
         "path": "05_Notebook与数据/验证输出/technical_acceptance_summary.json",
-        "bytes": 3738,
-        "modified_at": "2026-08-11T17:29:28+08:00",
-        "sha256": "D409AF0D11639C542CCAB3D033C3F4949D393C5DFD03C184A61FF29F7EBA91E3"
+        "bytes": 3820,
+        "modified_at": "2026-08-12T17:05:52+08:00",
+        "sha256": "24C6736FAF66BD93D50FE377CB3AA741ABFAA3626155BA5296D919CCA5D581EA"
       },
       {
         "path": "05_Notebook与数据/验证输出/指标裁决.json",
         "bytes": 86909,
-        "modified_at": "2026-08-11T17:26:10+08:00",
-        "sha256": "6A38FFBC76F1FF6834C90BC3F292850375EF7109676F5629CB84ABC5F98241B4"
+        "modified_at": "2026-08-12T16:52:08+08:00",
+        "sha256": "28103701F8EF90FA8A584391224758FC54F6822623FAD5AF648512356F80F201"
       },
       {
         "path": "05_Notebook与数据/验证输出/最新执行/execution_manifest.json",
-        "bytes": 3447,
-        "modified_at": "2026-08-11T17:26:11+08:00",
-        "sha256": "E66F922B50DBE0033D26C0A01F5154E906B600754670BF6C7EE25BD92E6D3524"
+        "bytes": 3449,
+        "modified_at": "2026-08-12T16:52:09+08:00",
+        "sha256": "AAC75924C6FB194C9BFFA8256694C38209A323738BDC52E9914D6E6BCCA727CA"
       }
     ]
   },
@@ -629,7 +645,7 @@
       "path": "03_源码/streamlit_cloud_deploy",
       "authority": "generated_from_03_源码/streamlit_app",
       "edit_directly": false,
-      "verification": "30/30 canonical files covered by deployment-mirror verification"
+      "verification": "31/31 managed files matched in technical acceptance"
     },
     {
       "path": "03_源码/streamlit_app/data/current_metrics.json",
@@ -637,17 +653,174 @@
       "edit_directly": false
     }
   ],
+  "prepared_competition_materials": {
+    "status": "CURRENT_MARKDOWN_DRAFT_AWAITING_USER_CONFIRMATION",
+    "files": [
+      {
+        "path": "01_参赛交付物/提交前审计报告.md",
+        "bytes": 4078,
+        "modified_at": "2026-08-12T17:11:16+08:00",
+        "sha256": "7F2AAD33C042FCDDAEBD0EF4CA760DAFDB01BC1A6164D367A96E05673E6333DE"
+      },
+      {
+        "path": "01_参赛交付物/演示视频字幕_4分30秒.srt",
+        "bytes": 2495,
+        "modified_at": "2026-08-12T16:36:36+08:00",
+        "sha256": "8790FF67B8BBEFFB4CE8802658F32DF66D22450ECAFED3D0068375FD082C664F"
+      },
+      {
+        "path": "01_参赛交付物/演示视频录制检查清单.md",
+        "bytes": 2770,
+        "modified_at": "2026-08-12T16:37:38+08:00",
+        "sha256": "7A307B247267BC6F26517DB17245F364BB25EB896ACFDEB10531F38D6DC2C966"
+      },
+      {
+        "path": "01_参赛交付物/演示视频脚本_4分30秒.md",
+        "bytes": 5053,
+        "modified_at": "2026-08-12T16:36:36+08:00",
+        "sha256": "B22BA7A7D8D8E21805670F87FF68044298343D65AD20CA6E5A2DBD897F210D24"
+      },
+      {
+        "path": "01_参赛交付物/现场演示操作手册.md",
+        "bytes": 3272,
+        "modified_at": "2026-08-12T17:01:53+08:00",
+        "sha256": "0487A36C5EB830792C9D268B234791B06F034C9F02625D0E4EB0C5235D631F53"
+      },
+      {
+        "path": "01_参赛交付物/答辩要点与高频问答.md",
+        "bytes": 5264,
+        "modified_at": "2026-08-12T17:01:53+08:00",
+        "sha256": "0393C5AEAC82DCA70DBB54BFD531158A9E7B35C500450A855CF3F8F3D0C0DED7"
+      },
+      {
+        "path": "01_参赛交付物/评审证据索引.md",
+        "bytes": 4140,
+        "modified_at": "2026-08-12T17:11:16+08:00",
+        "sha256": "8FFDA3F60E6344A826B4D2682B0AD7B10E019A43086DDF6F8359C77A8A4C5CB3"
+      },
+      {
+        "path": "01_参赛交付物/项目方案_智信2026_新概念反无.md",
+        "bytes": 22555,
+        "modified_at": "2026-08-12T17:11:16+08:00",
+        "sha256": "52AB1497BB004DCF9202C982CAA21E09A88FEC2007A6F3FDA745F541A26E05E2"
+      }
+    ]
+  },
   "frozen_submission_artifacts": {
-    "status": "EXCLUDED_FROM_PUBLIC_TECHNICAL_REPOSITORY",
-    "reason": "Submission artifacts are intentionally excluded from the public technical repository.",
-    "warning": "01_参赛交付物/00_暂停使用_待第7和第8步更新.md",
-    "files": []
+    "status": "FROZEN_DO_NOT_SUBMIT",
+    "reason": "DOCX/PDF and other binary artifacts have not been regenerated and visually reviewed against the current Markdown authority.",
+    "warning": "01_参赛交付物/00_第7和第8步恢复状态.md",
+    "files": [
+      {
+        "path": "01_参赛交付物/提交前_匿名技术包_创意类_科目7新概念反无.zip",
+        "bytes": 57818114,
+        "modified_at": "2026-08-10T01:24:14+08:00",
+        "sha256": "E10320293A2A71D3B7D90034F545EE9F611F39B6BDCC08C4AFEAB11F98165735"
+      },
+      {
+        "path": "01_参赛交付物/提交前_匿名技术包_创意类_科目7新概念反无.zip.sha256.json",
+        "bytes": 402,
+        "modified_at": "2026-08-10T01:24:47+08:00",
+        "sha256": "2F4BB0DD8B232F803C9A730FB136FC8809E713B9CCB27811842CA75DEA6745CE"
+      },
+      {
+        "path": "01_参赛交付物/演示视频_8分钟_无旁白审片版_非最终提交.mp4",
+        "bytes": 46445305,
+        "modified_at": "2026-08-10T01:19:16+08:00",
+        "sha256": "238248AAFFDCCD57A0A96CAFBCAAFBF04D11F7E16F997050029A2077F82375C7"
+      },
+      {
+        "path": "01_参赛交付物/演示视频字幕_8分钟.srt",
+        "bytes": 2276,
+        "modified_at": "2026-08-12T14:29:37+08:00",
+        "sha256": "675C2E2D7CB77445FED6C2A2AA3C30093A948CB1692D9651AF0F3E06ED3E01C0"
+      },
+      {
+        "path": "01_参赛交付物/演示视频脚本_8分钟.md",
+        "bytes": 7033,
+        "modified_at": "2026-08-12T14:29:37+08:00",
+        "sha256": "B125E8E3AE6504093179D5E9D53E33D864A293085410ED23642E99B9D3A51DCA"
+      },
+      {
+        "path": "01_参赛交付物/项目方案_智信2026_新概念反无.docx",
+        "bytes": 1556115,
+        "modified_at": "2026-08-12T16:53:42+08:00",
+        "sha256": "1843918255CEB3822F558190ECD9BA877469D66091D50A2125A0193CC511305E"
+      },
+      {
+        "path": "01_参赛交付物/项目方案_智信2026_新概念反无.pdf",
+        "bytes": 1524952,
+        "modified_at": "2026-08-12T14:30:38+08:00",
+        "sha256": "3A80E290D2E76E4651A3EE1D0370A82A8CC58BDA1C251BB5E359F33E1D37F2DC"
+      },
+      {
+        "path": "01_参赛交付物/项目汇报_智信2026_新概念反无.pptx",
+        "bytes": 962058,
+        "modified_at": "2026-08-10T00:48:49+08:00",
+        "sha256": "31B0FB49EA8027583D18751B6FE09CC3E74AC9A813E9D079C44D228CB6F81B5E"
+      }
+    ]
+  },
+  "pending_admin_materials": {
+    "status": "REQUIRES_CONFIRMED_TEAM_AND_SUBMISSION_DATA",
+    "files": [
+      {
+        "path": "01_参赛交付物/匿名技术包_提交前说明.md",
+        "bytes": 1790,
+        "modified_at": "2026-08-12T17:01:53+08:00",
+        "sha256": "4627D645DDD270D7C3D032E5CFBC189E64E0D36CAFF0C7CA8E9BA12008233FA1"
+      },
+      {
+        "path": "01_参赛交付物/报名信息采集与提交清单.md",
+        "bytes": 3432,
+        "modified_at": "2026-08-10T00:57:07+08:00",
+        "sha256": "01B81DC85FD6952238C5888B6AC59C77C1E6DA5AD953FAB83D5564890F60F3E9"
+      }
+    ]
   },
   "deferred_submission_generators": {
-    "status": "EXCLUDED_FROM_PUBLIC_TECHNICAL_REPOSITORY",
-    "files": []
+    "status": "DO_NOT_RUN_UNTIL_PPT_VIDEO_AND_ARCHIVE_REBUILD",
+    "files": [
+      {
+        "path": "06_部署脚本/build_competition_deck.mjs",
+        "bytes": 37456,
+        "modified_at": "2026-08-10T01:00:55+08:00",
+        "sha256": "5A5B0D4CB6DEAD92AE14A68B9A70F2D3805D74A4A2E5A28F47B538AF483D62C6"
+      },
+      {
+        "path": "06_部署脚本/build_review_video_deck.mjs",
+        "bytes": 7781,
+        "modified_at": "2026-08-10T01:11:20+08:00",
+        "sha256": "46B8BF312CCB3E66682C89EEFC26DB4FC7010D2E940D7CD1ED7B89A34EB3A5C3"
+      },
+      {
+        "path": "06_部署脚本/export_review_video.ps1",
+        "bytes": 4718,
+        "modified_at": "2026-08-10T01:18:30+08:00",
+        "sha256": "B0CC2B3AD5A811330D112E6EA5B7C6FFE632D4521B1B8987FA4283DA74AC26AB"
+      },
+      {
+        "path": "06_部署脚本/构建匿名技术包.ps1",
+        "bytes": 7234,
+        "modified_at": "2026-08-10T01:21:42+08:00",
+        "sha256": "6B09EA321A8D4DFC3AFE8E1742A76A85663CF9B8E635FBC01D17B1861F25070F"
+      }
+    ]
   },
-  "official_reference_files": [],
+  "official_reference_files": [
+    {
+      "path": "00_官方材料/官方原始模板/智信2026报名材料_官网下载原件.zip",
+      "bytes": 26411,
+      "modified_at": "2026-08-09T20:41:14+08:00",
+      "sha256": "4ACD3F257E58BE7685AC42A3F0C38177110F555D31911ACC3A21AAB73086301C"
+    },
+    {
+      "path": "00_官方材料/官方原始模板/附件2-“智信—2026”无人智能挑战赛报名表(创意类).docx",
+      "bytes": 14454,
+      "modified_at": "2026-08-09T20:42:41+08:00",
+      "sha256": "1A38FAA09C559F120D314EC4434973E3EC0949AD10E1F1DAD3BB1FEF8B1D0A0A"
+    }
+  ],
   "reference_only_roots": [
     "02_SCI论文",
     "04_可视化",
@@ -657,26 +830,26 @@
   "history_summary": [
     {
       "path": "01_参赛交付物/历史版本",
-      "files": 0,
-      "bytes": 0,
+      "files": 34,
+      "bytes": 172371894,
       "status": "REFERENCE_ONLY_DO_NOT_RUN_OR_SUBMIT"
     },
     {
       "path": "04_可视化/历史版本",
-      "files": 0,
-      "bytes": 0,
+      "files": 1,
+      "bytes": 34225,
       "status": "REFERENCE_ONLY_DO_NOT_RUN_OR_SUBMIT"
     },
     {
       "path": "05_Notebook与数据/历史版本",
-      "files": 0,
-      "bytes": 0,
+      "files": 31,
+      "bytes": 14708371,
       "status": "REFERENCE_ONLY_DO_NOT_RUN_OR_SUBMIT"
     },
     {
       "path": "06_部署脚本/历史版本",
-      "files": 0,
-      "bytes": 0,
+      "files": 13,
+      "bytes": 87469,
       "status": "REFERENCE_ONLY_DO_NOT_RUN_OR_SUBMIT"
     }
   ],
@@ -684,13 +857,13 @@
     "Edit 03_源码/streamlit_app, never edit streamlit_cloud_deploy directly.",
     "Only four top-level canonical notebooks are executable evidence; history is excluded.",
     "Use 指标裁决.json for every numeric claim and preserve synthetic/not-field-test wording.",
-    "Treat GitHub main as an early snapshot; preserve its history and publish only through an approved consolidation branch and PR.",
-    "Do not submit any current file in 01_参赛交付物 until steps 7 and 8 resume.",
+    "Treat GitHub main as an early snapshot; use the approved consolidation branch and Pull Request for public review.",
+    "Use Markdown as the sole authority until the user confirms content; only then regenerate and visually review DOCX/PDF.",
     "Run 执行技术验收.ps1 after every source or metric change; it regenerates this manifest."
   ],
   "deferred_scope": [
-    "competition proposal and application forms",
-    "PPT and video",
+    "official application forms with identity, signatures, and seal",
+    "competition presentation deck and final recorded video",
     "official submission archives"
   ]
 }

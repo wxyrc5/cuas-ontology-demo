@@ -1,9 +1,9 @@
 {
   "ontology_meta": {
     "name": "C-UAS Counter-UAS Ontology",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "namespace": "http://cuas-ontology.org/cuas#",
-    "methodology": "Palantir-style 8 Object Types + 10 Link Types",
+    "methodology": "本体驱动的 8 个核心 Object Type + 10 个核心 Link Type，并含 3 类评审扩展",
     "source_tbox": "03_源码/本体模型/cuas-ontology.ttl",
     "source_abox": "03_源码/本体模型/cuas-data-valid.ttl",
     "competition": "OSREDM 2026 Track 7: New Concept Counter-UAS",
@@ -52,7 +52,8 @@
         {"id": "Cap_C2_Semantic", "name": "语义指挥控制", "class": "C2", "version": "v1.1"},
         {"id": "Cap_EW_Directional", "name": "定向电磁软杀伤", "class": "SoftKill", "version": "v2.0"},
         {"id": "Cap_HPM_Group", "name": "HPM 群目标硬杀伤", "class": "HardKill", "version": "v1.3"},
-        {"id": "Cap_Data_Integration", "name": "统一航迹与告警去重", "class": "IntegrationEnablement", "version": "v1.4"}
+        {"id": "Cap_Data_Integration", "name": "统一航迹与告警去重", "class": "IntegrationEnablement", "version": "v1.4"},
+        {"id": "Cap_RFEO_Backup", "name": "射频/光电备用探测", "class": "Detection", "version": "v1.0"}
       ]
     },
     {
@@ -62,12 +63,13 @@
       "icon": "🔧",
       "color": "#6A1B9A",
       "description": "实现技术能力并覆盖一个或多个工作场景的物理或软件装备。",
-      "properties": ["equipmentSN", "stanagProfile", "operationalStatus", "geoPosition"],
+      "properties": ["equipmentSN", "stanagProfile", "operationalStatus", "healthScore", "hasSpatiotemporalContext"],
       "sample_instances": [
         {"id": "Eq_RadarUnit_007", "name": "AESA 雷达单元 007", "sn": "RDR-AESA-007", "status": "Available"},
         {"id": "Eq_FusionNode_001", "name": "多源融合节点 001", "sn": "FUS-NODE-001", "status": "Available"},
         {"id": "Eq_CommandPost_001", "name": "语义指挥所 001", "sn": "CMD-POST-001", "status": "Available"},
-        {"id": "Eq_EW_HPM_001", "name": "EW/HPM 复合阵列 001", "sn": "HPM-ARRAY-001", "status": "Available"}
+        {"id": "Eq_EW_HPM_001", "name": "EW/HPM 复合阵列 001", "sn": "HPM-ARRAY-001", "status": "Available", "health": 0.88},
+        {"id": "Eq_RFEO_Backup_002", "name": "射频/光电备用节点 002", "sn": "RFEO-BACKUP-002", "status": "Available", "health": 0.92}
       ]
     },
     {
@@ -135,6 +137,19 @@
     {"id": "L09", "name": "validates", "name_zh": "效果验证使命", "from": "EffectMetric", "to": "Mission", "cardinality": "many-to-many", "description": "EffectMetric→Mission"},
     {"id": "L10", "name": "operates", "name_zh": "操作员操作装备", "from": "Operator", "to": "Equipment", "cardinality": "many-to-many", "description": "Operator→Equipment"}
   ],
+  "extension_object_types": [
+    {"id": "Effect", "name_zh": "物理/行为效果", "description": "Action 实施后产生的干扰、诱骗、烧蚀或网捕等实际效果；与 EffectMetric 数值度量分离。"},
+    {"id": "Signal", "name_zh": "信号", "description": "被威胁发射或被传感器观测的通信、遥控或导航信号。"},
+    {"id": "SpatiotemporalContext", "name_zh": "时空上下文", "description": "坐标参考系、位置、精度、UTC 时间戳与 ENU 速度向量的复合对象。"}
+  ],
+  "extension_link_types": [
+    {"name": "hasSpatiotemporalContext", "from": "DomainEntity", "to": "SpatiotemporalContext"},
+    {"name": "emitsSignal", "from": "Threat", "to": "Signal"},
+    {"name": "observesSignal", "from": "Equipment", "to": "Signal"},
+    {"name": "causesEffect", "from": "Equipment", "to": "Effect"},
+    {"name": "affectsThreat", "from": "Effect", "to": "Threat"},
+    {"name": "quantifiedBy", "from": "Effect", "to": "EffectMetric"}
+  ],
   "edge_instances": [
     {"link": "L01", "from": "Mission_G20Summit", "to": "Scenario_Detect_MSN001"},
     {"link": "L01", "from": "Mission_G20Summit", "to": "Scenario_Track_MSN001"},
@@ -147,6 +162,7 @@
     {"link": "L02", "from": "Mission_G20Summit", "to": "Cap_EW_Directional"},
     {"link": "L02", "from": "Mission_G20Summit", "to": "Cap_HPM_Group"},
     {"link": "L02", "from": "Mission_G20Summit", "to": "Cap_Data_Integration"},
+    {"link": "L02", "from": "Mission_G20Summit", "to": "Cap_RFEO_Backup"},
     {"link": "L03", "from": "Mission_G20Summit", "to": "EM_DetectionCoverage"},
     {"link": "L03", "from": "Mission_G20Summit", "to": "EM_IdentificationAccuracy"},
     {"link": "L03", "from": "Mission_G20Summit", "to": "EM_OODAClosureTime"},
@@ -158,11 +174,13 @@
     {"link": "L04", "from": "Eq_CommandPost_001", "to": "Cap_C2_Semantic"},
     {"link": "L04", "from": "Eq_EW_HPM_001", "to": "Cap_EW_Directional"},
     {"link": "L04", "from": "Eq_EW_HPM_001", "to": "Cap_HPM_Group"},
+    {"link": "L04", "from": "Eq_RFEO_Backup_002", "to": "Cap_RFEO_Backup"},
     {"link": "L05", "from": "Eq_RadarUnit_007", "to": "Scenario_Detect_MSN001"},
     {"link": "L05", "from": "Eq_FusionNode_001", "to": "Scenario_Track_MSN001"},
     {"link": "L05", "from": "Eq_FusionNode_001", "to": "Scenario_Assess_MSN001"},
     {"link": "L05", "from": "Eq_CommandPost_001", "to": "Scenario_Decide_MSN001"},
     {"link": "L05", "from": "Eq_EW_HPM_001", "to": "Scenario_Engage_MSN001"},
+    {"link": "L05", "from": "Eq_RFEO_Backup_002", "to": "Scenario_Detect_MSN001"},
     {"link": "L06", "from": "Cap_Radar_GaN_AESA", "to": "EM_DetectionCoverage"},
     {"link": "L06", "from": "Cap_Fusion_MultiSensor", "to": "EM_IdentificationAccuracy"},
     {"link": "L06", "from": "Cap_C2_Semantic", "to": "EM_OODAClosureTime"},
@@ -180,11 +198,15 @@
     {"link": "L10", "from": "Operator_Commander_01", "to": "Eq_EW_HPM_001"}
   ],
   "summary_stats": {
-    "total_object_types": 8,
-    "total_link_types": 10,
-    "total_object_instances": 24,
-    "total_edge_instances": 42,
-    "total_property_types": 37,
+    "core_object_types": 8,
+    "extension_object_types": 3,
+    "total_object_types": 11,
+    "core_link_types": 10,
+    "extension_link_types": 6,
+    "total_link_types": 16,
+    "total_object_instances": 26,
+    "total_edge_instances": 45,
+    "total_property_types": 53,
     "scenarios_covered": 5,
     "missions_covered": 1
   }

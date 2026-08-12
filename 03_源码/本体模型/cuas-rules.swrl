@@ -1,0 +1,85 @@
+# ============================================
+# C-UAS Ontology SWRL Rules
+# Version: V1.1 (2026-08)
+# Source: cuas-ontology.ttl
+# Rules: 4 (R1-R4)
+# Intended design-time engine: Protégé + SWRLTab + SQWRL
+# Runtime note: these rules are specification artifacts.  The deployed demo
+# evaluates equivalent closed-world predicates in Python/SPARQL and does not
+# place a DL reasoner in the sub-5-second OODA path.
+# Description: 反无人机体系自适应决策规则
+#   R1 探测覆盖率不足 → 增补传感器
+#   R2 识别准确率不足 → 更换融合算法
+#   R3 威胁等级突变    → 提升任务优先级
+#   R4 装备故障        → 激活备份资源
+# ============================================
+
+@prefix cuas: <http://cuas-ontology.org/cuas#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+@prefix sqwrl: <http://sqwrl.stanford.edu/ontologies/built-ins/3.4/sqwrl.owl#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+
+# ============================================
+# Rule R1: 探测覆盖率 < 90% → 增补传感器
+# Trigger: 某 Mission 的探测效果低于门槛，且已分配探测能力；
+#          存在覆盖该任务场景并实现该能力的装备。
+# Action:  sqwrl:select(?m, "RECOMMEND_ADD_SENSOR")
+# 来源: cuas-ontology.ttl 第 415-420 行
+# ============================================
+
+Mission(?m) ^ Scenario(?s) ^ governs(?m, ?s) ^
+TechnicalCapability(?cap) ^ allocates(?m, ?cap) ^ produces(?cap, ?em) ^
+EffectMetric(?em) ^ measuredBy(?m, ?em) ^
+metricName(?em, "DetectionCoverage") ^ metricValue(?em, ?dc) ^
+swrlb:lessThan(?dc, 0.9) ^ Equipment(?eq) ^ implements(?eq, ?cap) ^ covers(?eq, ?s)
+-> sqwrl:select(?m, ?eq, "RECOMMEND_ADJUST_SENSOR")
+
+
+# ============================================
+# Rule R2: 识别准确率 < 85% → 更换融合算法
+# Trigger: Mission 通过 measuredBy 测得 "IdentificationAccuracy" < 0.85
+#          且该 Mission 分配了实现 FusionID 能力的 Equipment
+# Action:  sqwrl:select(?m, ?eq, "RECOMMEND_SWAP_FUSION_ALGO")
+# 来源: cuas-ontology.ttl 第 424-430 行
+# ============================================
+
+Mission(?m) ^ EffectMetric(?em) ^ measuredBy(?m, ?em) ^
+metricName(?em, "IdentificationAccuracy") ^ metricValue(?em, ?acc) ^
+swrlb:lessThan(?acc, 0.85) ^ TechnicalCapability(?cap) ^
+allocates(?m, ?cap) ^ capabilityClass(?cap, "FusionID") ^
+Equipment(?eq) ^ implements(?eq, ?cap)
+-> sqwrl:select(?m, ?eq, "RECOMMEND_SWAP_FUSION_ALGO")
+
+
+# ============================================
+# Rule R3: 威胁等级突变 → 提升优先级
+# Trigger: 同一 Mission 面对的两个 Threat 等级差 > 1
+# Action:  sqwrl:select(?m, "ESCALATE_PRIORITY")
+# 来源: cuas-ontology.ttl 第 434-440 行
+# ============================================
+
+Mission(?m) ^ Threat(?t) ^ confronts(?m, ?t) ^
+threatLevel(?t, ?lvl1) ^ Threat(?t2) ^ threatLevel(?t2, ?lvl2) ^
+swrlb:greaterThan(?lvl2, ?lvl1) ^ swrlb:subtract(?diff, ?lvl2, ?lvl1) ^
+swrlb:greaterThan(?diff, 1) ^ priority(?m, ?p)
+-> sqwrl:select(?m, "ESCALATE_PRIORITY")
+
+
+# ============================================
+# Rule R4: 装备故障 → 调用备份资源
+# Trigger: 某 Equipment 状态为 "Failed"，其能力被 Mission 分配，
+#          且存在另一 Equipment 实现同一能力且状态 "Available"
+# Action:  sqwrl:select(?m, ?eq, ?backup, "ACTIVATE_BACKUP")
+# 来源: cuas-ontology.ttl 第 444-450 行
+# ============================================
+
+Equipment(?eq) ^ operationalStatus(?eq, "Failed") ^
+implements(?eq, ?cap) ^ Mission(?m) ^ allocates(?m, ?cap) ^
+Equipment(?backup) ^ implements(?backup, ?cap) ^
+operationalStatus(?backup, "Available")
+-> sqwrl:select(?m, ?eq, ?backup, "ACTIVATE_BACKUP")

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "decision_id": "ACT-A7454DD33AEE",
+  "decision_id": "ACT-843B114DD264",
   "generated_at_utc": "2026-08-10T00:00:00+00:00",
   "scope": "local_ontology_action_feedback_prototype",
   "not_field_test": true,
@@ -31,13 +31,15 @@
       "Cap_EW_Directional",
       "Cap_Fusion_MultiSensor",
       "Cap_HPM_Group",
+      "Cap_RFEO_Backup",
       "Cap_Radar_GaN_AESA"
     ],
     "equipment_status": {
       "Eq_RadarUnit_007": "Available",
       "Eq_FusionNode_001": "Available",
       "Eq_CommandPost_001": "Available",
-      "Eq_EW_HPM_001": "Available"
+      "Eq_EW_HPM_001": "Available",
+      "Eq_RFEO_Backup_002": "Available"
     },
     "controls": {
       "scan_mode": "NORMAL",
@@ -60,13 +62,15 @@
       "Cap_EW_Directional",
       "Cap_Fusion_MultiSensor",
       "Cap_HPM_Group",
+      "Cap_RFEO_Backup",
       "Cap_Radar_GaN_AESA"
     ],
     "equipment_status": {
       "Eq_RadarUnit_007": "Available",
       "Eq_FusionNode_001": "Available",
       "Eq_CommandPost_001": "Available",
-      "Eq_EW_HPM_001": "Failed"
+      "Eq_EW_HPM_001": "Failed",
+      "Eq_RFEO_Backup_002": "Available"
     },
     "controls": {
       "scan_mode": "HIGH_REFRESH",
@@ -148,7 +152,22 @@
         "Cap_Data_Integration"
       ],
       "target_equipment": [],
-      "action_id": "ACT-A7454DD33AEE-R01_DETECTION_COVERAGE_LOW"
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 0.88,
+        "predicate": "< 0.90",
+        "rule_id": "R01_DETECTION_COVERAGE_LOW"
+      },
+      "side_effects": [
+        "controls.scan_mode=HIGH_REFRESH"
+      ],
+      "validation_function": "after.controls.scan_mode == HIGH_REFRESH",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R01_DETECTION_COVERAGE_LOW",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-843B114DD264-R01_DETECTION_COVERAGE_LOW"
     },
     {
       "rule_id": "R02_IDENTIFICATION_ACCURACY_LOW",
@@ -160,7 +179,22 @@
         "Cap_Data_Integration"
       ],
       "target_equipment": [],
-      "action_id": "ACT-A7454DD33AEE-R02_IDENTIFICATION_ACCURACY_LOW"
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 0.83,
+        "predicate": "< 0.85",
+        "rule_id": "R02_IDENTIFICATION_ACCURACY_LOW"
+      },
+      "side_effects": [
+        "controls.fusion_model=multi_sensor_high_confidence_v2"
+      ],
+      "validation_function": "after.controls.fusion_model == multi_sensor_high_confidence_v2",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R02_IDENTIFICATION_ACCURACY_LOW",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-843B114DD264-R02_IDENTIFICATION_ACCURACY_LOW"
     },
     {
       "rule_id": "R03_THREAT_LEVEL_RISING",
@@ -171,7 +205,25 @@
         "Cap_C2_Semantic"
       ],
       "target_equipment": [],
-      "action_id": "ACT-A7454DD33AEE-R03_THREAT_LEVEL_RISING"
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": {
+          "previous": 3,
+          "current": 5
+        },
+        "predicate": "current > previous",
+        "rule_id": "R03_THREAT_LEVEL_RISING"
+      },
+      "side_effects": [
+        "priority=max(priority, threat_level_current)"
+      ],
+      "validation_function": "after.priority >= context.threat_level_current",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R03_THREAT_LEVEL_RISING",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-843B114DD264-R03_THREAT_LEVEL_RISING"
     },
     {
       "rule_id": "R04_THREAT_RESOURCE_REALLOCATION",
@@ -183,7 +235,22 @@
         "Cap_HPM_Group"
       ],
       "target_equipment": [],
-      "action_id": "ACT-A7454DD33AEE-R04_THREAT_RESOURCE_REALLOCATION"
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 5,
+        "predicate": "threat level rising",
+        "rule_id": "R04_THREAT_RESOURCE_REALLOCATION"
+      },
+      "side_effects": [
+        "none_before_human_authorization"
+      ],
+      "validation_function": "pending_human_actions contains AUTHORIZE_RESOURCE_REALLOCATION",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R04_THREAT_RESOURCE_REALLOCATION",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-843B114DD264-R04_THREAT_RESOURCE_REALLOCATION"
     },
     {
       "rule_id": "R05_EQUIPMENT_FAILURE",
@@ -194,7 +261,24 @@
       "target_equipment": [
         "Eq_EW_HPM_001"
       ],
-      "action_id": "ACT-A7454DD33AEE-R05_EQUIPMENT_FAILURE"
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": [
+          "Eq_EW_HPM_001"
+        ],
+        "predicate": "one or more equipment failures",
+        "rule_id": "R05_EQUIPMENT_FAILURE"
+      },
+      "side_effects": [
+        "equipment_status=Failed; controls.wta_recompute_requested=true"
+      ],
+      "validation_function": "failed equipment excluded and WTA recompute requested",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R05_EQUIPMENT_FAILURE",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-843B114DD264-R05_EQUIPMENT_FAILURE"
     },
     {
       "rule_id": "R06_OODA_DEADLINE_BREACH",
@@ -206,7 +290,22 @@
         "Cap_Data_Integration"
       ],
       "target_equipment": [],
-      "action_id": "ACT-A7454DD33AEE-R06_OODA_DEADLINE_BREACH"
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 5.4,
+        "predicate": ">= 5.0 s",
+        "rule_id": "R06_OODA_DEADLINE_BREACH"
+      },
+      "side_effects": [
+        "none_before_human_authorization"
+      ],
+      "validation_function": "pending_human_actions contains AUTHORIZE_BATCH_DECISION_MODE",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R06_OODA_DEADLINE_BREACH",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-843B114DD264-R06_OODA_DEADLINE_BREACH"
     },
     {
       "rule_id": "R07_INTERCEPTION_SUCCESS_LOW",
@@ -218,7 +317,22 @@
         "Cap_HPM_Group"
       ],
       "target_equipment": [],
-      "action_id": "ACT-A7454DD33AEE-R07_INTERCEPTION_SUCCESS_LOW"
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 0.82,
+        "predicate": "< 0.85",
+        "rule_id": "R07_INTERCEPTION_SUCCESS_LOW"
+      },
+      "side_effects": [
+        "none_before_human_authorization"
+      ],
+      "validation_function": "pending_human_actions contains AUTHORIZE_EFFECTOR_REINFORCEMENT",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R07_INTERCEPTION_SUCCESS_LOW",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-843B114DD264-R07_INTERCEPTION_SUCCESS_LOW"
     },
     {
       "rule_id": "R08_FALSE_ALARM_HIGH",
@@ -230,7 +344,22 @@
         "Cap_Data_Integration"
       ],
       "target_equipment": [],
-      "action_id": "ACT-A7454DD33AEE-R08_FALSE_ALARM_HIGH"
+      "target_mission": "Mission_G20Summit",
+      "preconditions": {
+        "observed": 0.025,
+        "predicate": ">= 0.02",
+        "rule_id": "R08_FALSE_ALARM_HIGH"
+      },
+      "side_effects": [
+        "controls.fusion_confirmation=TWO_SOURCE_CONFIRMATION"
+      ],
+      "validation_function": "after.controls.fusion_confirmation == TWO_SOURCE_CONFIRMATION",
+      "expected_revision": 1,
+      "evidence_refs": [
+        "metric_or_context:R08_FALSE_ALARM_HIGH",
+        "runtime-trigger-queries.sparql"
+      ],
+      "action_id": "ACT-843B114DD264-R08_FALSE_ALARM_HIGH"
     }
   ],
   "summary": {

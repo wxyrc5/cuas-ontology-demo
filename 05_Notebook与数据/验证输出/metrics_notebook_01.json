@@ -4,9 +4,9 @@
   "not_field_test": true,
   "formal_owl_consistency_test_completed": true,
   "swrl_execution_in_scope": false,
-  "executed_at": "2026-08-11T17:17:39+08:00",
+  "executed_at": "2026-08-12T16:43:42+08:00",
   "validator_report": "05_Notebook与数据\\验证输出\\ontology_consistency_report.json",
-  "validator_report_sha256": "a29166af78e17b8e5f1a2670770aa3b83840529571cfccd8ccec935f2a911ade",
+  "validator_report_sha256": "8ba41166c6acdd2dd392ae2f39e8b5450ec94a2f242d6a3f6df23c51a2afda3a",
   "environment": {
     "python": "3.11.15",
     "java": "java version \"20.0.1\" 2023-04-18",
@@ -15,61 +15,64 @@
     "owlready2": "0.51"
   },
   "input_triples": {
-    "cuas-ontology.ttl": 288,
-    "cuas-data-valid.ttl": 175,
+    "cuas-ontology.ttl": 378,
+    "cuas-data-valid.ttl": 242,
     "cuas-data-test.ttl": 2,
-    "cuas-shapes.ttl": 419
+    "cuas-shapes.ttl": 516
   },
   "core_ot_declared": 8,
   "core_lt_declared": 10,
+  "extension_ot_declared": 3,
+  "extension_lt_declared": 6,
   "real_core_instance_counts": {
     "Mission": 1,
     "Scenario": 5,
-    "TechnicalCapability": 6,
-    "Equipment": 4,
+    "TechnicalCapability": 7,
+    "Equipment": 5,
     "EffectMetric": 5,
     "Threat": 1,
     "Asset": 1,
     "Operator": 1
   },
-  "combined_tbox_valid_abox_triples": 463,
+  "combined_tbox_valid_abox_triples": 620,
   "shacl_negative_violation_count": 2,
   "sparql_repetitions_per_query": 30,
   "sparql_queryability": [
     {
       "query": "Q1_OT实例计数",
       "result_rows": 8,
-      "p50_ms": 14.377700004843064,
-      "p95_ms": 20.314149992191222
+      "p50_ms": 16.679550000844756,
+      "p95_ms": 24.538960001154912
     },
     {
       "query": "Q2_使命场景",
       "result_rows": 5,
-      "p50_ms": 4.31225000647828,
-      "p95_ms": 5.8835899966652505
+      "p50_ms": 4.316800001106458,
+      "p95_ms": 7.205329999851527
     },
     {
       "query": "Q3_装备能力场景",
-      "result_rows": 8,
-      "p50_ms": 5.2163499931339175,
-      "p95_ms": 6.46177499438636
+      "result_rows": 10,
+      "p50_ms": 6.936450001376215,
+      "p95_ms": 12.59445000359846
     },
     {
       "query": "Q4_能力效果回证",
-      "result_rows": 6,
-      "p50_ms": 5.313599991495721,
-      "p95_ms": 6.822604994522407
+      "result_rows": 8,
+      "p50_ms": 5.117549997521564,
+      "p95_ms": 9.265679998497939
     },
     {
       "query": "Q5_效果门槛",
       "result_rows": 5,
-      "p50_ms": 5.718499989598058,
-      "p95_ms": 7.654449997062328
+      "p50_ms": 6.2580000012530945,
+      "p95_ms": 8.908250001695706
     }
   ],
   "checks": {
     "rdf_turtle_parse_pass": true,
     "core_8_ot_10_lt_pass": true,
+    "extension_3_ot_6_lt_pass": true,
     "shacl_positive_conforms": true,
     "shacl_negative_control_detected_exactly_two": true,
     "hermit_positive_consistent": true,

@@ -41,6 +41,7 @@ st.markdown(
 
 st.sidebar.title("🛡️ 智盾演示台")
 st.sidebar.markdown("**反无任务编排与验证原型**")
+st.sidebar.caption("昆仑智镜（KunLun MirAI）")
 st.sidebar.success("当前状态：可现场演示、可本地复现、可接入扩展")
 st.sidebar.info("所有概率、时延和资源结果均为参数化合成仿真，不是机场现场或装备实测。")
 st.sidebar.page_link("pages/0_🎬_专家演示.py", label="进入专家演示模式", icon="🎬", width="stretch")
@@ -69,7 +70,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.caption("产品形态：本地可运行的任务编排与数字化试验台｜核心机制：本体 + 贝叶斯反馈 + 全链路 OODA + 同源二维/三维态势")
+st.caption("昆仑智镜（KunLun MirAI）｜产品形态：本地可运行的任务编排与数字化试验台｜核心机制：本体 + 贝叶斯反馈 + 全链路 OODA + 同源二维/三维态势")
 
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("20 机闭环使命 Pk", f"{ooda['swarm_20']['closed_loop_pk']:.3f}", "固定资源，Wilson 下界≥0.75")
@@ -105,7 +106,7 @@ with story:
         以及跨包同步时延如何侵蚀理想并行收益。失败不是被隐藏，而是直接变成资源规划边界。
         """
     )
-    st.page_link("pages/0_🎬_专家演示.py", label="启动 8 分钟专家演示路径", icon="🎬", width="stretch")
+    st.page_link("pages/0_🎬_专家演示.py", label="启动 4 分 30 秒初筛演示路径", icon="🎬", width="stretch")
 with product:
     st.markdown("**好产品**：一套可运行的反无任务编排与验证台")
     st.markdown("**好创意**：把本体从知识图谱变成可执行、可回写的任务契约")
@@ -125,7 +126,7 @@ for column, title, body in [
         st.caption(body)
 
 st.markdown(
-    "<div class='boundary'><b>证据边界：</b>当前证明的是软件体系、形式模型和参数化试验方法可运行、可复现；不宣称真实装备接入、现场识别率、物理拦截效能、Palantir Foundry 部署、SWRL 执行或已完成专家/红蓝实测。</div>",
+    "<div class='boundary'><b>证据边界：</b>OWL/HermiT/SHACL/SWRL 用于设计态，运行态为闭世界查询与经 JSON Schema 校验的 Action；当前证明的是软件体系、形式模型和参数化试验方法可运行、可复现，不宣称真实装备接入、现场识别率、物理拦截效能、商业平台部署或已完成专家/红蓝实测。</div>",
     unsafe_allow_html=True,
 )
-st.caption("智盾 · 反无任务编排与验证台｜指标快照由本地验收流程生成")
+st.caption("昆仑智镜（KunLun MirAI）｜智盾 · 反无任务编排与验证台｜指标快照由本地验收流程生成")

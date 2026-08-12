@@ -157,13 +157,15 @@ def main() -> int:
         and ontology.get("verdict") == "PASS"
         and ontology.get("core_ot_declared") == 8
         and ontology.get("core_lt_declared") == 10
+        and ontology.get("extension_ot_declared") == 3
+        and ontology.get("extension_lt_declared") == 6
         and all(ontology.get("checks", {}).values())
     )
     checks.append(
         Check(
             "本体形式一致性",
             bool(ontology_ok),
-            "8 OT / 10 LT; HermiT and SHACL positive/negative controls passed",
+            "8 core OT / 10 core LT + 3/6 extensions; HermiT and SHACL controls passed",
         )
     )
 
@@ -266,7 +268,7 @@ def main() -> int:
         acceptance.get("status") == "passed"
         and len(pages) == 8
         and all(item.get("status") == "passed" and not item.get("exceptions") for item in pages)
-        and acceptance.get("ontology_assets", {}).get("canonical_graph_triples") == 463
+        and acceptance.get("ontology_assets", {}).get("canonical_graph_triples") == 620
         and all(
             count > 0
             for count in acceptance.get("ontology_assets", {}).get("sparql_template_rows", {}).values()

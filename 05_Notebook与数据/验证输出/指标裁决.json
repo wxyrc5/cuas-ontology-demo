@@ -1,13 +1,13 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-08-11T09:26:10.573771+00:00",
+  "generated_at_utc": "2026-08-12T08:52:08.329061+00:00",
   "purpose": "single_source_of_truth_for_current_reproducible_project_metrics",
   "not_official_competition_score": true,
   "not_field_test": true,
   "inputs": {
     "notebook_01": {
       "path": "05_Notebook与数据\\验证输出\\metrics_notebook_01.json",
-      "sha256": "5bc8a55e0f8f8d039c95721478cec1c0e338148253891c4d3a9c2d98d80abdc9",
+      "sha256": "9a578f80c5c0fff514fc201c43495952a018f07757b44d03f5efc9911fe282ce",
       "scope": "formal_owl2dl_consistency_and_shacl_validation"
     },
     "notebook_02": {
@@ -17,7 +17,7 @@
     },
     "notebook_03": {
       "path": "05_Notebook与数据\\验证输出\\metrics_notebook_03.json",
-      "sha256": "5c79b0e5e998f8b4bc6713a93a66d0853f46d9d83f04f957957647b70a676f1a",
+      "sha256": "9d654037385d2a2d97ca40bd1c1635bc84dad7fb0bfcfc037bc81d5d442d3b55",
       "scope": "synthetic_five_channel_beta_binomial_flywheel"
     }
   },

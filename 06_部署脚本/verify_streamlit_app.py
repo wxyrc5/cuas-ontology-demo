@@ -274,6 +274,10 @@ def validate_ontology_assets() -> dict:
         raise ValueError("ontology.json must contain exactly 8 Object Types")
     if [item["name"] for item in browser["link_types"]] != expected_links:
         raise ValueError("ontology.json Link Types do not match the manuscript/TBox")
+    if len(browser.get("extension_object_types", [])) != 3:
+        raise ValueError("ontology.json must contain exactly 3 reviewed extension Object Types")
+    if len(browser.get("extension_link_types", [])) != 6:
+        raise ValueError("ontology.json must contain exactly 6 reviewed extension Link Types")
     actual_instances = sum(
         len(item.get("sample_instances", [])) for item in browser["object_types"]
     )
@@ -288,7 +292,7 @@ def validate_ontology_assets() -> dict:
     graph.parse(model_dir / "cuas-ontology.ttl", format="turtle")
     graph.parse(model_dir / "cuas-data-valid.ttl", format="turtle")
     cuas = Namespace("http://cuas-ontology.org/cuas#")
-    if len(graph) != 463:
+    if len(graph) != 620:
         raise ValueError(f"canonical TBox+ABox triple count changed: {len(graph)}")
     missing_links = [
         name for name in expected_links
@@ -306,6 +310,8 @@ def validate_ontology_assets() -> dict:
     return {
         "object_types": 8,
         "link_types": 10,
+        "extension_object_types": 3,
+        "extension_link_types": 6,
         "positive_abox_instances": actual_instances,
         "positive_abox_edges": actual_edges,
         "canonical_graph_triples": len(graph),
@@ -315,7 +321,9 @@ def validate_ontology_assets() -> dict:
 
 def validate_action_feedback() -> dict:
     """Exercise the manuscript Effect->Action->Mission write-back prototype."""
+    from jsonschema import ValidationError
     from rdflib import Graph, Literal, Namespace, XSD
+    from utils.action_contract import validate_action_bundle
     from utils.ontology_action_engine import (
         action_result_to_turtle,
         evaluate_action_feedback,
@@ -352,6 +360,15 @@ def validate_action_feedback() -> dict:
     )
     if first != second or state != caller_state_snapshot:
         raise ValueError("Action decision is not deterministic or mutated caller state")
+    validate_action_bundle(first)
+    invalid_bundle = copy.deepcopy(first)
+    del invalid_bundle["actions"][0]["validation_function"]
+    try:
+        validate_action_bundle(invalid_bundle)
+    except ValidationError:
+        negative_contract_rejected = True
+    else:
+        raise ValueError("Action JSON Schema failed to reject a missing validation_function")
 
     expected_auto = 5
     expected_pending = 3
@@ -406,6 +423,8 @@ def validate_action_feedback() -> dict:
         "deterministic": True,
         "caller_state_immutable": True,
         "canonical_model_unchanged": True,
+        "action_contract_positive": True,
+        "action_contract_negative_rejected": negative_contract_rejected,
         "not_palantir_foundry_deployment": True,
         "status": "passed",
     }

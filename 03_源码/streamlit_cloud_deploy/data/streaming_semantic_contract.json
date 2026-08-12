@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "profile": "platform-neutral SAPIENT-like edge semantic envelope",
+  "scope_boundary": "公开数据模拟接口；非真实 SAPIENT ASM、实时总线或装备接口",
+  "required_fields": {
+    "event_id": "string/uuid",
+    "source_id": "string",
+    "event_time_utc": "RFC3339 UTC",
+    "ingest_time_utc": "RFC3339 UTC",
+    "coordinate_reference_system": "URI",
+    "position_wkt": "WKT POINT string",
+    "position_accuracy_m": "number >= 0",
+    "velocity_enu_mps": "{east,north,up}",
+    "signal": "{type,center_frequency_hz,confidence}",
+    "observation": "opaque JSON or Protobuf-decoded payload"
+  },
+  "semantic_mapping": {
+    "source_id": "Equipment.identifier",
+    "event_id": "SpatiotemporalContext.identifier",
+    "event_time_utc": "SpatiotemporalContext.observedAt",
+    "coordinate_reference_system": "SpatiotemporalContext.coordinateReferenceSystem",
+    "position_wkt": "SpatiotemporalContext.positionWKT",
+    "position_accuracy_m": "SpatiotemporalContext.positionAccuracyM",
+    "signal": "Signal",
+    "observation": "Threat/EffectMetric update"
+  },
+  "pipeline": [
+    "JSON/Protobuf decode",
+    "schema and timestamp validation",
+    "coordinate and unit normalization",
+    "Object/Link materialization",
+    "closed-world SPARQL trigger",
+    "Action contract validation",
+    "human authorization when required",
+    "Effect/EffectMetric evidence write-back"
+  ]
+}

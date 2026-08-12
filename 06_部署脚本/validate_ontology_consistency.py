@@ -63,6 +63,21 @@ CORE_LINKS = [
     CUAS.operates,
 ]
 
+EXTENSION_CLASSES = [
+    CUAS.Effect,
+    CUAS.Signal,
+    CUAS.SpatiotemporalContext,
+]
+
+EXTENSION_LINKS = [
+    CUAS.hasSpatiotemporalContext,
+    CUAS.emitsSignal,
+    CUAS.observesSignal,
+    CUAS.causesEffect,
+    CUAS.affectsThreat,
+    CUAS.quantifiedBy,
+]
+
 
 @dataclass
 class Check:
@@ -300,6 +315,28 @@ def main() -> int:
             f"core_classes={8-len(missing_classes)}/8; core_links={10-len(missing_links)}/10; "
             f"unsupported_datatype_ranges={len(unsupported_ranges)}",
             time.perf_counter() - structure_start,
+        )
+    )
+
+    extension_start = time.perf_counter()
+    missing_extension_classes = [
+        str(item)
+        for item in EXTENSION_CLASSES
+        if (item, RDF.type, OWL.Class) not in ontology
+    ]
+    missing_extension_links = [
+        str(item)
+        for item in EXTENSION_LINKS
+        if (item, RDF.type, OWL.ObjectProperty) not in ontology
+    ]
+    extension_ok = not missing_extension_classes and not missing_extension_links
+    checks.append(
+        Check(
+            "3 个扩展类型 / 6 个扩展关系审计",
+            extension_ok,
+            f"extension_classes={3-len(missing_extension_classes)}/3; "
+            f"extension_links={6-len(missing_extension_links)}/6",
+            time.perf_counter() - extension_start,
         )
     )
 

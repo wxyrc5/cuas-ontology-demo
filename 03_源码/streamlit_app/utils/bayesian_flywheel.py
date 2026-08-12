@@ -16,12 +16,14 @@ either model.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Iterable
 
 import numpy as np
 from scipy.stats import beta as beta_distribution
 from scipy.stats import norm
 from sklearn.metrics import roc_auc_score, roc_curve
+from rdflib import Graph, Namespace
 
 
 @dataclass(frozen=True)
@@ -84,6 +86,7 @@ CHANNELS: tuple[ChannelSpec, ...] = (
 )
 
 COMPOSITE_THRESHOLD = 0.90
+CUAS = Namespace("http://cuas-ontology.org/cuas#")
 
 
 @dataclass
@@ -532,6 +535,160 @@ def evaluate_fixed_rule_baseline(
     )
 
 
+def evaluate_ontology_conditioned_counterfactual(
+    ontology_path: str | Path,
+    data_path: str | Path,
+    *,
+    n_observations: int = 12,
+    seed: int = 20260812,
+    prior_strength: float = 12.0,
+    health_sensitivity: float = 0.70,
+) -> dict:
+    """Sensitivity test where ontology topology and health condition the priors.
+
+    The same synthetic observations are reused for nominal, radar-failure and
+    reconfigured cases.  Only the selected Equipment->Capability->EffectMetric
+    path and equipment health alter the prior.  This is a counterfactual
+    engineering demonstration, not a calibrated physical probability of kill.
+    """
+    if n_observations < 5:
+        raise ValueError("n_observations must be >= 5")
+    if prior_strength <= 0 or not 0 <= health_sensitivity <= 1:
+        raise ValueError("invalid prior parameters")
+
+    graph = Graph()
+    graph.parse(Path(ontology_path), format="turtle")
+    graph.parse(Path(data_path), format="turtle")
+
+    metric_ids = {
+        "detection": "EM_DetectionCoverage",
+        "identification": "EM_IdentificationAccuracy",
+        "interception": "EM_InterceptionSuccess",
+        "ooda_closure": "EM_OODAClosureTime",
+        "false_alarm_compliance": "EM_FalseAlarmRate",
+    }
+    nominal_equipment = {
+        "detection": "Eq_RadarUnit_007",
+        "identification": "Eq_FusionNode_001",
+        "interception": "Eq_EW_HPM_001",
+        "ooda_closure": "Eq_CommandPost_001",
+        "false_alarm_compliance": "Eq_FusionNode_001",
+    }
+    scenario_equipment = {
+        "名义状态": nominal_equipment,
+        "主雷达失效": nominal_equipment,
+        "本体重构至射频/光电备份": {
+            **nominal_equipment,
+            "detection": "Eq_RFEO_Backup_002",
+        },
+    }
+    health_override = {("主雷达失效", "Eq_RadarUnit_007"): 0.05}
+
+    rng = np.random.default_rng(seed)
+    shared_successes = {
+        channel.key: int(
+            rng.binomial(n_observations, channel.true_satisfaction_probability)
+        )
+        for channel in CHANNELS
+    }
+    weights = _normalise_weights(CHANNELS)
+    results = []
+
+    for scenario_name, equipment_by_channel in scenario_equipment.items():
+        channel_rows = []
+        compliance_probabilities = []
+        graph_paths = []
+        for channel in CHANNELS:
+            equipment_id = equipment_by_channel[channel.key]
+            equipment = CUAS[equipment_id]
+            metric = CUAS[metric_ids[channel.key]]
+            paths = [
+                (str(capability).split("#")[-1])
+                for capability in graph.objects(equipment, CUAS.implements)
+                if (capability, CUAS.produces, metric) in graph
+            ]
+            if not paths:
+                raise ValueError(
+                    f"missing Equipment->Capability->EffectMetric path: "
+                    f"{equipment_id}/{metric_ids[channel.key]}"
+                )
+            health_literal = next(graph.objects(equipment, CUAS.healthScore), None)
+            if health_literal is None:
+                raise ValueError(f"missing healthScore: {equipment_id}")
+            health = health_override.get(
+                (scenario_name, equipment_id), float(health_literal)
+            )
+            base_prior_mean = min(channel.requirement_probability + 0.025, 0.995)
+            prior_mean = np.clip(
+                base_prior_mean * (1.0 - health_sensitivity * (1.0 - health)),
+                0.01,
+                0.995,
+            )
+            alpha = prior_mean * prior_strength + shared_successes[channel.key]
+            beta_value = (
+                (1.0 - prior_mean) * prior_strength
+                + n_observations
+                - shared_successes[channel.key]
+            )
+            compliance = float(
+                beta_distribution.sf(
+                    channel.requirement_probability,
+                    alpha,
+                    beta_value,
+                )
+            )
+            compliance_probabilities.append(compliance)
+            path = f"{equipment_id}->{paths[0]}->{metric_ids[channel.key]}"
+            graph_paths.append(path)
+            channel_rows.append(
+                {
+                    "channel": channel.key,
+                    "channel_zh": channel.label_zh,
+                    "equipment": equipment_id,
+                    "capability": paths[0],
+                    "health": float(health),
+                    "prior_mean": float(prior_mean),
+                    "shared_successes": shared_successes[channel.key],
+                    "posterior_compliance_probability": compliance,
+                }
+            )
+        score = float(
+            np.exp(
+                np.sum(
+                    weights
+                    * np.log(np.clip(compliance_probabilities, 1e-12, 1.0))
+                )
+            )
+        )
+        results.append(
+            {
+                "scenario": scenario_name,
+                "mission_compliance_score": score,
+                "channels": channel_rows,
+                "graph_paths": graph_paths,
+            }
+        )
+
+    scores = {item["scenario"]: item["mission_compliance_score"] for item in results}
+    return {
+        "scope": "synthetic_ontology_conditioned_prior_sensitivity",
+        "not_field_test": True,
+        "seed": seed,
+        "n_observations_per_channel": n_observations,
+        "prior_strength": prior_strength,
+        "health_sensitivity": health_sensitivity,
+        "shared_successes": shared_successes,
+        "scenarios": results,
+        "checks": {
+            "radar_failure_reduces_score": scores["主雷达失效"] < scores["名义状态"],
+            "reconfiguration_recovers_score": scores["本体重构至射频/光电备份"] > scores["主雷达失效"],
+            "paths_derived_from_graph": all(
+                len(item["graph_paths"]) == len(CHANNELS) for item in results
+            ),
+        },
+    }
+
+
 __all__ = [
     "AUCComparison",
     "CHANNELS",
@@ -541,6 +698,7 @@ __all__ = [
     "FlywheelResult",
     "audit_flywheel_reproducibility",
     "evaluate_fixed_rule_baseline",
+    "evaluate_ontology_conditioned_counterfactual",
     "flywheel_channel_rows",
     "simulate_flywheel",
 ]

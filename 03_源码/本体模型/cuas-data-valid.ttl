@@ -1,12 +1,13 @@
 ###########################################################################
 # C-UAS Ontology — 一致性正向实例集
-# 版本: V1.1 (2026-08)
+# 版本: V1.2 (2026-08)
 # 用途: HermiT ABox 一致性与 SHACL 正向验证；不包含故意违规数据。
 ###########################################################################
 
 @prefix cuas: <http://cuas-ontology.org/cuas#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix geo:  <http://www.opengis.net/ont/geosparql#> .
 
 # 标准剖面
 cuas:STANAG_4817_PMO a cuas:STANAGProfile ;
@@ -22,7 +23,23 @@ cuas:Threat_Swarm_20 a cuas:Threat ;
     cuas:threatClass "ClassI" ;
     cuas:threatLevel 5 ;
     cuas:threatTrajectory "20 机蜂群由东南方向分三轴接近" ;
-    cuas:isSwarmMember true .
+    cuas:isSwarmMember true ;
+    cuas:emitsSignal cuas:Signal_RF_RemoteControl_20 ;
+    cuas:hasSpatiotemporalContext cuas:STC_Threat_Swarm_20 .
+
+# 信号、时空上下文和实际效果是评审扩展对象。坐标与时间均为演示夹具。
+cuas:Signal_RF_RemoteControl_20 a cuas:Signal ;
+    cuas:signalType "RemoteControl" ;
+    cuas:centerFrequencyHz "2440000000.0"^^xsd:double .
+
+cuas:STC_Threat_Swarm_20 a cuas:SpatiotemporalContext ;
+    cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:positionWKT "POINT (120.205 30.205)" ;
+    cuas:positionAccuracyM "35.0"^^xsd:double ;
+    cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime ;
+    cuas:velocityEastMps "-18.0"^^xsd:double ;
+    cuas:velocityNorthMps "12.0"^^xsd:double ;
+    cuas:velocityUpMps "0.5"^^xsd:double .
 
 # 五阶段场景，阶段预算统一采用 xsd:decimal 秒值
 cuas:Scenario_Detect_MSN001 a cuas:Scenario ;
@@ -103,12 +120,20 @@ cuas:Cap_Data_Integration a cuas:TechnicalCapability ;
     cuas:capabilityVersion "v1.4" ;
     cuas:produces cuas:EM_FalseAlarmRate .
 
+cuas:Cap_RFEO_Backup a cuas:TechnicalCapability ;
+    cuas:capabilityId "CAP-RFB-002" ;
+    cuas:capabilityClass "Detection" ;
+    cuas:capabilityMetric "RF/光电备份探测与复核能力（参数化夹具）" ;
+    cuas:capabilityVersion "v1.0" ;
+    cuas:produces cuas:EM_DetectionCoverage, cuas:EM_IdentificationAccuracy .
+
 # 装备实现能力并覆盖场景
 cuas:Eq_RadarUnit_007 a cuas:Equipment ;
     cuas:equipmentSN "RDR-AESA-007" ;
     cuas:stanagProfile cuas:STANAG_4817_PMO ;
     cuas:operationalStatus "Available" ;
-    cuas:geoPosition "120.155E, 30.245N" ;
+    cuas:healthScore "0.98"^^xsd:double ;
+    cuas:hasSpatiotemporalContext cuas:STC_RadarUnit_007 ;
     cuas:implements cuas:Cap_Radar_GaN_AESA ;
     cuas:covers cuas:Scenario_Detect_MSN001 .
 
@@ -116,7 +141,8 @@ cuas:Eq_FusionNode_001 a cuas:Equipment ;
     cuas:equipmentSN "FUS-NODE-001" ;
     cuas:stanagProfile cuas:STANAG_4817_PMO ;
     cuas:operationalStatus "Available" ;
-    cuas:geoPosition "120.156E, 30.245N" ;
+    cuas:healthScore "0.97"^^xsd:double ;
+    cuas:hasSpatiotemporalContext cuas:STC_FusionNode_001 ;
     cuas:implements cuas:Cap_Fusion_MultiSensor, cuas:Cap_Data_Integration ;
     cuas:covers cuas:Scenario_Track_MSN001, cuas:Scenario_Assess_MSN001 .
 
@@ -124,7 +150,8 @@ cuas:Eq_CommandPost_001 a cuas:Equipment ;
     cuas:equipmentSN "CMD-POST-001" ;
     cuas:stanagProfile cuas:STANAG_4817_PMO ;
     cuas:operationalStatus "Available" ;
-    cuas:geoPosition "120.154E, 30.244N" ;
+    cuas:healthScore "0.99"^^xsd:double ;
+    cuas:hasSpatiotemporalContext cuas:STC_CommandPost_001 ;
     cuas:implements cuas:Cap_C2_Semantic ;
     cuas:covers cuas:Scenario_Decide_MSN001 .
 
@@ -132,9 +159,58 @@ cuas:Eq_EW_HPM_001 a cuas:Equipment ;
     cuas:equipmentSN "HPM-ARRAY-001" ;
     cuas:stanagProfile cuas:STANAG_4817_PMO ;
     cuas:operationalStatus "Available" ;
-    cuas:geoPosition "120.157E, 30.246N" ;
+    cuas:healthScore "0.96"^^xsd:double ;
+    cuas:hasSpatiotemporalContext cuas:STC_EW_HPM_001 ;
     cuas:implements cuas:Cap_EW_Directional, cuas:Cap_HPM_Group ;
-    cuas:covers cuas:Scenario_Engage_MSN001 .
+    cuas:covers cuas:Scenario_Engage_MSN001 ;
+    cuas:causesEffect cuas:Effect_HPM_Disruption_001 .
+
+cuas:Eq_RFEO_Backup_002 a cuas:Equipment ;
+    cuas:equipmentSN "RFEO-BACKUP-002" ;
+    cuas:stanagProfile cuas:STANAG_4817_PMO ;
+    cuas:operationalStatus "Available" ;
+    cuas:healthScore "0.92"^^xsd:double ;
+    cuas:hasSpatiotemporalContext cuas:STC_RFEO_Backup_002 ;
+    cuas:implements cuas:Cap_RFEO_Backup ;
+    cuas:observesSignal cuas:Signal_RF_RemoteControl_20 ;
+    cuas:covers cuas:Scenario_Detect_MSN001, cuas:Scenario_Track_MSN001 .
+
+cuas:STC_RadarUnit_007 a cuas:SpatiotemporalContext ;
+    cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:positionWKT "POINT (120.155 30.245)" ;
+    cuas:positionAccuracyM "8.0"^^xsd:double ;
+    cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime .
+
+cuas:STC_FusionNode_001 a cuas:SpatiotemporalContext ;
+    cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:positionWKT "POINT (120.156 30.245)" ;
+    cuas:positionAccuracyM "5.0"^^xsd:double ;
+    cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime .
+
+cuas:STC_CommandPost_001 a cuas:SpatiotemporalContext ;
+    cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:positionWKT "POINT (120.154 30.244)" ;
+    cuas:positionAccuracyM "5.0"^^xsd:double ;
+    cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime .
+
+cuas:STC_EW_HPM_001 a cuas:SpatiotemporalContext ;
+    cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:positionWKT "POINT (120.157 30.246)" ;
+    cuas:positionAccuracyM "10.0"^^xsd:double ;
+    cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime .
+
+cuas:STC_RFEO_Backup_002 a cuas:SpatiotemporalContext ;
+    cuas:coordinateReferenceSystem "http://www.opengis.net/def/crs/OGC/1.3/CRS84"^^xsd:anyURI ;
+    cuas:positionWKT "POINT (120.153 30.247)" ;
+    cuas:positionAccuracyM "15.0"^^xsd:double ;
+    cuas:observedAt "2026-08-12T06:00:00Z"^^xsd:dateTime .
+
+cuas:Effect_HPM_Disruption_001 a cuas:Effect ;
+    cuas:effectType "HPMDisruption" ;
+    cuas:effectOutcome "Succeeded" ;
+    cuas:effectAt "2026-08-12T06:00:03Z"^^xsd:dateTime ;
+    cuas:affectsThreat cuas:Threat_Swarm_20 ;
+    cuas:quantifiedBy cuas:EM_InterceptionSuccess .
 
 # 五项 Effect 指标；显式 validates 构成 Effect -> Mission 反馈边
 cuas:EM_DetectionCoverage a cuas:EffectMetric ;
@@ -192,7 +268,7 @@ cuas:Mission_G20Summit a cuas:Mission ;
         cuas:Scenario_Engage_MSN001 ;
     cuas:allocates cuas:Cap_Radar_GaN_AESA, cuas:Cap_Fusion_MultiSensor,
         cuas:Cap_C2_Semantic, cuas:Cap_EW_Directional,
-        cuas:Cap_HPM_Group, cuas:Cap_Data_Integration ;
+        cuas:Cap_HPM_Group, cuas:Cap_Data_Integration, cuas:Cap_RFEO_Backup ;
     cuas:confronts cuas:Threat_Swarm_20 ;
     cuas:protects cuas:Asset_HangzhouConventionCenter ;
     cuas:measuredBy cuas:EM_DetectionCoverage, cuas:EM_IdentificationAccuracy,
